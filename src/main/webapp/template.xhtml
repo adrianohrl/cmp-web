@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -19,14 +20,32 @@
         </div>
         <div>
             <div id="left">
-                <ui:insert name="left">Left</ui:insert>
+                <ui:insert name="left">
+                    <h:form>
+                        <p:menu toggleable="true" style="width:140px">
+                            <p:submenu label="Subordinado">
+                                <p:menuitem value="Inserir" outcome="/personnel/subordinate/create" icon="ui-icon-plus" />
+                            </p:submenu>
+                            <p:submenu label="Supervisor">
+                                <p:menuitem value="Inserir" outcome="/personnel/supervisor/create" icon="ui-icon-plus" />
+                            </p:submenu>
+                            <p:submenu label="Gerente">
+                                <p:menuitem value="Inserir" outcome="/personnel/manager/create" icon="ui-icon-plus" />
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
+                </ui:insert>
             </div>
             <div>
                 <div id="right">
-                    <ui:insert name="right">Right</ui:insert>
+                    <ui:insert name="right">
+                        
+                    </ui:insert>
                 </div>
                 <div id="content" class="right_content">
-                    <ui:insert name="content">Content</ui:insert>
+                    <ui:insert name="content">
+                        
+                    </ui:insert>
                 </div>
             </div>
         </div>

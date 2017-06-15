@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid columns="3" cellpadding="5" style="width: 100%">           
+                <h:outputLabel value="Código: " /> 
+                <h:inputText id="code" value="#{subordinateBean.subordinate.code}"
+                             required="true"  requiredMessage="Digite o código do subordinado" 
+                             style="width: 250px;" />
+                <h:message for="code" style="color:red" />
+                <h:outputLabel value="Nome: " />            
+                <h:inputText id="name" value="#{subordinateBean.subordinate.name}"
+                             required="true" requiredMessage="Digite o nome do subordinado" 
+                             style="width: 250px;" />
+                <h:message for="name" style="color:red" />
+                <h:outputLabel value="#{subordinateBean.message}"
+                               style="color:red" />
+            </h:panelGrid>
+            <h:commandButton value="Inserir" 
+                             action="#{subordinateBean.insert()}"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
