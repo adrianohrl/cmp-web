@@ -1,42 +1,52 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="./../../template.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
+        <h2>Cadastro de Gerente</h2>
         <h:form>
-            <h:panelGrid columns="3" cellpadding="5" style="width: 100%">           
-                <h:outputLabel value="Código: " /> 
-                <h:inputText id="code" value="#{managerBean.manager.code}"
-                             required="true"  requiredMessage="Digite o código do gerente" 
+            <p:growl id="messages" showDetail="true" /> 
+            
+            <h:panelGrid id="grid" columns="3" cellpadding="10" style="margin-bottom: 20px;" >        
+                <h:outputLabel for="code" value="Código: " style="font-weight: bold;" /> 
+                <p:inputText id="code" label="Código" value="#{managerBean.manager.code}"
+                             required="true" requiredMessage="Digite o código do gerente" 
                              style="width: 250px;" />
-                <h:message for="code" style="color:red" />
-                <h:outputLabel value="Nome: " />            
-                <h:inputText id="name" value="#{managerBean.manager.name}"
+                <p:message for="code" />
+                
+                <h:outputLabel for="name" value="Nome: " style="font-weight: bold;" />            
+                <p:inputText id="name" value="#{managerBean.manager.name}"
                              required="true" requiredMessage="Digite o nome do gerente" 
                              style="width: 250px;" />
-                <h:message for="name" style="color:red" />
-                <h:outputLabel value="Login: " /> 
-                <h:inputText id="login" value="#{managerBean.manager.login}"
-                             required="true"  requiredMessage="Digite o login do gerente" 
+                <p:message for="name" />
+                
+                <h:outputLabel for="login" value="Login: " style="font-weight: bold;" />            
+                <p:inputText id="login" value="#{managerBean.manager.login}"
+                             required="true" requiredMessage="Digite o login do gerente" 
                              style="width: 250px;" />
-                <h:message for="login" style="color:red" />
-                <h:outputLabel value="Senha: " /> 
-                <h:inputText id="password1" value="#{managerBean.manager.password}"
-                             required="true"  requiredMessage="Digite a senha do gerente" 
-                             style="width: 250px;" />
-                <h:message for="password1" style="color:red" />
-                <h:outputLabel value="Confirmar Senha: " /> 
-                <h:inputText id="password2" value="#{managerBean.password}"
-                             required="true"  requiredMessage="Digite a confirmação da senha do gerente" 
-                             style="width: 250px;" />
-                <h:message for="password2" style="color:red" />
-                <h:outputLabel value="#{managerBean.message}"
-                               style="color:red" />
+                <p:message for="login" />
+                
+                <h:outputLabel for="password1" value="Senha: " style="font-weight: bold;" /> 
+                <p:password id="password1" value="#{managerBean.manager.password}" 
+                            feedback="true" match="password2" label="Senha" required="true" 
+                            promptLabel="Senha" weakLabel="Fraca" goodLabel="Boa" 
+                            strongLabel="Forte" requiredMessage="Digite a senha do gerente" 
+                            validatorMessage="As senhas não conferem" style="width: 250px;" />
+                <p:message for="password1" />
+                
+                <h:outputLabel for="password2" value="Confirmar Senha: " style="font-weight: bold;" /> 
+                <p:password id="password2" label="Confirmação da senha" required="true" 
+                            requiredMessage="Digite a senha do gerente novamente" style="width: 250px;" />
+                <p:message for="password2" />
             </h:panelGrid>
-            <h:commandButton value="Inserir" 
-                             action="#{managerBean.insert()}"/>
+           
+            <p:commandButton value="Inserir" action="#{managerBean.insert()}" 
+                             update="grid, messages" title="Inserir o gerente"
+                             style="font-size: 18px;" />
         </h:form>
     </ui:define>
 

@@ -15,24 +15,60 @@
     <h:body>
         <div id="top">
             <ui:insert name="top">
-                <h:graphicImage library="images" name="logo.png"/>
+                <h:graphicImage library="images" name="logo.png" />
             </ui:insert>
         </div>
         <div>
             <div id="left">
                 <ui:insert name="left">
                     <h:form>
-                        <p:menu toggleable="true" style="width:140px">
-                            <p:submenu label="Subordinado">
-                                <p:menuitem value="Inserir" outcome="/personnel/subordinate/create" icon="ui-icon-plus" />
+                        <p:panelMenu>
+                            <p:submenu label="Pessoal" expanded="false">
+                                <p:submenu label="Subordinado" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/personnel/subordinate/create" 
+                                                icon="ui-icon-plus" />
+                                </p:submenu>
+
+                                <p:submenu label="Supervisor" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/personnel/supervisor/create" 
+                                                icon="ui-icon-plus" />
+                                </p:submenu>
+
+                                <p:submenu label="Gerente" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/personnel/manager/create" 
+                                                icon="ui-icon-plus" />
+                                </p:submenu>
+
+                                <p:submenu label="Setor" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/personnel/sector/create" 
+                                                icon="ui-icon-plus" />
+                                </p:submenu>
+
+                                <p:submenu label="Pessoal" expanded="false">
+                                    <p:menuitem value="Importar" outcome="/personnel/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
+                                </p:submenu>
                             </p:submenu>
-                            <p:submenu label="Supervisor">
-                                <p:menuitem value="Inserir" outcome="/personnel/supervisor/create" icon="ui-icon-plus" />
+                            
+                            <p:submenu label="Produção" expanded="false">
+                                <p:submenu label="Fase" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/production/phase/create" 
+                                                icon="ui-icon-plus" />
+                                </p:submenu>
+
+                                <p:submenu label="Modelo" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/production/model/create" 
+                                                icon="ui-icon-plus" />
+                                </p:submenu>
                             </p:submenu>
-                            <p:submenu label="Gerente">
-                                <p:menuitem value="Inserir" outcome="/personnel/manager/create" icon="ui-icon-plus" />
+                            
+                            <p:submenu label="Eventos" expanded="false">
+                                <p:submenu label="Sinistro" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/events/casualty/create" 
+                                                icon="ui-icon-plus" />
+                                </p:submenu>
                             </p:submenu>
-                        </p:menu>
+                        </p:panelMenu>
                     </h:form>
                 </ui:insert>
             </div>
@@ -50,7 +86,9 @@
             </div>
         </div>
         <div id="bottom">
-            <ui:insert name="bottom">Bottom</ui:insert>
+            <ui:insert name="bottom">
+                
+            </ui:insert>
         </div>
     </h:body>
 

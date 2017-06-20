@@ -8,26 +8,25 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h2>Cadastro de Subordinado</h2>
+        <h2>Cadastro de Sinistro</h2>
         <h:form>
             <p:growl id="messages" showDetail="true" />  
             
             <h:panelGrid id="grid" columns="3" cellpadding="10" style="margin-bottom: 20px;" >      
-                <h:outputLabel for="code" value="Código: " style="font-weight: bold;" /> 
-                <p:inputText id="code" label="Código" value="#{subordinateBean.subordinate.code}"
-                             required="true" requiredMessage="Digite o código do subordinado" 
-                             style="width: 250px;" />
-                <p:message for="code" />
-
                 <h:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
-                <p:inputText id="name" label="Nome" value="#{subordinateBean.subordinate.name}"
-                             required="true" requiredMessage="Digite o nome do subordinado" 
+                <p:inputText id="name" label="Nome" value="#{casualtyBean.casualty.name}"
+                             required="true" requiredMessage="Digite o nome do sinistro" 
                              style="width: 250px;" />
                 <p:message for="name" />
+                
+                <h:outputLabel for="collective" value="Coletivo: " style="font-weight: bold;" /> 
+                <p:selectBooleanButton id="collective" value="#{casualtyBean.casualty.collective}" 
+                                       onLabel="Sim" offLabel="Não" />
+                <p:message for="collective" />
             </h:panelGrid>
 
-            <p:commandButton value="Inserir" action="#{subordinateBean.insert()}" 
-                             update="grid, messages" title="Inserir o subordinado"
+            <p:commandButton value="Inserir" action="#{casualtyBean.insert()}" 
+                             update="grid, messages" title="Inserir o sinistro"
                              style="font-size: 18px;" />
         </h:form>
     </ui:define>
