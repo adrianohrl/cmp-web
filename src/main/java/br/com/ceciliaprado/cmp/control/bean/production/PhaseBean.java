@@ -29,7 +29,7 @@ public class PhaseBean {
     private final EntityManager em = DataSource.createEntityManager();
     private final PhaseDAO phaseDAO = new PhaseDAO(em);
     private final SectorDAO sectorDAO = new SectorDAO(em);
-    private Phase phase = new Phase();
+    private final Phase phase = new Phase();
     private final List<Sector> sectors = sectorDAO.findAll();
     
     public String insert() {
@@ -56,10 +56,6 @@ public class PhaseBean {
 
     public Phase getPhase() {
         return phase;
-    }
-
-    public void setPhase(Phase phase) {
-        this.phase = phase;
     }
 
     public List<Sector> getSectors() {

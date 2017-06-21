@@ -25,7 +25,7 @@ public class SubordinateBean {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final SubordinateDAO subordinateDAO = new SubordinateDAO(em);
-    private Subordinate subordinate = new Subordinate();    
+    private final Subordinate subordinate = new Subordinate();    
     
     public String insert() {
         String next = "";
@@ -46,10 +46,6 @@ public class SubordinateBean {
 
     public Subordinate getSubordinate() {
         return subordinate;
-    }
-
-    public void setSubordinate(Subordinate subordinate) {
-        this.subordinate = subordinate;
     }
     
 }

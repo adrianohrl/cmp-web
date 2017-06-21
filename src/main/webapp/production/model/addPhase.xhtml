@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+     
+    <h:head>
+        <title>Nova Fase</title>
+        <style type="text/css">
+            .ui-widget {
+                font-size: 90%;
+            }
+        </style>
+    </h:head>
+     
+    <h:body>        
+        <h:form>
+            <p:growl id="messages" showDetail="true" /> 
+            
+            <h:panelGrid id="grid" columns="2" cellpadding="10" style="margin-bottom: 20px;" >                      
+                <h:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" />              
+                <p:selectOneMenu id="modelPhase" value="#{modelPhaseView.phase.phase}" 
+                                 converter="phaseConverter" panelStyle="width: 250px;"
+                                 effect="fade" var="ph" style="width: 200px;" filter="true" 
+                                 filterMatchMode="startsWith" required="true" 
+                                 requiredMessage="Selecione a fase desejada!!!">
+                    <f:selectItems value="#{modelPhaseView.phases}" var="phase" 
+                                   itemLabel="#{phase.name}" itemValue="#{phase}" />
+
+                    <p:column>
+                        <h:outputText value="#{ph.name}" />
+                    </p:column>
+                </p:selectOneMenu>
+                
+                <h:outputLabel for="duration" value="Duração: " style="font-weight: bold;" /> 
+                <p:inputText id="duration" value="#{modelPhaseView.phase.expectedDuration}" 
+                             label="Duração esperada [min]" required="true" 
+                             converterMessage="A duração desta fase deve ser número positivo!!!"
+                             requiredMessage="Digite a duração esperada desta fase em minutos!!!" 
+                             validatorMessage="O valor da duração deve ser número positivo!!!">
+                    <f:validateDoubleRange minimum="1e-4" />
+                </p:inputText>
+            </h:panelGrid>
+
+            <p:commandButton value="Adicionar" action="#{modelPhaseView.closeDialog}" 
+                             update="@form" title="Adicionar a nova fase"
+                             style="font-size: 18px;" />
+        </h:form>
+    </h:body>
+     
+</html>

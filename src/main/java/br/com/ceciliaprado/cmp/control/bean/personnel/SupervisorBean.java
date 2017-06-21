@@ -25,7 +25,7 @@ public class SupervisorBean {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final SupervisorDAO supervisorDAO = new SupervisorDAO(em);
-    private Supervisor supervisor = new Supervisor();
+    private final Supervisor supervisor = new Supervisor();
     
     public String insert() {
         String next = "";
@@ -46,10 +46,6 @@ public class SupervisorBean {
 
     public Supervisor getSupervisor() {
         return supervisor;  
-    }
-
-    public void setSupervisor(Supervisor supervisor) {
-        this.supervisor = supervisor;
     }
     
 }

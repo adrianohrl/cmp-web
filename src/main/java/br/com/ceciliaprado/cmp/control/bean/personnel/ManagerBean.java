@@ -25,7 +25,7 @@ public class ManagerBean {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final ManagerDAO managerDAO = new ManagerDAO(em);
-    private Manager manager = new Manager();
+    private final Manager manager = new Manager();
     
     public String insert() {
         String next = "";
@@ -46,10 +46,6 @@ public class ManagerBean {
 
     public Manager getManager() {
         return manager;
-    }
-
-    public void setManager(Manager manager) {
-        this.manager = manager;
     }
     
 }

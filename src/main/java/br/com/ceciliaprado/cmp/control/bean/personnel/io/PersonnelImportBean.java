@@ -7,8 +7,10 @@ package br.com.ceciliaprado.cmp.control.bean.personnel.io;
 
 import br.com.ceciliaprado.cmp.control.dao.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.io.PersonnelReaderDAO;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -34,7 +36,7 @@ public class PersonnelImportBean {
         FacesMessage message = null;
         file = event.getFile();
         try {
-            InputStream input = file.getInputstream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputstream()));
         } catch (IOException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no upload", 
                     "Não foi possível fazer o upload do arquivo " + event.getFile().getFileName());

@@ -29,7 +29,7 @@ public class SectorBean {
     private final EntityManager em = DataSource.createEntityManager();
     private final SectorDAO sectorDAO = new SectorDAO(em);
     private final SupervisorDAO supervisorDAO = new SupervisorDAO(em);
-    private Sector sector = new Sector();
+    private final Sector sector = new Sector();
     private final List<Supervisor> supervisors = supervisorDAO.findAll();
     
     public String insert() {
@@ -56,10 +56,6 @@ public class SectorBean {
 
     public Sector getSector() {
         return sector;
-    }
-
-    public void setSector(Sector sector) {
-        this.sector = sector;
     }
 
     public List<Supervisor> getSupervisors() {

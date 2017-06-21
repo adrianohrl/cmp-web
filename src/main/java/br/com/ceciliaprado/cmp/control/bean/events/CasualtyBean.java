@@ -25,7 +25,7 @@ public class CasualtyBean {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final CasualtyDAO casualtyDAO = new CasualtyDAO(em);
-    private Casualty casualty = new Casualty();
+    private final Casualty casualty = new Casualty();
     
     public String insert() {
         String next = "";
@@ -46,10 +46,6 @@ public class CasualtyBean {
 
     public Casualty getCasualty() {
         return casualty;
-    }
-
-    public void setCasualty(Casualty casualty) {
-        this.casualty = casualty;
     }
     
 }
