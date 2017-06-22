@@ -9,7 +9,7 @@
     <ui:define name="content">
         <h2>Cadastro de Supervisor</h2>
         <h:form>
-            <p:growl id="messages" showDetail="true" /> 
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
 
             <h:panelGrid id="grid" columns="3" cellpadding="10" style="margin-bottom: 20px;" >        
                 <h:outputLabel for="code" value="Código: " style="font-weight: bold;" /> 

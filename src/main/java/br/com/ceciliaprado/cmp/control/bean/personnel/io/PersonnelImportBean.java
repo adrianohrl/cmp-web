@@ -9,7 +9,6 @@ import br.com.ceciliaprado.cmp.control.dao.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.io.PersonnelReaderDAO;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;

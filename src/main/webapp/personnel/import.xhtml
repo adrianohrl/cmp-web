@@ -9,7 +9,7 @@
     <ui:define name="content">
         <h2>Importação de Pessoal</h2>
         <h:form>
-            <p:growl id="messages" showDetail="true" />  
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
             <p:fileUpload fileUploadListener="#{personnelImportBean.upload}" label="Escolher" 
                           mode="advanced" dragDropSupport="true" update="messages" auto="true" 

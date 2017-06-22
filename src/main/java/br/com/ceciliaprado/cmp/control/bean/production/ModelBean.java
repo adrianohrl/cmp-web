@@ -13,37 +13,38 @@ import br.com.ceciliaprado.cmp.model.production.ModelPhase;
 import br.com.ceciliaprado.cmp.model.production.Phase;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author adrianohrl
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class ModelBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final ModelDAO modelDAO = new ModelDAO(em);
     private final Model model = new Model();
     private final List<Phase> phases = new ArrayList<>();
+    private ModelPhase modelPhase = new ModelPhase();
+    private int minutes = 0;
+    private double seconds = 0.0;
     
     @PostConstruct
     public void init() {
         PhaseDAO phaseDAO = new PhaseDAO(em);
         phases.addAll(phaseDAO.findAll());
+        Collections.sort(phases);
         if (phases.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatalidade no cadastro", "Nenhuma fase foi cadastrada ainda!!!");
@@ -78,39 +79,60 @@ public class ModelBean implements Serializable {
         return next;
     }
     
-    public void remove(ModelPhase phase) {    
-        model.getPhases().remove(phase);
-        phases.add(phase.getPhase());
-    }
-    
-    public void edit(ModelPhase phase) {    
-        //model.getPhases().remove(phase);
-    }
-    
-    public void openModelPhaseView() {
-        Map<String,Object> options = new HashMap<>();
-        options.put("modal", true);
-        ExternalContext externalContent = FacesContext.getCurrentInstance().getExternalContext();
-        externalContent.getRequestMap().put("phases", phases);
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.openDialog("addPhase", options, null);        
-    }
-     
-    public void onReturnFromModelPhaseView(SelectEvent event) {
-        ModelPhase phase = (ModelPhase) event.getObject();
-        model.getPhases().add(phase);
-        phases.remove(phase.getPhase());
+    public void add(){
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Nova fase adicionada", phase.toString());
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dado inconsistente", "A duração da fase não pode ser nula!!!");
+        modelPhase.setExpectedDuration(minutes + seconds / 60);
+        boolean positiveExpectedDuration = modelPhase.getExpectedDuration() > 0.0;
+        if (positiveExpectedDuration) {
+            model.getPhases().add(modelPhase);
+            phases.remove(modelPhase.getPhase());
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Nova fase adicionada ao modelo", modelPhase.toString());
+            reset();    
+        }
         context.addMessage(null, message);
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.addCallbackParam("positiveExpectedDuration", positiveExpectedDuration);
     }
-
+    
+    public void remove(ModelPhase modelPhase) {    
+        model.getPhases().remove(modelPhase);
+        phases.add(modelPhase.getPhase());
+        Collections.sort(phases);
+    }
+    
+    private void reset() {
+        modelPhase = new ModelPhase();
+        minutes = 0;
+        seconds = 0.0;
+    }
+    
     public Model getModel() {
         return model;
     }
 
     public List<Phase> getPhases() {
         return phases;
+    }
+
+    public ModelPhase getModelPhase() {
+        return modelPhase;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    public double getSeconds() {
+        return seconds;
+    }
+
+    public void setSeconds(double seconds) {
+        this.seconds = seconds;
     }
     
 }

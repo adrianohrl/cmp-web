@@ -10,108 +10,103 @@
     <ui:define name="content">
         <h2>Cadastro de Modelo</h2>
         <h:form>
-            <p:growl id="messages" showDetail="true" />  
+            <p:growl id="messages" autoUpdate="true" showDetail="true" life="#{parametersBean.growlLife}" /> 
             
-            <h:panelGrid id="grid" columns="3" cellpadding="10" style="margin-bottom: 20px;" >      
-                <h:outputLabel for="reference" value="Referência: " style="font-weight: bold;"/> 
-                <p:inputText id="reference" label="Referência" value="#{modelBean.model.reference}"
-                             required="true" requiredMessage="Digite a referência do modelo" 
-                             style="width: 250px;" />
-                <p:message for="reference" />
-
-                <h:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
-                <p:inputText id="name" label="Nome" value="#{modelBean.model.name}"
-                             required="true" requiredMessage="Digite o nome do modelo" 
-                             style="width: 250px;" />
-                <p:message for="name" />
-            </h:panelGrid>
-            
-            <ui:remove>
-                <p:dataTable id="phases" var="phase" value="#{modelBean.model.phases}" 
-                         rowKey="#{phase.phase.name}" editable="true" editMode="cell" editingRow="true"
-                         style="margin-bottom: 20px;">
-                    <p:ajax event="cellEdit" listener="#{modelBean.onCellEdit}" update=":form:messages" />
-
-                    <p:column headerText="Fase">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{phase.phase.name}" style="center" />
-                            </f:facet>
-
-                            <f:facet name="input">
-                                <p:selectOneMenu value="#{phase.phase}" 
+            <p:dialog id="dialog" header="Nova Fase" widgetVar="dlg" resizable="false" modal="true" 
+                      draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+                <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
+                    <h:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
+                    <p:selectOneMenu id="modelPhase" value="#{modelBean.modelPhase.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;"
-                                     effect="fade" var="p" filter="true" style="width: 100%;" 
-                                     filterMatchMode="startsWith" >
-                                    <f:selectItems value="#{modelBean.phases}" var="ph" 
-                                                   itemLabel="#{ph.name}" itemValue="#{ph}" />
+                                     effect="fade" var="ph" style="width: 200px;" filter="true" 
+                                     filterMatchMode="startsWith" required="true" 
+                                     requiredMessage="Selecione a fase desejada!!!">
+                        <f:selectItems value="#{modelBean.phases}" var="phase" 
+                                       itemLabel="#{phase.name}" itemValue="#{phase}" />
 
-                                    <p:column>
-                                        <h:outputText value="#{p.name}" />
-                                    </p:column>
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
+                        <p:column>
+                            <h:outputText value="#{ph.name}" />
+                        </p:column>
+                    </p:selectOneMenu>
 
-                    <p:column headerText="Duração [min]">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{phase.expectedDuration}" style="center" />
-                            </f:facet>
+                    <h:outputLabel for="minutes" value="Duração: " style="font-weight: bold;" /> 
+                    <p:inputNumber id="minutes" value="#{modelBean.minutes}" label="Parcela da duração [min]" style="width: 100px;"
+                                   required="true" emptyValue="zero" decimalPlaces="0" symbol=" [min]" symbolPosition="s" minValue="0"
+                                   converterMessage="Esta parcela da duração esperada desta fase deve ser um número inteiro não-negativo!!!"
+                                   requiredMessage="Digite a parcela em minutos da duração esperada desta fase!!!" 
+                                   validatorMessage="O valor desta parcela da duração esperada deve ser um número inteiro não-negativo!!!" />
+                        
+                    <h:outputLabel value=""/>
+                    <p:inputNumber id="seconds" value="#{modelBean.seconds}" label="Parcela da duração [s]" required="true" 
+                                   decimalPlaces="2" symbol=" [s]" symbolPosition="s" minValue="0.0" style="width: 100px;"
+                                   converterMessage="Esta parcela da duração esperada desta fase deve ser um número real não-negativo!!!"
+                                   requiredMessage="Digite a parcela em segundos da duração esperada desta fase!!!" 
+                                   validatorMessage="O valor desta parcela da duração esperada deve ser um número real não-negativo!!!" />
 
-                            <f:facet name="input">
-                                <p:inputText value="#{phase.expectedDuration}" label="Duração esperada [min]" 
-                                             style="width: 100%">
-                                    <f:validateDoubleRange minimum="1e-4" />
-                                </p:inputText>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-
-                    <p:column style="width: 45px; text-align: center;">
-                        <p:commandButton process="phases" icon="ui-icon-plus"  title="Adicionar nova linha acima" 
-                                         action="#{modelBean.add}" update="phases, :form:messages" 
-                                         style="width: 20px; height: 20px;" />
-                        <p:commandButton process="phases" icon="ui-icon-minus"  title="Remover esta linha" 
-                                         action="#{modelBean.remove(phase)}" update="phases, :form:messages" 
-                                         style="width: 20px; height: 20px;" />
-                    </p:column>
-                </p:dataTable>
-            </ui:remove>
+                    <f:facet name="footer">
+                        <p:commandButton value="Adicionar" update="@form:dialog, @form:messages, @form:phases" 
+                                         title="Adicionar a nova fase" actionListener="#{modelBean.add}" 
+                                         style="font-size: 18px;" oncomplete="handleLoginRequest(xhr, status, args)"/>
+                    </f:facet>
+                </h:panelGrid>
+            </p:dialog>
             
-            <p:dataTable id="phases" var="phase" value="#{modelBean.model.phases}" 
-                         rowKey="#{phase.phase.name}" style="width: 500px; margin-bottom: 20px;">                
-                <p:column headerText="Fase" style="width: 200px; text-align: center;">
-                     <h:outputText value="#{phase.phase.name}" />
-                </p:column>
-                
-                <p:column headerText="Duração [min]" style="width: 100px; text-align: center;">
-                    <h:outputText value="#{phase.expectedDuration}" />
-                </p:column>
-                
-                <p:column style="width: 50px; text-align: center;">
-                    <p:commandButton process="phases" icon="ui-icon-pencil"  title="Editar esta fase" 
-                                     action="#{modelBean.edit(phase)}" update="@form:phases, @form:messages" 
-                                     style="width: 20px; height: 20px;" />
-                    <p:commandButton process="phases" icon="ui-icon-minus"  title="Remover esta fase" 
-                                     action="#{modelBean.remove(phase)}" update="@form:phases, @form:messages" 
-                                     style="width: 20px; height: 20px;" />
-                </p:column>
-                
-                <f:facet name="footer">
-                    <p:commandButton process="@form:phases" icon="ui-icon-plus" title="Adicionar nova fase" 
-                                     actionListener="#{modelBean.openModelPhaseView}" 
-                                     update="@form:phases, @form:messages" style="width: 20px; height: 20px;">
-                        <p:ajax event="dialogReturn" listener="#{modelBean.onReturnFromModelPhaseView}" 
-                                update="@form:phases, @form:messages"/>
-                    </p:commandButton>
-                </f:facet>
-            </p:dataTable>
+            <h:panelGrid columns="1" cellpadding="10">
+                <h:panelGrid id="grid" columns="3" cellpadding="10">      
+                    <h:outputLabel for="reference" value="Referência: " style="font-weight: bold;"/> 
+                    <p:inputText id="reference" label="Referência" value="#{modelBean.model.reference}"
+                                 required="true" requiredMessage="Digite a referência do modelo" 
+                                 style="width: 250px;" />
+                    <p:message for="reference" />
 
-            <p:commandButton value="Inserir" action="#{modelBean.insert}" update="@form" 
-                             title="Inserir o modelo" style="font-size: 18px;" />
+                    <h:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
+                    <p:inputText id="name" label="Nome" value="#{modelBean.model.name}"
+                                 required="true" requiredMessage="Digite o nome do modelo" 
+                                 style="width: 250px;" />
+                    <p:message for="name" />
+                </h:panelGrid>
+            
+                <p:dataTable id="phases" var="phase" value="#{modelBean.model.phases}" 
+                             rowKey="#{phase.phase.name}" style="width: 500px; margin-bottom: 20px;">                
+                    <p:column headerText="Fase" style="width: 200px; text-align: center;">
+                         <h:outputText value="#{phase.phase.name}" />
+                    </p:column>
+
+                    <p:column headerText="Duração [min]" style="width: 100px; text-align: center;">
+                        <h:outputText value="#{phase.expectedDuration}" />
+                    </p:column>
+
+                    <p:column style="width: 25px; text-align: center;">
+                        <p:commandButton process="phases" icon="ui-icon-minus"  title="Remover esta fase" 
+                                         actionListener="#{modelBean.remove(phase)}" 
+                                         update="@form:dialog, @form:phases, @form:messages" 
+                                         style="width: 20px; height: 20px;" />
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton process="@form:phases" icon="ui-icon-plus" title="Adicionar nova fase"
+                                         onclick="PF('dlg').show();" update="@form:phases, @form:messages" 
+                                         style="width: 20px; height: 20px;">
+                        </p:commandButton>
+                    </f:facet>
+                </p:dataTable>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Inserir" action="#{modelBean.insert}" update="@form" 
+                                     title="Inserir o modelo" style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
         </h:form>
+        
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if(args.validationFailed || !args.positiveExpectedDuration) {
+                    PF('dlg').jq.effect("shake", {times:5}, 100);
+                } else {
+                    PF('dlg').hide();
+                }
+            }
+        </script>
     </ui:define>
 
 </ui:composition>
