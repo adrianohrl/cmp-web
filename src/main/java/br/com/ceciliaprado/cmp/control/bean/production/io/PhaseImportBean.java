@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel.io;
+package br.com.ceciliaprado.cmp.control.bean.production.io;
 
 import br.com.ceciliaprado.cmp.control.dao.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.io.PersonnelReaderDAO;
@@ -25,7 +25,7 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class PersonnelImportBean implements Serializable {
+public class PhaseImportBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final PersonnelReaderDAO readerDAO = new PersonnelReaderDAO(em);

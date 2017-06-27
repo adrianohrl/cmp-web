@@ -25,7 +25,7 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class PersonnelImportBean implements Serializable {
+public class ManagerImportBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final PersonnelReaderDAO readerDAO = new PersonnelReaderDAO(em);

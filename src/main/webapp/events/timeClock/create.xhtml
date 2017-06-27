@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h2>Cadastro de Entrada/Saída de Ponto</h2>
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
+            
+            <h:panelGrid id="grid" columns="2" cellpadding="10">   
+                <h:outputLabel for="date" value="Data: " style="font-weight: bold;"/> 
+                <p:calendar id="date" value="#{timeClockEventBean.date}" pattern="dd-MM-yyyy" effect="fade"
+                            mask="true" required="true" maskAutoClear="true" mode="inline" navigator="true"
+                            requiredMessage="Selecione a data da entrada/saída!!!" locale="pt" />
+                
+                <h:outputLabel for="time" value="Horário: " style="font-weight: bold;"/> 
+                <p:calendar id="time" value="#{timeClockEventBean.time}" pattern="HH:mm:ss" effect="fade"
+                            mask="true" timeOnly="true"  required="true" maskAutoClear="true" mode="inline"
+                            requiredMessage="Selecione o horário da entrada/saída!!!" locale="pt" />
+                
+                <h:outputLabel for="employee" value="Funcionário: " style="font-weight: bold;" />              
+                <p:selectOneMenu id="employee" value="#{timeClockEventBean.timeClockEvent.employee}" 
+                                 converter="employeeConverter" panelStyle="width: 250px;"
+                                 effect="fade" var="emp" style="width: 200px;" filter="true" 
+                                 filterMatchMode="startsWith" required="true" 
+                                 converterMessage="Funcionário inválido!!!"
+                                 requiredMessage="Selecione o funcionário!!!">
+                    <f:selectItems value="#{timeClockEventBean.employees}" var="employee" 
+                                   itemLabel="#{employee.name}" itemValue="#{employee}" />
+
+                    <p:column>
+                        <h:outputText value="#{emp.name}" />
+                    </p:column>
+                </p:selectOneMenu>
+                
+                <h:outputLabel for="" value="Entrada: " style="font-weight: bold;" /> 
+                <p:selectBooleanButton id="collective" value="#{timeClockEventBean.timeClockEvent.arrival}" 
+                                       onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" 
+                                       offIcon="ui-icon-close" />
+                
+                <f:facet name="footer">
+                    <p:commandButton value="Inserir" action="#{casualtyBean.insert()}" 
+                                     update="@form" title="Inserir o sinistro"
+                                     style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
+        </h:form>
+        
+        <script>
+            PrimeFaces.locales['pt'] = {
+                closeText: 'Fechar',
+                prevText: 'Anterior',
+                nextText: 'Próximo',
+                currentText: 'Começo',
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+                weekHeader: 'Semana',
+                firstDay: 0,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Só Horas',
+                timeText: 'Tempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                ampm: false,
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                allDayText: 'Todo o Dia'
+            };
+        </script>
+        
+    </ui:define>
+
+</ui:composition>

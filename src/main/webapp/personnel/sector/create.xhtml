@@ -12,18 +12,19 @@
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
-            <h:panelGrid id="grid" columns="3" cellpadding="10" style="margin-bottom: 20px;" >      
+            <h:panelGrid id="grid" columns="2" cellpadding="10">      
                 <h:outputLabel for="name" value="Nome: " style="font-weight: bold;" /> 
                 <p:inputText id="name" label="Nome" value="#{sectorBean.sector.name}"
-                             required="true" requiredMessage="Digite o nome do setor" 
+                             required="true" requiredMessage="Digite o nome do setor!!!" 
                              style="width: 250px;" />
-                <p:message for="name" />
                 
                 <h:outputLabel for="supervisor" value="Supervisor: " style="font-weight: bold;" />              
                 <p:selectOneMenu id="supervisor" value="#{sectorBean.sector.supervisor}" 
                                  converter="supervisorConverter" panelStyle="width: 250px;"
                                  effect="fade" var="sup" style="width: 200px;" filter="true" 
-                                 filterMatchMode="startsWith" >
+                                 filterMatchMode="startsWith" required="true" 
+                                 converterMessage="Supervisor inválido!!!"
+                                 requiredMessage="Selecione o supervisor do setor!!!">
                     <f:selectItems value="#{sectorBean.supervisors}" var="supervisor" 
                                    itemLabel="#{supervisor.name}" itemValue="#{supervisor}" />
 
@@ -31,12 +32,13 @@
                         <h:outputText value="#{sup.name}" />
                     </p:column>
                 </p:selectOneMenu>
-                <p:message for="supervisor" />
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Inserir" action="#{sectorBean.insert()}" 
+                                     update="@form" title="Inserir o setor"
+                                     style="font-size: 18px;" />
+                </f:facet>
             </h:panelGrid>
-
-            <p:commandButton value="Inserir" action="#{sectorBean.insert()}" 
-                             update="grid, messages" title="Inserir o setor"
-                             style="font-size: 18px;" />
         </h:form>
     </ui:define>
 

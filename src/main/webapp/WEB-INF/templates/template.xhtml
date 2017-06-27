@@ -22,7 +22,7 @@
             <div id="left">
                 <ui:insert name="left">
                     <h:form>
-                        <p:panelMenu>
+                        <p:panelMenu stateful="false">
                             <p:submenu label="Pessoal" expanded="false">
                                 <p:submenu label="Subordinado" expanded="false">
                                     <p:menuitem value="Inserir" outcome="/personnel/subordinate/create" 
@@ -32,16 +32,22 @@
                                 <p:submenu label="Supervisor" expanded="false">
                                     <p:menuitem value="Inserir" outcome="/personnel/supervisor/create" 
                                                 icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/personnel/supervisor/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
 
                                 <p:submenu label="Gerente" expanded="false">
                                     <p:menuitem value="Inserir" outcome="/personnel/manager/create" 
                                                 icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/personnel/manager/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
 
                                 <p:submenu label="Setor" expanded="false">
                                     <p:menuitem value="Inserir" outcome="/personnel/sector/create" 
                                                 icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/personnel/sector/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
 
                                 <p:submenu label="Pessoal" expanded="false">
@@ -54,11 +60,29 @@
                                 <p:submenu label="Fase" expanded="false">
                                     <p:menuitem value="Inserir" outcome="/production/phase/create" 
                                                 icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/production/phase/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
 
                                 <p:submenu label="Modelo" expanded="false">
                                     <p:menuitem value="Inserir" outcome="/production/model/create" 
                                                 icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/production/model/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
+                                </p:submenu>
+
+                                <p:submenu label="Ordem de Produção" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/production/productionOrder/create" 
+                                                icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/production/productionOrder/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
+                                </p:submenu>
+
+                                <p:submenu label="Ordem de Produção de Fase" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/production/phaseProductionOrder/create" 
+                                                icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/production/phaseProductionOrder/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
                             </p:submenu>
                             
@@ -66,6 +90,22 @@
                                 <p:submenu label="Sinistro" expanded="false">
                                     <p:menuitem value="Inserir" outcome="/events/casualty/create" 
                                                 icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/events/casualty/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
+                                </p:submenu>
+                                
+                                <p:submenu label="Atividades de Produção" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/events/entry/create" 
+                                                icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/events/entry/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
+                                </p:submenu>
+                                
+                                <p:submenu label="Entrada/Saída de Ponto" expanded="false">
+                                    <p:menuitem value="Inserir" outcome="/events/timeClock/create" 
+                                                icon="ui-icon-plus" />
+                                    <p:menuitem value="Importar" outcome="/events/timeClock/import" 
+                                                icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
                             </p:submenu>
                         </p:panelMenu>

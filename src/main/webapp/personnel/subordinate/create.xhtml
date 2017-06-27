@@ -12,23 +12,23 @@
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
-            <h:panelGrid id="grid" columns="3" cellpadding="10" style="margin-bottom: 20px;" >      
+            <h:panelGrid id="grid" columns="2" cellpadding="10">      
                 <h:outputLabel for="code" value="Código: " style="font-weight: bold;" /> 
                 <p:inputText id="code" label="Código" value="#{subordinateBean.subordinate.code}"
-                             required="true" requiredMessage="Digite o código do subordinado" 
+                             required="true" requiredMessage="Digite o código do subordinado!!!" 
                              style="width: 250px;" />
-                <p:message for="code" />
 
                 <h:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
                 <p:inputText id="name" label="Nome" value="#{subordinateBean.subordinate.name}"
-                             required="true" requiredMessage="Digite o nome do subordinado" 
+                             required="true" requiredMessage="Digite o nome do subordinado!!!" 
                              style="width: 250px;" />
-                <p:message for="name" />
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Inserir" action="#{subordinateBean.insert()}" 
+                                     update="@form" title="Inserir o subordinado"
+                                     style="font-size: 18px;" />
+                </f:facet>
             </h:panelGrid>
-
-            <p:commandButton value="Inserir" action="#{subordinateBean.insert()}" 
-                             update="grid, messages" title="Inserir o subordinado"
-                             style="font-size: 18px;" />
         </h:form>
     </ui:define>
 

@@ -44,11 +44,14 @@ public class ModelBean implements Serializable {
     public void init() {
         PhaseDAO phaseDAO = new PhaseDAO(em);
         phases.addAll(phaseDAO.findAll());
-        Collections.sort(phases);
         if (phases.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatalidade no cadastro", "Nenhuma fase foi cadastrada ainda!!!");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                    "Fatalidade no cadastro", "Nenhuma fase foi cadastrada ainda!!!");
             context.addMessage(null, message);
+        } else {
+            phases.add(new Phase("", null));
+            Collections.sort(phases);
         }
     }
     
@@ -56,11 +59,6 @@ public class ModelBean implements Serializable {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
-        for (int i = 0; i < model.getPhases().size(); i++) {
-            if (model.getPhases().get(i).getPhase() == null) {
-                model.getPhases().remove(i);
-            }
-        }
         if (model.getPhases().isEmpty()) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                 "Erro no cadastro", model + " deve conter fases!!!");
@@ -81,13 +79,15 @@ public class ModelBean implements Serializable {
     
     public void add(){
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Dado inconsistente", "A duração da fase não pode ser nula!!!");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                "Dado inconsistente", "A duração da fase não pode ser nula!!!");
         modelPhase.setExpectedDuration(minutes + seconds / 60);
         boolean positiveExpectedDuration = modelPhase.getExpectedDuration() > 0.0;
         if (positiveExpectedDuration) {
             model.getPhases().add(modelPhase);
             phases.remove(modelPhase.getPhase());
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Nova fase adicionada ao modelo", modelPhase.toString());
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                    "Nova fase adicionada ao modelo", modelPhase.toString());
             reset();    
         }
         context.addMessage(null, message);

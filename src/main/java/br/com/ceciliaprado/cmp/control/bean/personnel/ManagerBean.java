@@ -7,7 +7,15 @@ package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.dao.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.ManagerDAO;
+import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
+import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -21,17 +29,34 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class ManagerBean {
+public class ManagerBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final ManagerDAO managerDAO = new ManagerDAO(em);
     private final Manager manager = new Manager();
+    private final List<Supervisor> supervisors = new ArrayList<>();  
+    private Supervisor[] selectedSupervisors;
+
+    @PostConstruct
+    public void init() {
+        SupervisorDAO supervisorDAO = new SupervisorDAO(em);
+        supervisors.addAll(supervisorDAO.findAll());
+        if (supervisors.isEmpty()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, 
+                    "Atenção", "Nenhum supervisor foi cadastrado ainda!!!");
+            context.addMessage(null, message);
+        } else {
+            Collections.sort(supervisors);
+        }
+    }
     
     public String insert() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
         try {
+            manager.setSupervisor(Arrays.asList(selectedSupervisors));
             managerDAO.create(manager);
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "Sucesso no cadastro", manager + " foi cadastrado com sucesso!!!");
@@ -46,6 +71,18 @@ public class ManagerBean {
 
     public Manager getManager() {
         return manager;
+    }
+
+    public List<Supervisor> getSupervisors() {
+        return supervisors;
+    }
+
+    public Supervisor[] getSelectedSupervisors() {
+        return selectedSupervisors;
+    }
+
+    public void setSelectedSupervisors(Supervisor[] selectedSupervisors) {
+        this.selectedSupervisors = selectedSupervisors;
     }
     
 }

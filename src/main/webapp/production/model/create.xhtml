@@ -10,7 +10,7 @@
     <ui:define name="content">
         <h2>Cadastro de Modelo</h2>
         <h:form>
-            <p:growl id="messages" autoUpdate="true" showDetail="true" life="#{parametersBean.growlLife}" /> 
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
             
             <p:dialog id="dialog" header="Nova Fase" widgetVar="dlg" resizable="false" modal="true" 
                       draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true">
@@ -20,7 +20,8 @@
                                      converter="phaseConverter" panelStyle="width: 250px;"
                                      effect="fade" var="ph" style="width: 200px;" filter="true" 
                                      filterMatchMode="startsWith" required="true" 
-                                     requiredMessage="Selecione a fase desejada!!!">
+                                     requiredMessage="Selecione a fase desejada!!!"
+                                     converterMessage="Fase inválida!!!">
                         <f:selectItems value="#{modelBean.phases}" var="phase" 
                                        itemLabel="#{phase.name}" itemValue="#{phase}" />
 
@@ -36,7 +37,7 @@
                                    requiredMessage="Digite a parcela em minutos da duração esperada desta fase!!!" 
                                    validatorMessage="O valor desta parcela da duração esperada deve ser um número inteiro não-negativo!!!" />
                         
-                    <h:outputLabel value=""/>
+                    <h:outputLabel />
                     <p:inputNumber id="seconds" value="#{modelBean.seconds}" label="Parcela da duração [s]" required="true" 
                                    decimalPlaces="2" symbol=" [s]" symbolPosition="s" minValue="0.0" style="width: 100px;"
                                    converterMessage="Esta parcela da duração esperada desta fase deve ser um número real não-negativo!!!"
@@ -52,18 +53,16 @@
             </p:dialog>
             
             <h:panelGrid columns="1" cellpadding="10">
-                <h:panelGrid id="grid" columns="3" cellpadding="10">      
+                <h:panelGrid id="grid" columns="2" cellpadding="10">      
                     <h:outputLabel for="reference" value="Referência: " style="font-weight: bold;"/> 
                     <p:inputText id="reference" label="Referência" value="#{modelBean.model.reference}"
                                  required="true" requiredMessage="Digite a referência do modelo" 
                                  style="width: 250px;" />
-                    <p:message for="reference" />
 
                     <h:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
                     <p:inputText id="name" label="Nome" value="#{modelBean.model.name}"
                                  required="true" requiredMessage="Digite o nome do modelo" 
                                  style="width: 250px;" />
-                    <p:message for="name" />
                 </h:panelGrid>
             
                 <p:dataTable id="phases" var="phase" value="#{modelBean.model.phases}" 
@@ -92,7 +91,7 @@
                 </p:dataTable>
 
                 <f:facet name="footer">
-                    <p:commandButton value="Inserir" action="#{modelBean.insert}" update="@form" 
+                    <p:commandButton value="Inserir" action="#{modelBean.insert()}" update="@form" 
                                      title="Inserir o modelo" style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>

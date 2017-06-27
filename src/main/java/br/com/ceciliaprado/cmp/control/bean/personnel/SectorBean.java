@@ -10,7 +10,11 @@ import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Sector;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -24,13 +28,27 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class SectorBean {
+public class SectorBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final SectorDAO sectorDAO = new SectorDAO(em);
-    private final SupervisorDAO supervisorDAO = new SupervisorDAO(em);
     private final Sector sector = new Sector();
-    private final List<Supervisor> supervisors = supervisorDAO.findAll();
+    private final List<Supervisor> supervisors = new ArrayList<>();
+    
+    @PostConstruct
+    public void init() {
+        SupervisorDAO supervisorDAO = new SupervisorDAO(em);
+        supervisors.addAll(supervisorDAO.findAll());
+        if (supervisors.isEmpty()) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                    "Fatalidade no cadastro", "Nenhum supervisor foi cadastrado ainda!!!");
+            context.addMessage(null, message);
+        } else {
+            supervisors.add(new Supervisor("", "", "", ""));
+            Collections.sort(supervisors);
+        }
+    }
     
     public String insert() {
         String next = "";
