@@ -24,6 +24,9 @@
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Modelo inválido!!!" 
                                  requiredMessage="Selecione o modelo que esta ordem de produção está associada!!!">
+                    <f:selectItem itemLabel="Selecione um" itemValue="#{productionOrderBean.emptyModel}" 
+                                  noSelectionOption="true" />
+                    
                     <f:selectItems value="#{productionOrderBean.models}" var="model" 
                                    itemLabel="#{model.name}" itemValue="#{model}" />
 

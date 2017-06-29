@@ -5,7 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SubordinateDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
 import java.util.ArrayList;

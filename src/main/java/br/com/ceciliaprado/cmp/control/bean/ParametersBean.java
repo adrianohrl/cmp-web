@@ -18,6 +18,7 @@ import javax.faces.bean.SessionScoped;
 public class ParametersBean implements Serializable {
     
     private int growlLife = 5000;
+    private String theme = "blitzer";
 
     public int getGrowlLife() {
         return growlLife;
@@ -25,6 +26,14 @@ public class ParametersBean implements Serializable {
 
     public void setGrowlLife(int growlLife) {
         this.growlLife = growlLife;
+    } 
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
     
 }

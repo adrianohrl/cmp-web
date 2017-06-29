@@ -22,6 +22,9 @@
                                      filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!"
                                      converterMessage="Fase inválida!!!">
+                        <f:selectItem itemLabel="Selecione uma" itemValue="#{modelBean.emptyPhase}" 
+                                      noSelectionOption="true" />
+                        
                         <f:selectItems value="#{modelBean.phases}" var="phase" 
                                        itemLabel="#{phase.name}" itemValue="#{phase}" />
 
@@ -45,9 +48,15 @@
                                    validatorMessage="O valor desta parcela da duração esperada deve ser um número real não-negativo!!!" />
 
                     <f:facet name="footer">
-                        <p:commandButton value="Adicionar" update="@form:dialog, @form:messages, @form:phases" 
-                                         title="Adicionar a nova fase" actionListener="#{modelBean.add}" 
-                                         style="font-size: 18px;" oncomplete="handleLoginRequest(xhr, status, args)"/>
+                        <h:panelGrid columns="2" cellpadding="10"> 
+                            <p:commandButton process="@form:dialog" value="Limpar" update="@form:modelPhase, @form:minutes, @form:seconds" 
+                                             title="Limpar os campos" actionListener="#{modelBean.reset()}" type="reset"
+                                             style="font-size: 18px;" />
+                            
+                            <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:phases" 
+                                             title="Adicionar a nova fase" actionListener="#{modelBean.add()}" 
+                                             style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)"/>
+                        </h:panelGrid>
                     </f:facet>
                 </h:panelGrid>
             </p:dialog>
@@ -97,15 +106,7 @@
             </h:panelGrid>
         </h:form>
         
-        <script type="text/javascript">
-            function handleLoginRequest(xhr, status, args) {
-                if(args.validationFailed || !args.positiveExpectedDuration) {
-                    PF('dlg').jq.effect("shake", {times:5}, 100);
-                } else {
-                    PF('dlg').hide();
-                }
-            }
-        </script>
+        <h:outputScript library="js" name="common.js" />
     </ui:define>
 
 </ui:composition>

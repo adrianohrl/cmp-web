@@ -5,10 +5,11 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SubordinateDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
 import java.io.Serializable;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -23,7 +24,7 @@ import javax.persistence.EntityManager;
 @ManagedBean
 @ViewScoped
 public class SubordinateBean implements Serializable {
-    
+       
     private final EntityManager em = DataSource.createEntityManager();
     private final SubordinateDAO subordinateDAO = new SubordinateDAO(em);
     private final Subordinate subordinate = new Subordinate();    
@@ -43,6 +44,11 @@ public class SubordinateBean implements Serializable {
         }
         context.addMessage(null, message);
         return next;
+    }
+
+    @PreDestroy
+    void destroy() {
+        em.close();
     }
 
     public Subordinate getSubordinate() {

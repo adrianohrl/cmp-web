@@ -25,6 +25,9 @@
                                  filterMatchMode="startsWith" required="true"
                                  requiredMessage="Selecione o setor onde está fase é executada!!!"
                                  converterMessage="Setor inválido!!!">
+                    <f:selectItem itemLabel="Selecione um" itemValue="#{phaseBean.emptySector}"
+                                  noSelectionOption="true" />
+                    
                     <f:selectItems value="#{phaseBean.sectors}" var="sector" 
                                    itemLabel="#{sector.name}" itemValue="#{sector}" />
 

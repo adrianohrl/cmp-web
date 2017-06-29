@@ -5,7 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Sector;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -30,23 +31,23 @@ import javax.persistence.EntityManager;
 @ViewScoped
 public class SectorBean implements Serializable {
     
+    
     private final EntityManager em = DataSource.createEntityManager();
     private final SectorDAO sectorDAO = new SectorDAO(em);
     private final Sector sector = new Sector();
+    private final Supervisor emptySupervisor = new Supervisor("", "", "", "");
     private final List<Supervisor> supervisors = new ArrayList<>();
     
     @PostConstruct
     public void init() {
         SupervisorDAO supervisorDAO = new SupervisorDAO(em);
         supervisors.addAll(supervisorDAO.findAll());
+        Collections.sort(supervisors);
         if (supervisors.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                     "Fatalidade no cadastro", "Nenhum supervisor foi cadastrado ainda!!!");
             context.addMessage(null, message);
-        } else {
-            supervisors.add(new Supervisor("", "", "", ""));
-            Collections.sort(supervisors);
         }
     }
     
@@ -72,8 +73,17 @@ public class SectorBean implements Serializable {
         return next;
     }
 
+    @PreDestroy
+    void destroy() {
+        em.close();
+    }
+
     public Sector getSector() {
         return sector;
+    }
+
+    public Supervisor getEmptySupervisor() {
+        return emptySupervisor;
     }
 
     public List<Supervisor> getSupervisors() {

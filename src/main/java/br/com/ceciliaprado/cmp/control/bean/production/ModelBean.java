@@ -5,7 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.production;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.production.ModelDAO;
 import br.com.ceciliaprado.cmp.control.dao.production.PhaseDAO;
 import br.com.ceciliaprado.cmp.model.production.Model;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -35,6 +36,7 @@ public class ModelBean implements Serializable {
     private final EntityManager em = DataSource.createEntityManager();
     private final ModelDAO modelDAO = new ModelDAO(em);
     private final Model model = new Model();
+    private final Phase emptyPhase = new Phase("", null);
     private final List<Phase> phases = new ArrayList<>();
     private ModelPhase modelPhase = new ModelPhase();
     private int minutes = 0;
@@ -44,14 +46,12 @@ public class ModelBean implements Serializable {
     public void init() {
         PhaseDAO phaseDAO = new PhaseDAO(em);
         phases.addAll(phaseDAO.findAll());
+        Collections.sort(phases);
         if (phases.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                     "Fatalidade no cadastro", "Nenhuma fase foi cadastrada ainda!!!");
             context.addMessage(null, message);
-        } else {
-            phases.add(new Phase("", null));
-            Collections.sort(phases);
         }
     }
     
@@ -101,14 +101,23 @@ public class ModelBean implements Serializable {
         Collections.sort(phases);
     }
     
-    private void reset() {
+    public void reset() {
         modelPhase = new ModelPhase();
         minutes = 0;
         seconds = 0.0;
     }
+
+    @PreDestroy
+    void destroy() {
+        em.close();
+    }
     
     public Model getModel() {
         return model;
+    }
+
+    public Phase getEmptyPhase() {
+        return emptyPhase;
     }
 
     public List<Phase> getPhases() {

@@ -13,15 +13,18 @@
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
             <h:panelGrid id="grid" columns="2" cellpadding="10">   
-                <h:outputLabel for="date" value="Data: " style="font-weight: bold;"/> 
+                <h:outputLabel for="date" value="Data: " style="font-weight: bold;" /> 
                 <p:calendar id="date" value="#{timeClockEventBean.date}" pattern="dd-MM-yyyy" effect="fade"
-                            mask="true" required="true" maskAutoClear="true" mode="inline" navigator="true"
-                            requiredMessage="Selecione a data da entrada/saída!!!" locale="pt" />
-                
-                <h:outputLabel for="time" value="Horário: " style="font-weight: bold;"/> 
+                            mask="true" maskAutoClear="true" navigator="true" required="true"
+                            requiredMessage="Selecione a data da entrada/saída!!!" 
+                            converterMessage="Data com formato errado!!!" locale="pt" 
+                            maxdate="#{timeClockEventBean.getMaxDate()}" />
+
+                <h:outputLabel for="time" value="Horário: " style="font-weight: bold;" /> 
                 <p:calendar id="time" value="#{timeClockEventBean.time}" pattern="HH:mm:ss" effect="fade"
-                            mask="true" timeOnly="true"  required="true" maskAutoClear="true" mode="inline"
-                            requiredMessage="Selecione o horário da entrada/saída!!!" locale="pt" />
+                            mask="true" timeOnly="true" maskAutoClear="true" required="true" 
+                            requiredMessage="Selecione o horário da entrada/saída!!!"
+                            converterMessage="Horário com formato errado!!!" locale="pt" />                
                 
                 <h:outputLabel for="employee" value="Funcionário: " style="font-weight: bold;" />              
                 <p:selectOneMenu id="employee" value="#{timeClockEventBean.timeClockEvent.employee}" 
@@ -30,6 +33,9 @@
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Funcionário inválido!!!"
                                  requiredMessage="Selecione o funcionário!!!">
+                    <f:selectItem itemLabel="Selecione um" itemValue="#{timeClockEventBean.emptyEmployee}"
+                                  noSelectionOption="true" />
+                    
                     <f:selectItems value="#{timeClockEventBean.employees}" var="employee" 
                                    itemLabel="#{employee.name}" itemValue="#{employee}" />
 
@@ -44,41 +50,14 @@
                                        offIcon="ui-icon-close" />
                 
                 <f:facet name="footer">
-                    <p:commandButton value="Inserir" action="#{casualtyBean.insert()}" 
+                    <p:commandButton value="Inserir" action="#{timeClockEventBean.insert()}" 
                                      update="@form" title="Inserir o sinistro"
                                      style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>
         </h:form>
         
-        <script>
-            PrimeFaces.locales['pt'] = {
-                closeText: 'Fechar',
-                prevText: 'Anterior',
-                nextText: 'Próximo',
-                currentText: 'Começo',
-                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
-                weekHeader: 'Semana',
-                firstDay: 0,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: '',
-                timeOnlyTitle: 'Só Horas',
-                timeText: 'Tempo',
-                hourText: 'Hora',
-                minuteText: 'Minuto',
-                secondText: 'Segundo',
-                ampm: false,
-                month: 'Mês',
-                week: 'Semana',
-                day: 'Dia',
-                allDayText: 'Todo o Dia'
-            };
-        </script>
+        <h:outputScript library="js" name="pt_calendar.js" />
         
     </ui:define>
 

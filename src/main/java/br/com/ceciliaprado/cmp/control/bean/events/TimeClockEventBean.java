@@ -5,7 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.events;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.events.TimeClockEventDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
 import br.com.ceciliaprado.cmp.model.events.TimeClockEvent;
@@ -14,11 +14,13 @@ import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
 import br.com.ceciliaprado.cmp.util.Calendars;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -37,7 +39,9 @@ public class TimeClockEventBean implements Serializable {
     private final EntityManager em = DataSource.createEntityManager();
     private final TimeClockEventDAO timeClockEventDAO = new TimeClockEventDAO(em);
     private final TimeClockEvent timeClockEvent = new TimeClockEvent();
+    private final Employee emptyEmployee = new Subordinate("", "");
     private final List<Employee> employees = new ArrayList<>();
+    private final Calendar maxDate = new GregorianCalendar();
     private Date date;
     private Date time;
     
@@ -46,26 +50,28 @@ public class TimeClockEventBean implements Serializable {
     public void init() {
         EmployeeDAO employeeDAO = new EmployeeDAO(em);
         employees.addAll(employeeDAO.findAll());
+        Collections.sort(employees);
         if (employees.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                     "Fatalidade no cadastro", "Nenhum funcionário foi cadastrado ainda!!!");
             context.addMessage(null, message);
-        } else {
-            employees.add(new Subordinate("", ""));
-            Collections.sort(employees);
         }
     }
     
     public String insert() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage message;
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                    "Erro no cadastro", "A data e o horário de entrada/saída deve ser antes da data e horário atual!!!");
         try {
-            timeClockEventDAO.create(timeClockEvent);
-            message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                "Sucesso no cadastro", timeClockEvent + " foi cadastrado com sucesso!!!");
-            next = "/index";
+            timeClockEvent.setEventDate(Calendars.sum(date, time));
+            if (maxDate.after(timeClockEvent.getEventDate())) {
+                timeClockEventDAO.create(timeClockEvent);
+                message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                    "Sucesso no cadastro", timeClockEvent + " foi cadastrado com sucesso!!!");
+                next = "/index";
+            }
         } catch (EntityExistsException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                 "Erro no cadastro", timeClockEvent + " já foi cadastrado!!!");
@@ -74,8 +80,17 @@ public class TimeClockEventBean implements Serializable {
         return next;
     }
 
+    @PreDestroy
+    void destroy() {
+        em.close();
+    }
+
     public TimeClockEvent getTimeClockEvent() {
         return timeClockEvent;
+    }
+
+    public Employee getEmptyEmployee() {
+        return emptyEmployee;
     }
 
     public List<Employee> getEmployees() {
@@ -96,6 +111,10 @@ public class TimeClockEventBean implements Serializable {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+    
+    public Date getMaxDate() {
+        return maxDate.getTime();
     }
     
 }

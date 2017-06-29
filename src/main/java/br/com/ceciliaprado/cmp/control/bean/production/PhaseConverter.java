@@ -5,7 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.production;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.production.PhaseDAO;
 import br.com.ceciliaprado.cmp.model.production.Phase;
 import java.util.ArrayList;

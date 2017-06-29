@@ -5,7 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.ManagerDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -30,6 +31,7 @@ import javax.persistence.EntityManager;
 @ManagedBean
 @ViewScoped
 public class ManagerBean implements Serializable {
+    
     
     private final EntityManager em = DataSource.createEntityManager();
     private final ManagerDAO managerDAO = new ManagerDAO(em);
@@ -67,6 +69,11 @@ public class ManagerBean implements Serializable {
         }
         context.addMessage(null, message);
         return next;
+    }
+
+    @PreDestroy
+    void destroy() {
+        em.close();
     }
 
     public Manager getManager() {

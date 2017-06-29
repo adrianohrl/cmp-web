@@ -16,17 +16,19 @@
                       resizable="false" modal="true" draggable="false" showEffect="fade" 
                       hideEffect="fade" closeOnEscape="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
-                    
                     <h:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="modelPhase" value="#{phaseProductionOrderBean.phaseProductionOrder.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;" effect="fade" var="ph" 
                                      style="width: 200px;" filter="true" filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!" converterMessage="Fase inválida!!!">
+                        <f:selectItem itemLabel="Selecione uma" itemValue="#{phaseProductionOrderBean.emptyModelPhase.phase}"
+                                      noSelectionOption="true" />
+                        
                         <f:selectItems value="#{phaseProductionOrderBean.modelPhases}" var="phase" 
-                                       itemLabel="#{phase.phase.name}" itemValue="#{phase}" />
+                                       itemLabel="#{phase.phase.name}" itemValue="#{phase.phase}" />
 
                         <p:column>
-                            <h:outputText value="#{ph.phase.name}" />
+                            <h:outputText value="#{ph.name}" />
                         </p:column>
                     </p:selectOneMenu>
 
@@ -55,7 +57,12 @@
                                      filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a ordem de produção desejada!!!"
                                      converterMessage="Ordem de produção inválida!!!">
-                        <p:ajax listener="#{phaseProductionOrderBean.clear()}" update="@form:dialog, @form:orders, @form:modelPhase" />
+                        <p:ajax listener="#{phaseProductionOrderBean.clear()}" 
+                                update="@form:dialog, @form:orders, @form:modelPhase" />
+                        
+                        <f:selectItem itemLabel="Selecione uma" itemValue="#{phaseProductionOrderBean.emptyProductionOrder}"
+                                      noSelectionOption="true" />
+                        
                         <f:selectItems value="#{phaseProductionOrderBean.productionOrders}" var="productionOrder" 
                                        itemLabel="#{productionOrder.reference}" itemValue="#{productionOrder}" />
 
@@ -68,7 +75,7 @@
                     <p:selectBooleanButton id="button" value="#{phaseProductionOrderBean.allPhases}" 
                                            onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" 
                                            offIcon="ui-icon-close">
-                        <p:ajax update="@form:block" />
+                        <p:ajax update="@form:allQuantity, @form:orders" />
                     </p:selectBooleanButton>
 
                     <h:outputLabel for="allQuantity" value="Quantidade: " style="font-weight: bold;" /> 
@@ -77,11 +84,13 @@
                                    emptyValue="zero" decimalPlaces="0" symbol=" [un]" symbolPosition="s" minValue="1"
                                    converterMessage="A quantidade total deve ser um número inteiro positivo!!!"
                                    requiredMessage="Digite a quantidade total a ser produzida nesta fase!!!" 
-                                   validatorMessage="A quantidade total deve ser um número inteiro positivo!!!" />
+                                   validatorMessage="A quantidade total deve ser um número inteiro positivo!!!"
+                                   rendered="#{phaseProductionOrderBean.allPhases}" />
                 </h:panelGrid>
                       
                 <p:dataTable id="orders" var="ppo" value="#{phaseProductionOrderBean.phaseProductionOrders}" 
-                             rowKey="#{order.phase.phase.name}" style="width: 500px; margin-bottom: 20px;">                
+                             rowKey="#{order.phase.phase.name}" style="width: 500px; margin-bottom: 20px;"
+                             rendered="#{phaseProductionOrderBean.allPhases}">                
                     <p:column headerText="Fase" style="width: 200px; text-align: center;">
                         <h:outputText value="#{ppo.phase.phase.name}" />
                     </p:column>

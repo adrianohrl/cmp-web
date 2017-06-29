@@ -5,7 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.production;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
 import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class ProductionOrderConverter implements Converter {
     private final List<ProductionOrder> productionOrders = new ArrayList<>();
     
     @PostConstruct
-    public void init() {
+    public void init() {    
         EntityManager em = DataSource.createEntityManager();
         ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
         productionOrders.addAll(productionOrderDAO.findAll());

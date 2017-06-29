@@ -5,12 +5,13 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.production.io;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.io.PersonnelReaderDAO;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -44,6 +45,11 @@ public class ProductionOrderImportBean implements Serializable {
         if (message != null) {
             context.addMessage(null, message);
         }
+    }
+
+    @PreDestroy
+    void destroy() {
+        em.close();
     }
 
     public UploadedFile getFile() {

@@ -5,7 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.production;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.production.ModelDAO;
 import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
 import br.com.ceciliaprado.cmp.model.production.Model;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -33,20 +34,19 @@ public class ProductionOrderBean implements Serializable {
     private final EntityManager em = DataSource.createEntityManager();
     private final ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
     private final ProductionOrder productionOrder = new ProductionOrder();
+    private final Model emptyModel = new Model("", "");
     private final List<Model> models = new ArrayList<>();
     
     @PostConstruct
     public void init() {
         ModelDAO modelDAO = new ModelDAO(em);
         models.addAll(modelDAO.findAll());
+        Collections.sort(models);
         if (models.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                     "Fatalidade no cadastro", "Nenhum modelo foi cadastrado ainda!!!");
             context.addMessage(null, message);
-        } else {
-            models.add(new Model("", ""));
-            Collections.sort(models);
         }
     }
     
@@ -67,8 +67,17 @@ public class ProductionOrderBean implements Serializable {
         return next;
     }
 
+    @PreDestroy
+    void destroy() {
+        em.close();
+    }
+
     public ProductionOrder getProductionOrder() {
         return productionOrder;
+    }
+
+    public Model getEmptyModel() {
+        return emptyModel;
     }
 
     public List<Model> getModels() {

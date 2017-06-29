@@ -5,10 +5,11 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.events;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
 import br.com.ceciliaprado.cmp.model.events.Casualty;
 import java.io.Serializable;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -23,7 +24,7 @@ import javax.persistence.EntityManager;
 @ManagedBean
 @ViewScoped
 public class CasualtyBean implements Serializable {
-    
+        
     private final EntityManager em = DataSource.createEntityManager();
     private final CasualtyDAO casualtyDAO = new CasualtyDAO(em);
     private final Casualty casualty = new Casualty();
@@ -47,6 +48,11 @@ public class CasualtyBean implements Serializable {
 
     public Casualty getCasualty() {
         return casualty;
+    }
+
+    @PreDestroy
+    void destroy() {
+        em.close();
     }
     
 }

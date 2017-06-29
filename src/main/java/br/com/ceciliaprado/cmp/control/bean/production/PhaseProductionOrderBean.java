@@ -5,12 +5,13 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.production;
 
-import br.com.ceciliaprado.cmp.control.dao.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.production.PhaseProductionOrderDAO;
 import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
 import br.com.ceciliaprado.cmp.exceptions.ProductionException;
 import br.com.ceciliaprado.cmp.model.production.Model;
 import br.com.ceciliaprado.cmp.model.production.ModelPhase;
+import br.com.ceciliaprado.cmp.model.production.Phase;
 import br.com.ceciliaprado.cmp.model.production.PhaseProductionOrder;
 import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
 import java.io.Serializable;
@@ -18,12 +19,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -38,7 +41,9 @@ public class PhaseProductionOrderBean implements Serializable {
     private ProductionOrder productionOrder = new ProductionOrder();
     private PhaseProductionOrder phaseProductionOrder = new PhaseProductionOrder();
     private final List<PhaseProductionOrder> phaseProductionOrders = new ArrayList<>();
+    private final ProductionOrder emptyProductionOrder = new ProductionOrder("", null);
     private final List<ProductionOrder> productionOrders = new ArrayList<>();
+    private final ModelPhase emptyModelPhase = new ModelPhase(new Phase("", null), 0.0);
     private final List<ModelPhase> modelPhases = new ArrayList<>();
     private boolean allPhases = true;
     private int totalQuantity;
@@ -47,14 +52,12 @@ public class PhaseProductionOrderBean implements Serializable {
     public void init() {
         ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
         productionOrders.addAll(productionOrderDAO.findAll());
+        Collections.sort(productionOrders);
         if (productionOrders.isEmpty()) {
             FacesContext context = FacesContext.getCurrentInstance();
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                     "Fatalidade no cadastro", "Nenhuma ordem de produção foi cadastrada ainda!!!");
             context.addMessage(null, message);
-        } else {
-            productionOrders.add(new ProductionOrder("", null));
-            Collections.sort(productionOrders);
         }
     }
     
@@ -97,6 +100,8 @@ public class PhaseProductionOrderBean implements Serializable {
                     "Nova ordem de produção de fase adicionada ao modelo", phaseProductionOrder.toString());
         reset();    
         context.addMessage(null, message);
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.update("@form:modelPhase");
     }
     
     public void remove(PhaseProductionOrder phaseProductionOrder) {
@@ -121,6 +126,11 @@ public class PhaseProductionOrderBean implements Serializable {
         }
     }
 
+    @PreDestroy
+    void destroy() {
+        em.close();
+    }
+
     public ProductionOrder getProductionOrder() {
         return productionOrder;
     }
@@ -141,8 +151,16 @@ public class PhaseProductionOrderBean implements Serializable {
         return phaseProductionOrders;
     }
 
+    public ProductionOrder getEmptyProductionOrder() {
+        return emptyProductionOrder;
+    }
+
     public List<ProductionOrder> getProductionOrders() {
         return productionOrders;
+    }
+
+    public ModelPhase getEmptyModelPhase() {
+        return emptyModelPhase;
     }
 
     public List<ModelPhase> getModelPhases() {
