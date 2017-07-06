@@ -48,15 +48,15 @@
                 <h:outputLabel value="Subordinados: " style="font-weight: bold;" />      
                 
                 <p:selectManyCheckbox id="subordinates" value="#{supervisorBean.selectedSubordinates}" 
-                                      layout="responsive" columns="4" converter="subordinateConverter"
+                                      layout="grid" columns="4" converter="subordinateConverter"
                                       converterMessage="Subordinado inválido!!!">
                     <f:selectItems value="#{supervisorBean.subordinates}" var="subordinate" 
                                    itemLabel="#{subordinate.name}" itemValue="#{subordinate}" />
                 </p:selectManyCheckbox>
                     
                 <f:facet name="footer">
-                    <p:commandButton value="Inserir" action="#{supervisorBean.insert()}" 
-                                     update="@form" title="Inserir o supervisor" 
+                    <p:commandButton value="Registrar" action="#{supervisorBean.register()}" 
+                                     update="@form" title="Registrar o supervisor" 
                                      style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>

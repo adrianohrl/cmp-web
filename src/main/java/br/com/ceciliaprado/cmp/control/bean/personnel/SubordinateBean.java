@@ -28,7 +28,7 @@ public class SubordinateBean implements Serializable {
     private final EntityManager em = DataSource.createEntityManager();
     private final Subordinate subordinate = new Subordinate();    
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;

@@ -17,7 +17,7 @@
                     <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="modelPhase" value="#{modelBean.modelPhase.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;"
-                                     effect="fade" var="ph" style="width: 200px;" filter="true" 
+                                     effect="fade" var="ph" style="width: 250px;" filter="true" 
                                      filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!"
                                      converterMessage="Fase inválida!!!">
@@ -46,9 +46,10 @@
                                    requiredMessage="Digite a parcela em segundos da duração esperada desta fase!!!" 
                                    validatorMessage="O valor desta parcela da duração esperada deve ser um número real não-negativo!!!" />
 
-                    <p:commandButton process="@form:dialog" value="Limpar" update="@form:modelPhase, @form:minutes, @form:seconds" 
-                                     title="Limpar os campos" actionListener="#{modelBean.reset()}" type="reset"
-                                     style="font-size: 18px;" />
+                    <p:commandButton process="@this" value="Limpar" update="@parent" 
+                                     title="Limpar os campos" style="font-size: 18px;">
+                        <p:ajax update="@form:dlgGrid" resetValues="true" />
+                    </p:commandButton>
                     <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:phases" 
                                      title="Adicionar a nova fase" actionListener="#{modelBean.add()}" 
                                      style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)" />

@@ -38,9 +38,11 @@
                                    requiredMessage="Digite a quantidade total a ser produzida nesta fase!!!" 
                                    validatorMessage="A quantidade total deve ser um número inteiro positivo!!!" />
                     
-                    <p:commandButton process="@form:dialog" value="Limpar" update="@form:modelPhase, @form:minutes, @form:seconds" 
-                                     title="Limpar os campos" actionListener="#{phaseProductionOrderBean.reset()}" type="reset"
-                                     style="font-size: 18px;" />
+                    <p:commandButton process="@this" value="Limpar" update="@parent" 
+                                     title="Limpar os campos" actionListener="#{phaseProductionOrderBean.reset()}"
+                                     style="font-size: 18px;">
+                        <p:ajax update="@form:dlgGrid" resetValues="true" />
+                    </p:commandButton>
                     <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:orders" 
                                      title="Adicionar a nova ordem de produção de fase" actionListener="#{phaseProductionOrderBean.add()}" 
                                      style="font-size: 18px;" oncomplete="handleLoginRequest(xhr, status, args)" />                        
@@ -54,8 +56,7 @@
                 
                 <h:panelGrid columns="2" cellpadding="10">  
                     <p:outputLabel for="order" value="Ordem de Produção: " style="font-weight: bold;" /> 
-                    <p:selectOneMenu id="order"
-                                 converter="productionOrderConverter" panelStyle="width: 250px;"
+                    <p:selectOneMenu id="order" converter="productionOrderConverter" panelStyle="width: 250px;"
                                  effect="fade" var="po" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" 
                                  requiredMessage="Selecione a ordem de produção desejada!!!"

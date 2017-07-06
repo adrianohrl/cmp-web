@@ -7,12 +7,14 @@ package br.com.ceciliaprado.cmp.control.bean.personnel.validators;
 
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
+import javax.faces.validator.FacesValidator;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author adrianohrl
  */
+@FacesValidator("supervisorLoginValidator")
 public class SupervisorLoginValidator extends LoggableEmployeeLoginValidator<Supervisor> {
     
     @Override

@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import org.primefaces.context.RequestContext;
 
 /**
  *
