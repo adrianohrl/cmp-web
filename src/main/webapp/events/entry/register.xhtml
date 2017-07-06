@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <p:outputLabel value="Cadastro de Atividades de Produção" style="font-weight: bold; font-size: 24px;" />     
+        
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
+            
+            <h:panelGrid columns="1" cellpadding="10">
+                <p:wizard flowListener="#{entryEventBean.onFlowProcess}" >
+                    <p:tab id="supervisor" title="Supervisor">
+                        <h:panelGrid id="supervisorGrid" columns="2" cellpadding="10">      
+                            <p:outputLabel for="login" value="Login: " style="font-weight: bold;"/> 
+                            <p:inputText id="login" label="Login" value="#{entryEventBean.supervisor.login}"
+                                         required="true" requiredMessage="Digite o seu login, supervisor!!!" 
+                                         style="width: 250px;" /> 
+
+                            <p:outputLabel for="password" value="Senha: " style="font-weight: bold;"/> 
+                            <p:password id="password" match="#{entryEventBean.supervisor.password}" label="Senha" 
+                                        required="true" requiredMessage="Digite a sua senha, supervisor!!!"
+                                        promptLabel="Digite a sua senha, supervisor!!!" 
+                                        validatorMessage="Senha inválida!!!" />
+
+                            <h:outputLabel for="sector" value="Setor: " style="font-weight: bold;" />              
+                            <p:selectOneMenu id="sector" value="#{entryEventBean.sector}" 
+                                             converter="sectorConverter" panelStyle="width: 250px;"
+                                             effect="fade" var="sec" style="width: 200px;" filter="true" 
+                                             filterMatchMode="startsWith" required="true"
+                                             requiredMessage="Selecione o setor onde está fase é executada!!!"
+                                             converterMessage="Setor inválido!!!">
+                                <f:selectItem itemLabel="Selecione um" itemValue="#{entryEventBean.emptySector}"
+                                              noSelectionOption="true" />
+
+                                <f:selectItems value="#{entryEventBean.sectors}" var="sector" 
+                                               itemLabel="#{sector.name}" itemValue="#{sector}" />
+
+                                <p:column>
+                                    <h:outputText value="#{sec.name}" />
+                                </p:column>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                    </p:tab>
+                    
+                    <p:tab>
+                        
+                    </p:tab>
+                </p:wizard>
+                
+                <p:commandButton value="Sair" action="/index" 
+                                 update="@form" title="Registrar a fase"
+                                 style="font-size: 18px;" />
+            </h:panelGrid>
+        </h:form>
+    </ui:define>Cadas
+</ui:composition>

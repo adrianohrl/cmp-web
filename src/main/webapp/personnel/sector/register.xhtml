@@ -6,22 +6,24 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-
     <ui:define name="content">
-        <h2>Cadastro de Setor</h2>
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
             <h:panelGrid id="grid" columns="2" cellpadding="10">      
-                <h:outputLabel for="name" value="Nome: " style="font-weight: bold;" /> 
+                <f:facet name="header">
+                    <h:outputText value="Cadastro de Setor" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+                
+                <p:outputLabel for="name" value="Nome: " style="font-weight: bold;" /> 
                 <p:inputText id="name" label="Nome" value="#{sectorBean.sector.name}"
                              required="true" requiredMessage="Digite o nome do setor!!!" 
                              style="width: 250px;" />
                 
-                <h:outputLabel for="supervisor" value="Supervisor: " style="font-weight: bold;" />              
+                <p:outputLabel for="supervisor" value="Supervisor: " style="font-weight: bold;" />              
                 <p:selectOneMenu id="supervisor" value="#{sectorBean.sector.supervisor}" 
                                  converter="supervisorConverter" panelStyle="width: 250px;"
-                                 effect="fade" var="sup" style="width: 200px;" filter="true" 
+                                 effect="fade" var="sup" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Supervisor inválido!!!"
                                  requiredMessage="Selecione o supervisor do setor!!!">
@@ -35,14 +37,13 @@
                         <h:outputText value="#{sup.name}" />
                     </p:column>
                 </p:selectOneMenu>
-                    
+                
                 <f:facet name="footer">
-                    <p:commandButton value="Inserir" action="#{sectorBean.insert()}" 
-                                     update="@form" title="Inserir o setor"
+                    <p:commandButton value="Registrar" action="#{sectorBean.register()}" 
+                                     update="@form" title="Registrar o setor"
                                      style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>
         </h:form>
     </ui:define>
-
 </ui:composition>

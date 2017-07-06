@@ -6,20 +6,18 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-
     <ui:define name="content">
-        <h2>Cadastro de Ordem de Produção de Fase</h2>
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
-            
+             
             <p:dialog id="dialog" header="Nova Ordem de Produção de Fase" widgetVar="dlg" 
                       resizable="false" modal="true" draggable="false" showEffect="fade" 
                       hideEffect="fade" closeOnEscape="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
-                    <h:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
+                    <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="modelPhase" value="#{phaseProductionOrderBean.phaseProductionOrder.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;" effect="fade" var="ph" 
-                                     style="width: 200px;" filter="true" filterMatchMode="startsWith" required="true" 
+                                     style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!" converterMessage="Fase inválida!!!">
                         <f:selectItem itemLabel="Selecione uma" itemValue="#{phaseProductionOrderBean.emptyModelPhase.phase}"
                                       noSelectionOption="true" />
@@ -32,7 +30,7 @@
                         </p:column>
                     </p:selectOneMenu>
 
-                    <h:outputLabel for="quantity" value="Quantidade: " style="font-weight: bold;" /> 
+                    <p:outputLabel for="quantity" value="Quantidade: " style="font-weight: bold;" /> 
                     <p:inputNumber id="quantity" value="#{phaseProductionOrderBean.phaseProductionOrder.totalQuantity}" 
                                    label="Quantidade total [un]" style="width: 100px;" required="true" emptyValue="zero" 
                                    decimalPlaces="0" symbol=" [un]" symbolPosition="s" minValue="1"
@@ -40,29 +38,34 @@
                                    requiredMessage="Digite a quantidade total a ser produzida nesta fase!!!" 
                                    validatorMessage="A quantidade total deve ser um número inteiro positivo!!!" />
                     
-                    <f:facet name="footer">
-                        <p:commandButton value="Adicionar" update="@form:dialog, @form:messages, @form:orders" 
-                                         title="Adicionar a nova ordem de produção defase" actionListener="#{phaseProductionOrderBean.add}" 
-                                         style="font-size: 18px;" oncomplete="handleLoginRequest(xhr, status, args)"/>
-                    </f:facet>
+                    <p:commandButton process="@form:dialog" value="Limpar" update="@form:modelPhase, @form:minutes, @form:seconds" 
+                                     title="Limpar os campos" actionListener="#{phaseProductionOrderBean.reset()}" type="reset"
+                                     style="font-size: 18px;" />
+                    <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:orders" 
+                                     title="Adicionar a nova ordem de produção de fase" actionListener="#{phaseProductionOrderBean.add()}" 
+                                     style="font-size: 18px;" oncomplete="handleLoginRequest(xhr, status, args)" />                        
                 </h:panelGrid>
             </p:dialog>
             
-            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+            <h:panelGrid id="grid" columns="1" cellpadding="10">    
+                <f:facet name="header">
+                    <h:outputText value="Cadastro de Ordem de Produção de Fase" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+                
                 <h:panelGrid columns="2" cellpadding="10">  
-                    <h:outputLabel for="order" value="Ordem de Produção: " style="font-weight: bold;" /> 
-                    <p:selectOneMenu id="order" value="#{modelBean.modelPhase.phase}" 
-                                     converter="productionOrderConverter" panelStyle="width: 250px;"
-                                     effect="fade" var="po" style="width: 200px;" filter="true" 
-                                     filterMatchMode="startsWith" required="true" 
-                                     requiredMessage="Selecione a ordem de produção desejada!!!"
-                                     converterMessage="Ordem de produção inválida!!!">
-                        <p:ajax listener="#{phaseProductionOrderBean.clear()}" 
-                                update="@form:dialog, @form:orders, @form:modelPhase" />
+                    <p:outputLabel for="order" value="Ordem de Produção: " style="font-weight: bold;" /> 
+                    <p:selectOneMenu id="order"
+                                 converter="productionOrderConverter" panelStyle="width: 250px;"
+                                 effect="fade" var="po" style="width: 250px;" filter="true" 
+                                 filterMatchMode="startsWith" required="true" 
+                                 requiredMessage="Selecione a ordem de produção desejada!!!"
+                                 converterMessage="Ordem de produção inválida!!!">
+                        <p:ajax listener="#{phaseProductionOrderBean.clear}" update="@form:dialog" />
                         
-                        <f:selectItem itemLabel="Selecione uma" itemValue="#{phaseProductionOrderBean.emptyProductionOrder}"
+                        <f:selectItem itemLabel="Selecione um" 
+                                      itemValue="#{phaseProductionOrderBean.emptyProductionOrder}"
                                       noSelectionOption="true" />
-                        
+
                         <f:selectItems value="#{phaseProductionOrderBean.productionOrders}" var="productionOrder" 
                                        itemLabel="#{productionOrder.reference}" itemValue="#{productionOrder}" />
 
@@ -70,27 +73,28 @@
                             <h:outputText value="#{po.reference}" />
                         </p:column>
                     </p:selectOneMenu>
-                
+                    
                     <h:outputLabel for="button" value="Todas as fases: " style="font-weight: bold;" /> 
                     <p:selectBooleanButton id="button" value="#{phaseProductionOrderBean.allPhases}" 
                                            onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" 
                                            offIcon="ui-icon-close">
-                        <p:ajax update="@form:allQuantity, @form:orders" />
+                        <f:ajax render="@form" />
                     </p:selectBooleanButton>
 
-                    <h:outputLabel for="allQuantity" value="Quantidade: " style="font-weight: bold;" /> 
+                    <h:outputLabel id="allQuantityLabel" for="allQuantity" value="Quantidade: " style="font-weight: bold;" 
+                                   rendered="#{phaseProductionOrderBean.allPhases}" /> 
                     <p:inputNumber id="allQuantity" value="#{phaseProductionOrderBean.phaseProductionOrder.totalQuantity}" 
-                                   label="Quantidade total [un]" style="width: 100px;" required="#{phaseProductionOrderBean.allPhases}" 
+                                   label="Quantidade total [un]" style="width: 150px;" required="#{phaseProductionOrderBean.allPhases}" 
                                    emptyValue="zero" decimalPlaces="0" symbol=" [un]" symbolPosition="s" minValue="1"
                                    converterMessage="A quantidade total deve ser um número inteiro positivo!!!"
                                    requiredMessage="Digite a quantidade total a ser produzida nesta fase!!!" 
                                    validatorMessage="A quantidade total deve ser um número inteiro positivo!!!"
                                    rendered="#{phaseProductionOrderBean.allPhases}" />
                 </h:panelGrid>
-                      
+                
                 <p:dataTable id="orders" var="ppo" value="#{phaseProductionOrderBean.phaseProductionOrders}" 
                              rowKey="#{order.phase.phase.name}" style="width: 500px; margin-bottom: 20px;"
-                             rendered="#{phaseProductionOrderBean.allPhases}">                
+                             rendered="#{!phaseProductionOrderBean.allPhases}" >         
                     <p:column headerText="Fase" style="width: 200px; text-align: center;">
                         <h:outputText value="#{ppo.phase.phase.name}" />
                     </p:column>
@@ -102,7 +106,7 @@
                     <p:column style="width: 25px; text-align: center;">
                         <p:commandButton process="orders" icon="ui-icon-minus"  title="Remover esta fase" 
                                          actionListener="#{phaseProductionOrderBean.remove(ppo)}" 
-                                         update="@form:dialog, @form:orders, @form:messages" 
+                                         update="@form:orders, @form:messages" 
                                          style="width: 20px; height: 20px;" />
                     </p:column>
 
@@ -110,20 +114,18 @@
                         <p:commandButton process="@form:orders" icon="ui-icon-plus" 
                                          title="Adicionar uma nova ordem de produção de fase"
                                          onclick="PF('dlg').show();" update="@form:orders, @form:messages" 
-                                         style="width: 20px; height: 20px;">
-                        </p:commandButton>
+                                         style="width: 20px; height: 20px;" />
                     </f:facet>
                 </p:dataTable>
                 
-                <p:blockUI id="block" block="#{phaseProductionOrderBean.allPhases ? '@form:allQuantity' : '@form:orders'}" />
-                    
                 <f:facet name="footer">
-                    <p:commandButton value="Inserir" action="#{productionOrderBean.insert()}" 
-                                     update="@form" title="Inserir as ordens de produção de fase"
-                                     style="font-size: 18px;" />
+                    <p:commandButton process="@this, @form:grid, @form:orders" value="Registrar" 
+                                     action="#{phaseProductionOrderBean.register()}" update="@form" 
+                                     title="Registrar as ordens de produção de fase" style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>            
         </h:form>
+        
+        <h:outputScript library="js" name="common.js" />
     </ui:define>
-
 </ui:composition>

@@ -6,16 +6,15 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-
     <ui:define name="content">
-        <h2>Cadastro de Modelo</h2>
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
             
             <p:dialog id="dialog" header="Nova Fase" widgetVar="dlg" resizable="false" modal="true" 
-                      draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+                      draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true" 
+                      onShow="#{modelBean.reset()}">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
-                    <h:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
+                    <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="modelPhase" value="#{modelBean.modelPhase.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;"
                                      effect="fade" var="ph" style="width: 200px;" filter="true" 
@@ -33,42 +32,41 @@
                         </p:column>
                     </p:selectOneMenu>
 
-                    <h:outputLabel for="minutes" value="Duração: " style="font-weight: bold;" /> 
+                    <p:outputLabel for="minutes" value="Duração: " style="font-weight: bold;" /> 
                     <p:inputNumber id="minutes" value="#{modelBean.minutes}" label="Parcela da duração [min]" style="width: 100px;"
                                    required="true" emptyValue="zero" decimalPlaces="0" symbol=" [min]" symbolPosition="s" minValue="0"
                                    converterMessage="Esta parcela da duração esperada desta fase deve ser um número inteiro não-negativo!!!"
                                    requiredMessage="Digite a parcela em minutos da duração esperada desta fase!!!" 
                                    validatorMessage="O valor desta parcela da duração esperada deve ser um número inteiro não-negativo!!!" />
                         
-                    <h:outputLabel />
+                    <p:outputLabel />
                     <p:inputNumber id="seconds" value="#{modelBean.seconds}" label="Parcela da duração [s]" required="true" 
                                    decimalPlaces="2" symbol=" [s]" symbolPosition="s" minValue="0.0" style="width: 100px;"
                                    converterMessage="Esta parcela da duração esperada desta fase deve ser um número real não-negativo!!!"
                                    requiredMessage="Digite a parcela em segundos da duração esperada desta fase!!!" 
                                    validatorMessage="O valor desta parcela da duração esperada deve ser um número real não-negativo!!!" />
 
-                    <f:facet name="footer">
-                        <h:panelGrid columns="2" cellpadding="10"> 
-                            <p:commandButton process="@form:dialog" value="Limpar" update="@form:modelPhase, @form:minutes, @form:seconds" 
-                                             title="Limpar os campos" actionListener="#{modelBean.reset()}" type="reset"
-                                             style="font-size: 18px;" />
-                            
-                            <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:phases" 
-                                             title="Adicionar a nova fase" actionListener="#{modelBean.add()}" 
-                                             style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)"/>
-                        </h:panelGrid>
-                    </f:facet>
+                    <p:commandButton process="@form:dialog" value="Limpar" update="@form:modelPhase, @form:minutes, @form:seconds" 
+                                     title="Limpar os campos" actionListener="#{modelBean.reset()}" type="reset"
+                                     style="font-size: 18px;" />
+                    <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:phases" 
+                                     title="Adicionar a nova fase" actionListener="#{modelBean.add()}" 
+                                     style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)" />
                 </h:panelGrid>
             </p:dialog>
             
             <h:panelGrid columns="1" cellpadding="10">
+                <f:facet name="header">
+                    <h:outputText value="Cadastro de Modelo" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+                
                 <h:panelGrid id="grid" columns="2" cellpadding="10">      
-                    <h:outputLabel for="reference" value="Referência: " style="font-weight: bold;"/> 
+                    <p:outputLabel for="reference" value="Referência: " style="font-weight: bold;"/> 
                     <p:inputText id="reference" label="Referência" value="#{modelBean.model.reference}"
                                  required="true" requiredMessage="Digite a referência do modelo" 
                                  style="width: 250px;" />
 
-                    <h:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
+                    <p:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
                     <p:inputText id="name" label="Nome" value="#{modelBean.model.name}"
                                  required="true" requiredMessage="Digite o nome do modelo" 
                                  style="width: 250px;" />
@@ -76,6 +74,10 @@
             
                 <p:dataTable id="phases" var="phase" value="#{modelBean.model.phases}" 
                              rowKey="#{phase.phase.name}" style="width: 500px; margin-bottom: 20px;">                
+                    <f:facet name="header">
+                        <h:outputText value="Fases"/>
+                    </f:facet>
+                    
                     <p:column headerText="Fase" style="width: 200px; text-align: center;">
                          <h:outputText value="#{phase.phase.name}" />
                     </p:column>
@@ -94,19 +96,17 @@
                     <f:facet name="footer">
                         <p:commandButton process="@form:phases" icon="ui-icon-plus" title="Adicionar nova fase"
                                          onclick="PF('dlg').show();" update="@form:phases, @form:messages" 
-                                         style="width: 20px; height: 20px;">
-                        </p:commandButton>
+                                         style="width: 20px; height: 20px;" />                        
                     </f:facet>
                 </p:dataTable>
-
+                
                 <f:facet name="footer">
-                    <p:commandButton value="Inserir" action="#{modelBean.insert()}" update="@form" 
-                                     title="Inserir o modelo" style="font-size: 18px;" />
+                    <p:commandButton process="@this, @form:grid, @form:phases" value="Registrar" action="#{modelBean.register()}" 
+                                     title="Registrar o modelo" style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>
         </h:form>
         
         <h:outputScript library="js" name="common.js" />
     </ui:define>
-
 </ui:composition>

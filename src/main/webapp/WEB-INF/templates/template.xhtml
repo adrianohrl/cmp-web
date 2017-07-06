@@ -4,7 +4,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet name="./css/default.css"/>
@@ -18,6 +17,7 @@
                 <h:graphicImage library="images" name="logo.png" />
             </ui:insert>
         </div>
+        
         <div>
             <div id="left">
                 <ui:insert name="left">
@@ -25,99 +25,99 @@
                         <p:panelMenu stateful="false">
                             <p:submenu label="Pessoal" expanded="false">
                                 <p:submenu label="Subordinado" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/personnel/subordinate/create" 
+                                    <p:menuitem value="Registrar" outcome="/personnel/subordinate/register" 
                                                 icon="ui-icon-plus" />
                                 </p:submenu>
 
                                 <p:submenu label="Supervisor" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/personnel/supervisor/create" 
+                                    <p:menuitem value="Registrar" outcome="/personnel/supervisor/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/personnel/supervisor/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
 
                                 <p:submenu label="Gerente" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/personnel/manager/create" 
+                                    <p:menuitem value="Registrar" outcome="/personnel/manager/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/personnel/manager/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
 
                                 <p:submenu label="Setor" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/personnel/sector/create" 
+                                    <p:menuitem value="Registrar" outcome="/personnel/sector/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/personnel/sector/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
-
-                                <p:submenu label="Pessoal" expanded="false">
-                                    <p:menuitem value="Importar" outcome="/personnel/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
-                                </p:submenu>
+                                
+                                <p:menuitem value="Importar" outcome="/personnel/import" 
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                             </p:submenu>
                             
                             <p:submenu label="Produção" expanded="false">
                                 <p:submenu label="Fase" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/production/phase/create" 
+                                    <p:menuitem value="Registrar" outcome="/production/phase/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/production/phase/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
 
                                 <p:submenu label="Modelo" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/production/model/create" 
+                                    <p:menuitem value="Registrar" outcome="/production/model/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/production/model/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
 
                                 <p:submenu label="Ordem de Produção" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/production/productionOrder/create" 
+                                    <p:menuitem value="Registrar" outcome="/production/productionOrder/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/production/productionOrder/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
 
                                 <p:submenu label="Ordem de Produção de Fase" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/production/phaseProductionOrder/create" 
+                                    <p:menuitem value="Registrar" outcome="/production/phaseProductionOrder/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/production/phaseProductionOrder/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
                             </p:submenu>
                             
                             <p:submenu label="Eventos" expanded="false">
                                 <p:submenu label="Sinistro" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/events/casualty/create" 
+                                    <p:menuitem value="Registrar" outcome="/events/casualty/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/events/casualty/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
                                 
                                 <p:submenu label="Atividades de Produção" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/events/entry/create" 
+                                    <p:menuitem value="Registrar" outcome="/events/entry/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/events/entry/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
                                 
                                 <p:submenu label="Entrada/Saída de Ponto" expanded="false">
-                                    <p:menuitem value="Inserir" outcome="/events/timeClock/create" 
+                                    <p:menuitem value="Registrar" outcome="/events/timeClock/register" 
                                                 icon="ui-icon-plus" />
                                     <p:menuitem value="Importar" outcome="/events/timeClock/import" 
-                                                icon="ui-icon-arrowthick-1-n" />
+                                                icon="ui-icon-arrowthick-1-n" disabled="true" />
                                 </p:submenu>
                             </p:submenu>
                         </p:panelMenu>
                     </h:form>
                 </ui:insert>
             </div>
+            
             <div>
                 <div id="right">
                     <ui:insert name="right">
                         
                     </ui:insert>
                 </div>
+                
                 <div id="content" class="right_content">
                     <ui:insert name="content">
                         
@@ -125,11 +125,11 @@
                 </div>
             </div>
         </div>
+        
         <div id="bottom">
             <ui:insert name="bottom">
                 
             </ui:insert>
         </div>
     </h:body>
-
 </html>
