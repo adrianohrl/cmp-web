@@ -7,37 +7,91 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
-        <p:outputLabel value="Cadastro de Atividades de Produção" style="font-weight: bold; font-size: 24px;" />     
-        
         <h:form>
-            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
+            <p:growl id="messages" autoUpdate="true" showDetail="true" life="#{parametersBean.growlLife}" />   
             
-            <h:panelGrid columns="1" cellpadding="10">
-                <p:wizard flowListener="#{entryEventBean.onFlowProcess}" >
+            <p:idleMonitor timeout="#{parametersBean.timeout}">
+                <p:ajax event="idle" listener="#{entryEventsBean.onIdle}" update="@form:messages" />
+                <p:ajax event="active" listener="#{entryEventsBean.onActive}" update="@form:messages" />
+            </p:idleMonitor>
+            
+            
+            
+<ui:remove>
+    
+            <p:dialog id="dialog" header="Nova Atividades de Produção" widgetVar="dlg" 
+                      resizable="false" modal="true" draggable="false" showEffect="fade" 
+                      hideEffect="fade" closeOnEscape="true">
+                <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
+                    <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
+                    <p:selectOneMenu id="modelPhase" value="#{entryEventsBean.phaseProductionOrder.phase}" 
+                                     converter="phaseConverter" panelStyle="width: 250px;" effect="fade" var="ph" 
+                                     style="width: 200px;" filter="true" filterMatchMode="startsWith" required="true" 
+                                     requiredMessage="Selecione a fase desejada!!!" converterMessage="Fase inválida!!!">
+                        <f:selectItem itemLabel="Selecione uma" itemValue="#{entryEventsBean.emptyModelPhase.phase}"
+                                      noSelectionOption="true" />
+                        
+                        <f:selectItems value="#{entryEventsBean.modelPhases}" var="phase" 
+                                       itemLabel="#{phase.phase.name}" itemValue="#{phase.phase}" />
+
+                        <p:column>
+                            <h:outputText value="#{ph.name}" />
+                        </p:column>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="quantity" value="Quantidade: " style="font-weight: bold;" /> 
+                    <p:inputNumber id="quantity" value="#{entryEventsBean.phaseProductionOrder.totalQuantity}" 
+                                   label="Quantidade total [un]" style="width: 100px;" required="true" emptyValue="zero" 
+                                   decimalPlaces="0" symbol=" [un]" symbolPosition="s" minValue="1"
+                                   converterMessage="A quantidade total deve ser um número inteiro positivo!!!"
+                                   requiredMessage="Digite a quantidade total a ser produzida nesta fase!!!" 
+                                   validatorMessage="A quantidade total deve ser um número inteiro positivo!!!" />
+                    
+                    <p:commandButton process="@form:dialog" value="Limpar" update="@form:modelPhase, @form:minutes, @form:seconds" 
+                                     title="Limpar os campos" actionListener="#{entryEventsBean.reset()}" type="reset"
+                                     style="font-size: 18px;" />
+                    <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:entryEventsDT" 
+                                     title="Adicionar a nova ordem de produção de fase" actionListener="#{entryEventsBean.add()}" 
+                                     style="font-size: 18px;" oncomplete="handleLoginRequest(xhr, status, args)" />                        
+                </h:panelGrid>
+            </p:dialog>
+
+</ui:remove>
+            
+            
+            
+            <h:panelGrid columns="1" cellpadding="10">      
+                <f:facet name="header">
+                    <h:outputText value="Cadastro de Atividades de Produção" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+                
+                <p:wizard flowListener="#{entryEventsBean.onFlowProcess}" backLabel="Voltar" nextLabel="Próximo" >
                     <p:tab id="supervisor" title="Supervisor">
                         <h:panelGrid id="supervisorGrid" columns="2" cellpadding="10">      
-                            <p:outputLabel for="login" value="Login: " style="font-weight: bold;"/> 
-                            <p:inputText id="login" label="Login" value="#{entryEventBean.supervisor.login}"
+                            <p:outputLabel for="login" value="Login: " style="font-weight: bold;" /> 
+                            <p:inputText id="login" label="Login" value="#{entryEventsBean.supervisor.login}"
                                          required="true" requiredMessage="Digite o seu login, supervisor!!!" 
-                                         style="width: 250px;" /> 
+                                         style="width: 250px;" validator="supervisorLoginValidator">
+                                <p:ajax event="blur" listener="#{entryEventsBean.selectSupervisor()}" />
+                            </p:inputText>
 
                             <p:outputLabel for="password" value="Senha: " style="font-weight: bold;"/> 
-                            <p:password id="password" match="#{entryEventBean.supervisor.password}" label="Senha" 
+                            <p:password id="password" match="#{entryEventsBean.supervisor.password}" label="Senha" 
                                         required="true" requiredMessage="Digite a sua senha, supervisor!!!"
                                         promptLabel="Digite a sua senha, supervisor!!!" 
                                         validatorMessage="Senha inválida!!!" />
 
                             <h:outputLabel for="sector" value="Setor: " style="font-weight: bold;" />              
-                            <p:selectOneMenu id="sector" value="#{entryEventBean.sector}" 
+                            <p:selectOneMenu id="sector" value="#{entryEventsBean.sector}" 
                                              converter="sectorConverter" panelStyle="width: 250px;"
-                                             effect="fade" var="sec" style="width: 200px;" filter="true" 
+                                             effect="fade" var="sec" style="width: 250px;" filter="true" 
                                              filterMatchMode="startsWith" required="true"
                                              requiredMessage="Selecione o setor onde está fase é executada!!!"
                                              converterMessage="Setor inválido!!!">
-                                <f:selectItem itemLabel="Selecione um" itemValue="#{entryEventBean.emptySector}"
+                                <f:selectItem itemLabel="Selecione um" itemValue="#{entryEventsBean.emptySector}"
                                               noSelectionOption="true" />
 
-                                <f:selectItems value="#{entryEventBean.sectors}" var="sector" 
+                                <f:selectItems value="#{entryEventsBean.sectors}" var="sector" 
                                                itemLabel="#{sector.name}" itemValue="#{sector}" />
 
                                 <p:column>
@@ -57,5 +111,5 @@
                                  style="font-size: 18px;" />
             </h:panelGrid>
         </h:form>
-    </ui:define>Cadas
+    </ui:define>
 </ui:composition>

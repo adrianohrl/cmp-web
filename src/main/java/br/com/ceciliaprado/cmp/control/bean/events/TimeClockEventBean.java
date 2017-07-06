@@ -37,7 +37,6 @@ import javax.persistence.EntityManager;
 public class TimeClockEventBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
-    private final TimeClockEventDAO timeClockEventDAO = new TimeClockEventDAO(em);
     private final TimeClockEvent timeClockEvent = new TimeClockEvent();
     private final Employee emptyEmployee = new Subordinate("", "");
     private final List<Employee> employees = new ArrayList<>();
@@ -59,7 +58,7 @@ public class TimeClockEventBean implements Serializable {
         }
     }
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -67,6 +66,7 @@ public class TimeClockEventBean implements Serializable {
         try {
             timeClockEvent.setEventDate(Calendars.sum(date, time));
             if (maxDate.after(timeClockEvent.getEventDate())) {
+                TimeClockEventDAO timeClockEventDAO = new TimeClockEventDAO(em);
                 timeClockEventDAO.create(timeClockEvent);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Sucesso no cadastro", timeClockEvent + " foi cadastrado com sucesso!!!");

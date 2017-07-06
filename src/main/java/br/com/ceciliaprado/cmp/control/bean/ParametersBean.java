@@ -19,6 +19,7 @@ public class ParametersBean implements Serializable {
     
     private int growlLife = 5000;
     private String theme = "blitzer";
+    private long timeout = 30 * 60 * 1000;
 
     public int getGrowlLife() {
         return growlLife;
@@ -34,6 +35,14 @@ public class ParametersBean implements Serializable {
 
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+
+    public long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
     }
     
 }

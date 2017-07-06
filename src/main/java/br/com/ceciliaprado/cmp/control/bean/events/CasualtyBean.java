@@ -25,15 +25,15 @@ import javax.persistence.EntityManager;
 @ViewScoped
 public class CasualtyBean implements Serializable {
         
-    private final EntityManager em = DataSource.createEntityManager();
-    private final CasualtyDAO casualtyDAO = new CasualtyDAO(em);
+    private final EntityManager em = DataSource.createEntityManager();    
     private final Casualty casualty = new Casualty();
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
         try {
+            CasualtyDAO casualtyDAO = new CasualtyDAO(em);
             casualtyDAO.create(casualty);
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "Sucesso no cadastro", casualty + " foi cadastrado com sucesso!!!");

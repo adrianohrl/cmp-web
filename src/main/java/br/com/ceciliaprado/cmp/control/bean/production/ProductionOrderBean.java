@@ -32,7 +32,6 @@ import javax.persistence.EntityManager;
 public class ProductionOrderBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
-    private final ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
     private final ProductionOrder productionOrder = new ProductionOrder();
     private final Model emptyModel = new Model("", "");
     private final List<Model> models = new ArrayList<>();
@@ -50,11 +49,12 @@ public class ProductionOrderBean implements Serializable {
         }
     }
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
         try {
+            ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
             productionOrderDAO.create(productionOrder);
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "Sucesso no cadastro", productionOrder + " foi cadastrado com sucesso!!!");

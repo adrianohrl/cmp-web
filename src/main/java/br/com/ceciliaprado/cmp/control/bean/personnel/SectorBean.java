@@ -31,9 +31,7 @@ import javax.persistence.EntityManager;
 @ViewScoped
 public class SectorBean implements Serializable {
     
-    
     private final EntityManager em = DataSource.createEntityManager();
-    private final SectorDAO sectorDAO = new SectorDAO(em);
     private final Sector sector = new Sector();
     private final Supervisor emptySupervisor = new Supervisor("", "", "", "");
     private final List<Supervisor> supervisors = new ArrayList<>();
@@ -51,7 +49,7 @@ public class SectorBean implements Serializable {
         }
     }
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
@@ -60,6 +58,7 @@ public class SectorBean implements Serializable {
                 "Erro no cadastro", sector + " deve estar associado a um supervisor!!!");
         } else {
             try {
+                SectorDAO sectorDAO = new SectorDAO(em);
                 sectorDAO.create(sector);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Sucesso no cadastro", sector + " foi cadastrado com sucesso!!!");

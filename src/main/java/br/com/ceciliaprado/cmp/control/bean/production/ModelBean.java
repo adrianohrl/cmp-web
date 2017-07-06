@@ -34,7 +34,6 @@ import org.primefaces.context.RequestContext;
 public class ModelBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
-    private final ModelDAO modelDAO = new ModelDAO(em);
     private final Model model = new Model();
     private final Phase emptyPhase = new Phase("", null);
     private final List<Phase> phases = new ArrayList<>();
@@ -55,7 +54,7 @@ public class ModelBean implements Serializable {
         }
     }
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
@@ -64,6 +63,7 @@ public class ModelBean implements Serializable {
                 "Erro no cadastro", model + " deve conter fases!!!");
         } else {
             try {
+                ModelDAO modelDAO = new ModelDAO(em);
                 modelDAO.create(model);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Sucesso no cadastro", model + " foi cadastrado com sucesso!!!");

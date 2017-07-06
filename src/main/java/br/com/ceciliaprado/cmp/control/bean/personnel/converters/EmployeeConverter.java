@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel;
+package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
+import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
+import br.com.ceciliaprado.cmp.model.personnel.Employee;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -23,37 +23,37 @@ import javax.persistence.EntityManager;
  *
  * @author adrianohrl
  */
-@FacesConverter("supervisorConverter")
-public class SupervisorConverter implements Converter {
+@FacesConverter("employeeConverter")
+public class EmployeeConverter implements Converter {
     
-    private final List<Supervisor> supervisors = new ArrayList<>();
+    private final List<Employee> employees = new ArrayList<>();
     
     @PostConstruct
     public void init() {
         EntityManager em = DataSource.createEntityManager();
-        SupervisorDAO supervisorDAO = new SupervisorDAO(em);
-        supervisors.addAll(supervisorDAO.findAll());
+        EmployeeDAO employeeDAO = new EmployeeDAO(em);
+        employees.addAll(employeeDAO.findAll());
         em.close();
     }
-    
+
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        for (Supervisor supervisor : supervisors) {
-            if (value.equals(supervisor.getName())) {
-                return supervisor;
+        for (Employee employee : employees) {
+            if (value.equals(employee.getName())) {
+                return employee;
             }
         }
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Erro na conversão", "Supervisor inválido!!!");
+            "Erro na conversão", "Funcionário inválido!!!");
         throw new ConverterException(message);
     }
- 
+
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((Supervisor) obj).getName() : null;
-    }   
+        return obj != null ? ((Employee) obj).getName() : null;
+    }
     
 }

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel;
+package br.com.ceciliaprado.cmp.control.bean.production.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.SubordinateDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
+import br.com.ceciliaprado.cmp.control.dao.production.ModelDAO;
+import br.com.ceciliaprado.cmp.model.production.Model;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -23,16 +23,16 @@ import javax.persistence.EntityManager;
  *
  * @author adrianohrl
  */
-@FacesConverter("subordinateConverter")
-public class SubordinateConverter implements Converter {
+@FacesConverter("modelConverter")
+public class ModelConverter implements Converter {
     
-    private final List<Subordinate> subordinates = new ArrayList<>();
+    private final List<Model> models = new ArrayList<>();
     
     @PostConstruct
     public void init() {
         EntityManager em = DataSource.createEntityManager();
-        SubordinateDAO subordinateDAO = new SubordinateDAO(em);
-        subordinates.addAll(subordinateDAO.findAll());
+        ModelDAO modelDAO = new ModelDAO(em);
+        models.addAll(modelDAO.findAll());
         em.close();
     }
 
@@ -41,19 +41,19 @@ public class SubordinateConverter implements Converter {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        for (Subordinate subordinate : subordinates) {
-            if (value.equals(subordinate.getName())) {
-                return subordinate;
+        for (Model model : models) {
+            if (value.equals(model.getName())) {
+                return model;
             }
         }
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Erro na conversão", "Subordinado inválido!!!");
+            "Erro na conversão", "Modelo inválido!!!");
         throw new ConverterException(message);
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((Subordinate) obj).getName() : null;
+        return obj != null ? ((Model) obj).getName() : null;
     }
     
 }

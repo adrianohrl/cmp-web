@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.production;
+package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
-import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
+import br.com.ceciliaprado.cmp.control.dao.personnel.SubordinateDAO;
+import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -23,16 +23,16 @@ import javax.persistence.EntityManager;
  *
  * @author adrianohrl
  */
-@FacesConverter("productionOrderConverter")
-public class ProductionOrderConverter implements Converter {
+@FacesConverter("subordinateConverter")
+public class SubordinateConverter implements Converter {
     
-    private final List<ProductionOrder> productionOrders = new ArrayList<>();
+    private final List<Subordinate> subordinates = new ArrayList<>();
     
     @PostConstruct
-    public void init() {    
+    public void init() {
         EntityManager em = DataSource.createEntityManager();
-        ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
-        productionOrders.addAll(productionOrderDAO.findAll());
+        SubordinateDAO subordinateDAO = new SubordinateDAO(em);
+        subordinates.addAll(subordinateDAO.findAll());
         em.close();
     }
 
@@ -41,19 +41,19 @@ public class ProductionOrderConverter implements Converter {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        for (ProductionOrder productionOrder : productionOrders) {
-            if (value.equals(productionOrder.getReference())) {
-                return productionOrder;
+        for (Subordinate subordinate : subordinates) {
+            if (value.equals(subordinate.getName())) {
+                return subordinate;
             }
         }
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Erro na conversão", "Fase inválida!!!");
+            "Erro na conversão", "Subordinado inválido!!!");
         throw new ConverterException(message);
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((ProductionOrder) obj).getReference() : null;
+        return obj != null ? ((Subordinate) obj).getName() : null;
     }
     
 }

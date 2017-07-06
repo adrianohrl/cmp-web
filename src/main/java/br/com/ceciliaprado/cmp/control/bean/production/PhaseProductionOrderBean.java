@@ -24,9 +24,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -45,7 +45,7 @@ public class PhaseProductionOrderBean implements Serializable {
     private final List<ProductionOrder> productionOrders = new ArrayList<>();
     private final ModelPhase emptyModelPhase = new ModelPhase(new Phase("", null), 0.0);
     private final List<ModelPhase> modelPhases = new ArrayList<>();
-    private boolean allPhases = true;
+    private boolean allPhases = false;
     private int totalQuantity;
     
     @PostConstruct
@@ -61,7 +61,7 @@ public class PhaseProductionOrderBean implements Serializable {
         }
     }
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
@@ -100,8 +100,6 @@ public class PhaseProductionOrderBean implements Serializable {
                     "Nova ordem de produção de fase adicionada ao modelo", phaseProductionOrder.toString());
         reset();    
         context.addMessage(null, message);
-        RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.update("@form:modelPhase");
     }
     
     public void remove(PhaseProductionOrder phaseProductionOrder) {
@@ -110,12 +108,12 @@ public class PhaseProductionOrderBean implements Serializable {
         Collections.sort(modelPhases);
     }
     
-    private void reset() {
+    public void reset() {
         phaseProductionOrder = new PhaseProductionOrder();
         phaseProductionOrder.setProductionOrder(productionOrder);
     }
     
-    public void clear() {
+    public void clear(AjaxBehaviorEvent event) {
         phaseProductionOrders.clear();
         modelPhases.clear();
         Model model = productionOrder.getModel();

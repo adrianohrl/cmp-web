@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel;
+package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Employee;
+import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
+import br.com.ceciliaprado.cmp.model.personnel.Sector;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -23,16 +23,16 @@ import javax.persistence.EntityManager;
  *
  * @author adrianohrl
  */
-@FacesConverter("employeeConverter")
-public class EmployeeConverter implements Converter {
+@FacesConverter("sectorConverter")
+public class SectorConverter implements Converter {
     
-    private final List<Employee> employees = new ArrayList<>();
+    private final List<Sector> sectors = new ArrayList<>();
     
     @PostConstruct
     public void init() {
         EntityManager em = DataSource.createEntityManager();
-        EmployeeDAO employeeDAO = new EmployeeDAO(em);
-        employees.addAll(employeeDAO.findAll());
+        SectorDAO sectorDAO = new SectorDAO(em);
+        sectors.addAll(sectorDAO.findAll());
         em.close();
     }
 
@@ -41,19 +41,19 @@ public class EmployeeConverter implements Converter {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        for (Employee employee : employees) {
-            if (value.equals(employee.getName())) {
-                return employee;
+        for (Sector sector : sectors) {
+            if (value.equals(sector.getName())) {
+                return sector;
             }
         }
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Erro na conversão", "Funcionário inválido!!!");
+            "Erro na conversão", "Setor inválido!!!");
         throw new ConverterException(message);
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((Employee) obj).getName() : null;
+        return obj != null ? ((Sector) obj).getName() : null;
     }
     
 }

@@ -32,7 +32,6 @@ import javax.persistence.EntityManager;
 public class PhaseBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
-    private final PhaseDAO phaseDAO = new PhaseDAO(em);
     private final Phase phase = new Phase();
     private final Sector emptySector = new Sector("", null);
     private final List<Sector> sectors = new ArrayList<>();
@@ -50,7 +49,7 @@ public class PhaseBean implements Serializable {
         }
     }
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
@@ -59,6 +58,7 @@ public class PhaseBean implements Serializable {
                 "Erro no cadastro", phase + " deve estar associado a um setor!!!");
         } else {
             try {
+                PhaseDAO phaseDAO = new PhaseDAO(em);
                 phaseDAO.create(phase);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Sucesso no cadastro", phase + " foi cadastrado com sucesso!!!");

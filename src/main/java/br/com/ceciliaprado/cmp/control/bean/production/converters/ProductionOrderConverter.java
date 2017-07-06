@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel;
+package br.com.ceciliaprado.cmp.control.bean.production.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Sector;
+import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
+import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -23,16 +23,16 @@ import javax.persistence.EntityManager;
  *
  * @author adrianohrl
  */
-@FacesConverter("sectorConverter")
-public class SectorConverter implements Converter {
+@FacesConverter("productionOrderConverter")
+public class ProductionOrderConverter implements Converter {
     
-    private final List<Sector> sectors = new ArrayList<>();
+    private final List<ProductionOrder> productionOrders = new ArrayList<>();
     
     @PostConstruct
-    public void init() {
+    public void init() {    
         EntityManager em = DataSource.createEntityManager();
-        SectorDAO sectorDAO = new SectorDAO(em);
-        sectors.addAll(sectorDAO.findAll());
+        ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
+        productionOrders.addAll(productionOrderDAO.findAll());
         em.close();
     }
 
@@ -41,19 +41,19 @@ public class SectorConverter implements Converter {
         if (value == null || value.isEmpty()) {
             return null;
         }
-        for (Sector sector : sectors) {
-            if (value.equals(sector.getName())) {
-                return sector;
+        for (ProductionOrder productionOrder : productionOrders) {
+            if (value.equals(productionOrder.getReference())) {
+                return productionOrder;
             }
         }
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Erro na conversão", "Setor inválido!!!");
+            "Erro na conversão", "Fase inválida!!!");
         throw new ConverterException(message);
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((Sector) obj).getName() : null;
+        return obj != null ? ((ProductionOrder) obj).getReference() : null;
     }
     
 }

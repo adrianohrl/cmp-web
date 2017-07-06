@@ -26,7 +26,6 @@ import javax.persistence.EntityManager;
 public class SubordinateBean implements Serializable {
        
     private final EntityManager em = DataSource.createEntityManager();
-    private final SubordinateDAO subordinateDAO = new SubordinateDAO(em);
     private final Subordinate subordinate = new Subordinate();    
     
     public String insert() {
@@ -34,6 +33,7 @@ public class SubordinateBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
         try {
+            SubordinateDAO subordinateDAO = new SubordinateDAO(em);
             subordinateDAO.create(subordinate);
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "Sucesso no cadastro", subordinate + " foi cadastrado com sucesso!!!");

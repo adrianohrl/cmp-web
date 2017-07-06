@@ -33,7 +33,6 @@ import javax.persistence.EntityManager;
 public class SupervisorBean implements Serializable {
        
     private final EntityManager em = DataSource.createEntityManager();
-    private final SupervisorDAO supervisorDAO = new SupervisorDAO(em);
     private final Supervisor supervisor = new Supervisor();
     private final List<Subordinate> subordinates = new ArrayList<>();
     private Subordinate[] selectedSubordinates;
@@ -51,12 +50,13 @@ public class SupervisorBean implements Serializable {
         }
     }
     
-    public String insert() {
+    public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
         try {
             supervisor.setSubordinates(Arrays.asList(selectedSubordinates));
+            SupervisorDAO supervisorDAO = new SupervisorDAO(em);
             supervisorDAO.create(supervisor);
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "Sucesso no cadastro", supervisor + " foi cadastrado com sucesso!!!");
