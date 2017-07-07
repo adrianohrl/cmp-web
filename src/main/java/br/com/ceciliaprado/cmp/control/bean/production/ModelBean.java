@@ -101,7 +101,7 @@ public class ModelBean implements Serializable {
         Collections.sort(phases);
     }
     
-    private void reset() {
+    public void reset() {
         modelPhase = new ModelPhase();
         minutes = 0;
         seconds = 0.0;

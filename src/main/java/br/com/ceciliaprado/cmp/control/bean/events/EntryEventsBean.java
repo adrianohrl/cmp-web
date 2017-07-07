@@ -41,7 +41,7 @@ public class EntryEventsBean implements Serializable {
     private EntryEventsBuilder builder;
     private Supervisor supervisor = new Supervisor();
     private final List<Supervisor> supervisors = new ArrayList<>();
-    private Sector sector = new Sector();
+    private Sector sector = new Sector("", null);
     private final Sector emptySector = new Sector("", null);
     private final List<Sector> sectors = new ArrayList<>();
     private final List<Subordinate> subordinates = new ArrayList<>();
@@ -51,19 +51,11 @@ public class EntryEventsBean implements Serializable {
         SupervisorDAO supervisorDAO = new SupervisorDAO(em);
         supervisors.addAll(supervisorDAO.findAll());
         Collections.sort(supervisors);
-        SectorDAO sectorDAO = new SectorDAO(em);
-        sectors.addAll(sectorDAO.findAll());
-        Collections.sort(sectors);
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
         if (supervisors.isEmpty()) {
             message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                     "Fatalidade no login", "Nenhum supervisor foi cadastrado ainda!!!");
-            context.addMessage(null, message);
-        }
-        if (sectors.isEmpty()) {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no login", "Nenhum setor foi cadastrado ainda!!!");
             context.addMessage(null, message);
         }
     }
@@ -82,6 +74,9 @@ public class EntryEventsBean implements Serializable {
                 HttpSession session = SessionUtils.getSession();
 			session.setAttribute("loggedEmployee", s);
                 supervisor = s;
+                SupervisorDAO supervisorDAO = new SupervisorDAO(em);
+                sectors.addAll(supervisorDAO.findSupervisorSectors(supervisor));
+                Collections.sort(sectors);
                 return;
             }
         }

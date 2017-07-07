@@ -26,7 +26,7 @@
                     <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="modelPhase" value="#{entryEventsBean.phaseProductionOrder.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;" effect="fade" var="ph" 
-                                     style="width: 200px;" filter="true" filterMatchMode="startsWith" required="true" 
+                                     style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!" converterMessage="Fase inválida!!!">
                         <f:selectItem itemLabel="Selecione uma" itemValue="#{entryEventsBean.emptyModelPhase.phase}"
                                       noSelectionOption="true" />
@@ -66,20 +66,19 @@
                 </f:facet>
                 
                 <p:wizard flowListener="#{entryEventsBean.onFlowProcess}" backLabel="Voltar" nextLabel="Próximo" >
-                    <p:tab id="supervisor" title="Supervisor">
+                    <p:tab id="supervisorTab" title="Supervisor">
                         <h:panelGrid id="supervisorGrid" columns="2" cellpadding="10">      
                             <p:outputLabel for="login" value="Login: " style="font-weight: bold;" /> 
                             <p:inputText id="login" label="Login" value="#{entryEventsBean.supervisor.login}"
                                          required="true" requiredMessage="Digite o seu login, supervisor!!!" 
                                          style="width: 250px;" validator="supervisorLoginValidator">
-                                <p:ajax event="blur" listener="#{entryEventsBean.selectSupervisor()}" />
+                                <p:ajax event="blur" listener="#{entryEventsBean.selectSupervisor()}" update="@form:sector" />
                             </p:inputText>
 
                             <p:outputLabel for="password" value="Senha: " style="font-weight: bold;"/> 
-                            <p:password id="password" match="#{entryEventsBean.supervisor.password}" label="Senha" 
+                            <p:password id="password" label="Senha" validator="supervisorPasswordValidator"
                                         required="true" requiredMessage="Digite a sua senha, supervisor!!!"
-                                        promptLabel="Digite a sua senha, supervisor!!!" 
-                                        validatorMessage="Senha inválida!!!" />
+                                        promptLabel="Digite a sua senha, supervisor!!!" style="width: 250px;" />
 
                             <h:outputLabel for="sector" value="Setor: " style="font-weight: bold;" />              
                             <p:selectOneMenu id="sector" value="#{entryEventsBean.sector}" 
@@ -101,15 +100,118 @@
                         </h:panelGrid>
                     </p:tab>
                     
-                    <p:tab>
-                        
+                    <p:tab id="entriesTab" title="Atividades">
+                        <h:panelGrid columns="1" cellpadding="10"> 
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <h:outputText value="Supervisor:" />
+                                <h:outputText value="#{entryEventsBean.supervisor}" style="font-weight: bold;"  />
+                            
+                                <h:outputText value="Setor:" />
+                                <h:outputText value="#{entryEventsBean.sector}" style="font-weight: bold;" />
+                            </h:panelGrid>
+                            
+                            <p:dataTable id="entriesDT" value="#{entryEventsBean}" var="entry" 
+                                         rowKey="#{entry.eventDate}" style="margin-bottom: 20px;">                
+                                <f:facet name="header">
+                                    <h:outputText value="Atividades de Produção"/>
+                                </f:facet>
+                                
+                                <p:columnGroup type="header">
+                                    <p:row>
+                                        <p:column rowspan="2" headerText="Data" />
+                                        <p:column rowspan="2" headerText="Horário" />
+                                        <p:column rowspan="2" headerText="Subordinado" style="width: 100px;" />
+                                        <p:column rowspan="2" headerText="Modelo" />
+                                        <p:column rowspan="2" headerText="Ordem de Produção" />
+                                        <p:column rowspan="2" headerText="Fase" />
+                                        <p:column rowspan="2" headerText="Duração [min/un]" />
+                                        <p:column rowspan="2" headerText="Tipo de Atividade" />
+                                        <p:column colspan="3" headerText="Quantidades [un]" />
+                                        <p:column rowspan="2" headerText="Observação" style="width: 100px;" />
+                                        <p:column rowspan="2" headerText="Sinistro" />
+                                    </p:row>
+                                    <p:row>
+                                        <p:column headerText="Produzida" />
+                                        <p:column headerText="Retornada" />
+                                        <p:column headerText="Total" />
+                                    </p:row>
+                                </p:columnGroup>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.dateEvent}">
+                                        <f:convertDateTime locale="pt" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.dateEvent}">
+                                        <f:convertDateTime locale="pt" pattern="HH:mm" />
+                                    </h:outputText>
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.employee}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.phaseProductionOrder.productionOrder.model.reference}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.phaseProductionOrder.productionOrder.reference}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.phaseProductionOrder.phase.phase.name}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.phaseProductionOrder.phase.expectedDuration}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.productionState}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.producedQuantity}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.returnedQuantity}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.phaseProductionOrder.totalQuantity}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.observation}" />
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText value="#{entry.casualty.name}" />
+                                </p:column>
+
+                                <f:facet name="footer">
+                                    <p:commandButton process="@form:entriesDT" 
+                                                     icon="ui-icon-plus" title="Adicionar nova atividade de produção"
+                                                     onclick="PF('dlg').show();" update="@form:entriesDT, @form:messages" 
+                                                     style="width: 20px; height: 20px;" />                        
+                                </f:facet>
+                            </p:dataTable>
+                        </h:panelGrid>
                     </p:tab>
                 </p:wizard>
                 
-                <p:commandButton value="Sair" action="/index" 
+                <p:commandButton value="Sair" action="#{entryEventsBean.logout()}"
                                  update="@form" title="Registrar a fase"
-                                 style="font-size: 18px;" />
+                                 style="font-size: 18px;">
+                    <p:ajax update="@form" resetValues="true" />
+                </p:commandButton>
             </h:panelGrid>
         </h:form>
+        
+        <h:outputScript library="js" name="pt_calendar.js" />
     </ui:define>
 </ui:composition>

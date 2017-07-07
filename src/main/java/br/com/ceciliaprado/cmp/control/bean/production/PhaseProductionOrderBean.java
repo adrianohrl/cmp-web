@@ -27,7 +27,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -39,8 +38,8 @@ public class PhaseProductionOrderBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
-    private ProductionOrder productionOrder = new ProductionOrder();
-    private PhaseProductionOrder phaseProductionOrder = new PhaseProductionOrder();
+    private ProductionOrder productionOrder = new ProductionOrder("", null);
+    private PhaseProductionOrder phaseProductionOrder;
     private final List<PhaseProductionOrder> phaseProductionOrders = new ArrayList<>();
     private final ProductionOrder emptyProductionOrder = new ProductionOrder("", null);
     private final List<ProductionOrder> productionOrders = new ArrayList<>();
@@ -60,6 +59,7 @@ public class PhaseProductionOrderBean implements Serializable {
                     "Fatalidade no cadastro", "Nenhuma ordem de produção foi cadastrada ainda!!!");
             context.addMessage(null, message);
         }
+        reset();
     }
     
     public String register() {
@@ -93,7 +93,7 @@ public class PhaseProductionOrderBean implements Serializable {
         return next;
     }
     
-    public void add(){
+    public void add() {
         phaseProductionOrders.add(phaseProductionOrder);
         modelPhases.remove(phaseProductionOrder.getPhase());
         FacesContext context = FacesContext.getCurrentInstance();
@@ -110,7 +110,8 @@ public class PhaseProductionOrderBean implements Serializable {
     }
     
     public void reset() {
-        phaseProductionOrder = new PhaseProductionOrder();
+        phaseProductionOrder = new PhaseProductionOrder();        
+        phaseProductionOrder.setPhase(new ModelPhase());
         phaseProductionOrder.setProductionOrder(productionOrder);
     }
     
