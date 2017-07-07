@@ -11,8 +11,7 @@
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
             
             <p:dialog id="dialog" header="Nova Fase" widgetVar="dlg" resizable="false" modal="true" 
-                      draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true" 
-                      onShow="#{modelBean.reset()}">
+                      draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
                     <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="modelPhase" value="#{modelBean.modelPhase.phase}" 
@@ -88,7 +87,7 @@
                     </p:column>
 
                     <p:column style="width: 25px; text-align: center;">
-                        <p:commandButton process="phases" icon="ui-icon-minus"  title="Remover esta fase" 
+                        <p:commandButton process="@form:phases" icon="ui-icon-minus"  title="Remover esta fase" 
                                          actionListener="#{modelBean.remove(phase)}" 
                                          update="@form:dialog, @form:phases, @form:messages" 
                                          style="width: 20px; height: 20px;" />
@@ -96,14 +95,15 @@
 
                     <f:facet name="footer">
                         <p:commandButton process="@form:phases" icon="ui-icon-plus" title="Adicionar nova fase"
-                                         onclick="PF('dlg').show();" update="@form:phases, @form:messages" 
+                                         onclick="PF('dlg').show();" update="@form:phases, @form:messages"
+                                         disabled="#{empty modelBean.phases}"  
                                          style="width: 20px; height: 20px;" />                        
                     </f:facet>
                 </p:dataTable>
                 
                 <f:facet name="footer">
                     <p:commandButton process="@this, @form:grid, @form:phases" value="Registrar" action="#{modelBean.register()}" 
-                                     title="Registrar o modelo" style="font-size: 18px;" />
+                                     title="Registrar o modelo" update="@form:messages" style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>
         </h:form>

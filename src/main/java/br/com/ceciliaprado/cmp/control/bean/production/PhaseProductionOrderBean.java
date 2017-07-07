@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -43,8 +44,9 @@ public class PhaseProductionOrderBean implements Serializable {
     private final List<PhaseProductionOrder> phaseProductionOrders = new ArrayList<>();
     private final ProductionOrder emptyProductionOrder = new ProductionOrder("", null);
     private final List<ProductionOrder> productionOrders = new ArrayList<>();
-    private final ModelPhase emptyModelPhase = new ModelPhase(new Phase("", null), 0.0);
-    private final List<ModelPhase> modelPhases = new ArrayList<>();
+    private Phase phase;
+    private final Phase emptyPhase = new Phase("", null);
+    private final List<Phase> phases = new ArrayList<>();
     private boolean allPhases = false;
     private int totalQuantity;
     
@@ -66,10 +68,11 @@ public class PhaseProductionOrderBean implements Serializable {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
-        if (isAllPhases()) {
+        if (allPhases) {
             phaseProductionOrders.clear();
-            for (ModelPhase modelPhase : modelPhases) {
+            for (Phase p : phases) {
                 try {
+                    ModelPhase modelPhase = productionOrder.getModel().getPhase(p);
                     phaseProductionOrders.add(new PhaseProductionOrder(modelPhase, productionOrder, totalQuantity));
                 } catch (ProductionException ex) {
                     message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -94,35 +97,53 @@ public class PhaseProductionOrderBean implements Serializable {
     }
     
     public void add() {
-        phaseProductionOrders.add(phaseProductionOrder);
-        modelPhases.remove(phaseProductionOrder.getPhase());
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                    "Nova ordem de produção de fase adicionada ao modelo", phaseProductionOrder.toString());
-        reset();    
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+                "Dado inconsistente", "A quantidade total a ser produzida dessa fase deve ser positiva!!!");
+        boolean positiveTotalQuantity = phaseProductionOrder.getTotalQuantity() > 0;
+        if (positiveTotalQuantity) {
+            for (ModelPhase modelPhase : productionOrder.getModel().getPhases()) {
+                if (modelPhase.equals(phase)) {
+                    phaseProductionOrder.setPhase(modelPhase);
+                }
+            }
+            phaseProductionOrders.add(phaseProductionOrder);
+            phases.remove(phase);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                    "Nova ordem de produção de fase adicionada ao modelo", 
+                    phaseProductionOrder.getTotalQuantity() + " [un] no fase " + 
+                            phaseProductionOrder.getPhase() + " da ordem de produção " + 
+                            phaseProductionOrder.getProductionOrder());
+            reset();    
+        }
         context.addMessage(null, message);
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.addCallbackParam("otherValidationsFailed", !positiveTotalQuantity);
     }
     
     public void remove(PhaseProductionOrder phaseProductionOrder) {
         phaseProductionOrders.remove(phaseProductionOrder);
-        modelPhases.add(phaseProductionOrder.getPhase());
-        Collections.sort(modelPhases);
+        phases.add(phaseProductionOrder.getPhase().getPhase());
+        Collections.sort(phases);
     }
     
-    public void reset() {
-        phaseProductionOrder = new PhaseProductionOrder();        
-        phaseProductionOrder.setPhase(new ModelPhase());
+    private void reset() {
+        totalQuantity = 0;
+        phase = new Phase("", null);
+        phaseProductionOrder = new PhaseProductionOrder();    
         phaseProductionOrder.setProductionOrder(productionOrder);
     }
     
     public void clear(AjaxBehaviorEvent event) {
         phaseProductionOrders.clear();
-        modelPhases.clear();
+        phases.clear();
         Model model = productionOrder.getModel();
         if (model != null) {
             phaseProductionOrder.setProductionOrder(productionOrder);
-            modelPhases.addAll(model.getPhases());
-            Collections.sort(modelPhases);
+            for (ModelPhase modelPhase : model.getPhases()) {
+                phases.add(modelPhase.getPhase());
+            }
+            Collections.sort(phases);
         }
     }
 
@@ -159,12 +180,20 @@ public class PhaseProductionOrderBean implements Serializable {
         return productionOrders;
     }
 
-    public ModelPhase getEmptyModelPhase() {
-        return emptyModelPhase;
+    public Phase getPhase() {
+        return phase;
     }
 
-    public List<ModelPhase> getModelPhases() {
-        return modelPhases;
+    public void setPhase(Phase phase) {
+        this.phase = phase;
+    }
+
+    public Phase getEmptyPhase() {
+        return emptyPhase;
+    }
+
+    public List<Phase> getPhases() {
+        return phases;
     }
 
     public boolean isAllPhases() {

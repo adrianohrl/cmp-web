@@ -92,7 +92,7 @@ public class ModelBean implements Serializable {
         }
         context.addMessage(null, message);
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.addCallbackParam("positiveExpectedDuration", positiveExpectedDuration);
+        requestContext.addCallbackParam("otherValidationsFailed", !positiveExpectedDuration);
     }
     
     public void remove(ModelPhase modelPhase) {    
@@ -101,7 +101,7 @@ public class ModelBean implements Serializable {
         Collections.sort(phases);
     }
     
-    public void reset() {
+    private void reset() {
         modelPhase = new ModelPhase();
         minutes = 0;
         seconds = 0.0;

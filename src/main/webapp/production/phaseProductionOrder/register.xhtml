@@ -11,19 +11,19 @@
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
             
             <p:dialog id="dialog" header="Nova Ordem de Produção de Fase" widgetVar="dlg" 
-                      resizable="false" modal="true" draggable="false" showEffect="fade" 
-                      hideEffect="fade" closeOnEscape="true" onShow="#{modelBean.reset()}">
+                      resizable="false" modal="true" draggable="false" showEffect="fade"  
+                      hideEffect="fade" closeOnEscape="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
                     <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
-                    <p:selectOneMenu id="modelPhase" value="#{phaseProductionOrderBean.phaseProductionOrder.phase.phase}" 
+                    <p:selectOneMenu id="modelPhase" value="#{phaseProductionOrderBean.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;" effect="fade" var="ph" 
                                      style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!" converterMessage="Fase inválida!!!">
-                        <f:selectItem itemLabel="Selecione uma" itemValue="#{phaseProductionOrderBean.emptyModelPhase.phase}"
+                        <f:selectItem itemLabel="Selecione uma" itemValue="#{phaseProductionOrderBean.emptyPhase}"
                                       noSelectionOption="true" />
                         
-                        <f:selectItems value="#{phaseProductionOrderBean.modelPhases}" var="phase" 
-                                       itemLabel="#{phase.phase.name}" itemValue="#{phase.phase}" />
+                        <f:selectItems value="#{phaseProductionOrderBean.phases}" var="phase" 
+                                       itemLabel="#{phase.name}" itemValue="#{phase}" />
 
                         <p:column>
                             <h:outputText value="#{ph.name}" />
@@ -44,7 +44,7 @@
                     </p:commandButton>
                     <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:orders" 
                                      title="Adicionar a nova ordem de produção de fase" actionListener="#{phaseProductionOrderBean.add()}" 
-                                     style="font-size: 18px;" oncomplete="handleLoginRequest(xhr, status, args)" />                        
+                                     style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)" />                        
                 </h:panelGrid>
             </p:dialog>
             
@@ -84,7 +84,7 @@
 
                     <h:outputLabel id="allQuantityLabel" for="allQuantity" value="Quantidade: " style="font-weight: bold;" 
                                    rendered="#{phaseProductionOrderBean.allPhases}" /> 
-                    <p:inputNumber id="allQuantity" value="#{phaseProductionOrderBean.phaseProductionOrder.totalQuantity}" 
+                    <p:inputNumber id="allQuantity" value="#{phaseProductionOrderBean.totalQuantity}" 
                                    label="Quantidade total [un]" style="width: 150px;" required="#{phaseProductionOrderBean.allPhases}" 
                                    emptyValue="zero" decimalPlaces="0" symbol=" [un]" symbolPosition="s" minValue="1"
                                    converterMessage="A quantidade total deve ser um número inteiro positivo!!!"
@@ -105,9 +105,9 @@
                     </p:column>
 
                     <p:column style="width: 25px; text-align: center;">
-                        <p:commandButton process="orders" icon="ui-icon-minus"  title="Remover esta fase" 
+                        <p:commandButton process="@form:orders" icon="ui-icon-minus"  title="Remover esta fase" 
                                          actionListener="#{phaseProductionOrderBean.remove(ppo)}" 
-                                         update="@form:orders, @form:messages" 
+                                         update="@form:dialog, @form:orders, @form:messages" 
                                          style="width: 20px; height: 20px;" />
                     </p:column>
 
@@ -115,13 +115,14 @@
                         <p:commandButton process="@form:orders" icon="ui-icon-plus" 
                                          title="Adicionar nova ordem de produção de fase"
                                          onclick="PF('dlg').show();" update="@form:orders, @form:messages" 
+                                         disabled="#{empty phaseProductionOrderBean.phases}" 
                                          style="width: 20px; height: 20px;" />
                     </f:facet>
                 </p:dataTable>
                 
                 <f:facet name="footer">
                     <p:commandButton process="@this, @form:grid, @form:orders" value="Registrar" 
-                                     action="#{phaseProductionOrderBean.register()}" update="@form" 
+                                     action="#{phaseProductionOrderBean.register()}" update="@form:messages" 
                                      title="Registrar as ordens de produção de fase" style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>            
