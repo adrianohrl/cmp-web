@@ -7,13 +7,18 @@ package br.com.ceciliaprado.cmp.control.bean.events;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.bean.SessionUtils;
-import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
+import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
+import br.com.ceciliaprado.cmp.control.dao.production.PhaseProductionOrderDAO;
 import br.com.ceciliaprado.cmp.control.model.production.EntryEventsBuilder;
 import br.com.ceciliaprado.cmp.control.model.production.reports.filters.EntryEventsList;
+import br.com.ceciliaprado.cmp.model.events.Casualty;
 import br.com.ceciliaprado.cmp.model.personnel.Sector;
 import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
+import br.com.ceciliaprado.cmp.model.production.Phase;
+import br.com.ceciliaprado.cmp.model.production.PhaseProductionOrder;
+import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +29,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FlowEvent;
@@ -41,16 +47,26 @@ public class EntryEventsBean implements Serializable {
     private EntryEventsBuilder builder;
     private Supervisor supervisor = new Supervisor();
     private final List<Supervisor> supervisors = new ArrayList<>();
-    private Sector sector = new Sector("", null);
+    private Sector sector;
     private final Sector emptySector = new Sector("", null);
     private final List<Sector> sectors = new ArrayList<>();
+    private final Subordinate emptySubordinate = new Subordinate("", "");
     private final List<Subordinate> subordinates = new ArrayList<>();
+    private final ProductionOrder emptyProductionOrder = new ProductionOrder("", null);
+    private final List<ProductionOrder> productionOrders = new ArrayList<>();
+    private final Phase emptyPhase = new Phase("", null);
+    private PhaseProductionOrder phaseProductionOrder;
+    private final List<PhaseProductionOrder> phaseProductionOrders = new ArrayList<>();
+    private final Casualty emptyCasualty = new Casualty("");
+    private final List<Casualty> casualties = new ArrayList<>();
     
     @PostConstruct
     public void init() {
         SupervisorDAO supervisorDAO = new SupervisorDAO(em);
         supervisors.addAll(supervisorDAO.findAll());
         Collections.sort(supervisors);
+        CasualtyDAO casualtyDAO = new CasualtyDAO(em);
+        casualties.addAll(casualtyDAO.findAll());
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
         if (supervisors.isEmpty()) {
@@ -77,20 +93,40 @@ public class EntryEventsBean implements Serializable {
                 SupervisorDAO supervisorDAO = new SupervisorDAO(em);
                 sectors.addAll(supervisorDAO.findSupervisorSectors(supervisor));
                 Collections.sort(sectors);
+                subordinates.clear();
+                for (Subordinate subordinate : supervisor.getSubordinates()) {
+                    if (subordinate.isAvailable()) {
+                        subordinates.add(subordinate);
+                    }
+                }
+                Collections.sort(subordinates);
                 return;
             }
         }
     }
     
+    public void selectProductionOrders(AjaxBehaviorEvent event) {
+        PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
+        phaseProductionOrders.clear();
+        phaseProductionOrders.addAll(phaseProductionOrderDAO.findPendents(sector));
+        productionOrders.clear();
+        for (PhaseProductionOrder ppo : phaseProductionOrders) {
+            ProductionOrder po = ppo.getProductionOrder();
+            if (!productionOrders.contains(po)) {
+                productionOrders.add(po);
+            }
+        }
+        Collections.sort(productionOrders);
+    }
+    
+    public void selectPhaseProductionOrder(AjaxBehaviorEvent event) {
+        
+    }
+    
     public void onIdle() {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, 
-                "No activity.", "What are you doing over there?"));
+                "Saindo...", "Tempo expirado!!!"));
         logout();
-    }
- 
-    public void onActive() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-                "Welcome Back", "Well, that's a long coffee break!"));
     }
     
     public String logout() {
@@ -140,8 +176,44 @@ public class EntryEventsBean implements Serializable {
         return sectors;
     }
 
+    public Subordinate getEmptySubordinate() {
+        return emptySubordinate;
+    }
+
     public List<Subordinate> getSubordinates() {
         return subordinates;
+    }
+
+    public ProductionOrder getEmptyProductionOrder() {
+        return emptyProductionOrder;
+    }
+
+    public List<ProductionOrder> getProductionOrders() {
+        return productionOrders;
+    }
+
+    public Phase getEmptyPhase() {
+        return emptyPhase;
+    }
+
+    public PhaseProductionOrder getPhaseProductionOrder() {
+        return phaseProductionOrder;
+    }
+
+    public void setPhaseProductionOrder(PhaseProductionOrder phaseProductionOrder) {
+        this.phaseProductionOrder = phaseProductionOrder;
+    }
+
+    public List<PhaseProductionOrder> getPhaseProductionOrders() {
+        return phaseProductionOrders;
+    }
+
+    public Casualty getEmptyCasualty() {
+        return emptyCasualty;
+    }
+
+    public List<Casualty> getCasualties() {
+        return casualties;
     }
     
 }

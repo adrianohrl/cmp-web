@@ -22,8 +22,8 @@
                         <f:selectItem itemLabel="Selecione uma" itemValue="#{phaseProductionOrderBean.emptyPhase}"
                                       noSelectionOption="true" />
                         
-                        <f:selectItems value="#{phaseProductionOrderBean.phases}" var="phase" 
-                                       itemLabel="#{phase.name}" itemValue="#{phase}" />
+                        <f:selectItems value="#{phaseProductionOrderBean.phases}" var="p" 
+                                       itemLabel="#{p.name}" itemValue="#{p}" />
 
                         <p:column>
                             <h:outputText value="#{ph.name}" />
@@ -54,10 +54,10 @@
                 </f:facet>
                 
                 <h:panelGrid columns="2" cellpadding="10">  
-                    <p:outputLabel for="order" value="Ordem de Produção: " style="font-weight: bold;" /> 
-                    <p:selectOneMenu id="order" value="#{phaseProductionOrderBean.productionOrder}" 
+                    <p:outputLabel for="productionOrder" value="Ordem de Produção: " style="font-weight: bold;" /> 
+                    <p:selectOneMenu id="productionOrder" value="#{phaseProductionOrderBean.productionOrder}" 
                                      converter="productionOrderConverter" panelStyle="width: 250px;"
-                                     effect="fade" var="po" style="width: 250px;" filter="true" 
+                                     effect="fade" var="order" style="width: 250px;" filter="true" 
                                      filterMatchMode="startsWith" required="true"
                                      requiredMessage="Selecione a ordem de produção desejada!!!"
                                      converterMessage="Ordem de produção inválida!!!">
@@ -67,11 +67,11 @@
                                       itemValue="#{phaseProductionOrderBean.emptyProductionOrder}"
                                       noSelectionOption="true" />
 
-                        <f:selectItems value="#{phaseProductionOrderBean.productionOrders}" var="productionOrder" 
-                                       itemLabel="#{productionOrder.reference}" itemValue="#{productionOrder}" />
+                        <f:selectItems value="#{phaseProductionOrderBean.productionOrders}" var="po" 
+                                       itemLabel="#{po.reference}" itemValue="#{po}" />
 
                         <p:column>
-                            <h:outputText value="#{po.reference}" />
+                            <h:outputText value="#{order.reference}" />
                         </p:column>
                     </p:selectOneMenu>
                     

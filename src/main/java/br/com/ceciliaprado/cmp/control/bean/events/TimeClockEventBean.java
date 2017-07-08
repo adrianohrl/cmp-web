@@ -61,8 +61,8 @@ public class TimeClockEventBean implements Serializable {
     public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                    "Erro no cadastro", "A data e o horário de entrada/saída deve ser antes da data e horário atual!!!");
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no cadastro", 
+                "A data e o horário de entrada/saída deve ser antes da data e horário atual!!!");
         try {
             timeClockEvent.setEventDate(Calendars.sum(date, time));
             if (maxDate.after(timeClockEvent.getEventDate())) {

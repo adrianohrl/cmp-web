@@ -13,8 +13,8 @@
             <p:dialog id="dialog" header="Nova Fase" widgetVar="dlg" resizable="false" modal="true" 
                       draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
-                    <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
-                    <p:selectOneMenu id="modelPhase" value="#{modelBean.modelPhase.phase}" 
+                    <p:outputLabel for="phase" value="Fase: " style="font-weight: bold;" /> 
+                    <p:selectOneMenu id="phase" value="#{modelBean.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;"
                                      effect="fade" var="ph" style="width: 250px;" filter="true" 
                                      filterMatchMode="startsWith" required="true" 
@@ -23,8 +23,8 @@
                         <f:selectItem itemLabel="Selecione uma" itemValue="#{modelBean.emptyPhase}" 
                                       noSelectionOption="true" />
                         
-                        <f:selectItems value="#{modelBean.phases}" var="phase" 
-                                       itemLabel="#{phase.name}" itemValue="#{phase}" />
+                        <f:selectItems value="#{modelBean.phases}" var="p" 
+                                       itemLabel="#{p.name}" itemValue="#{p}" />
 
                         <p:column>
                             <h:outputText value="#{ph.name}" />

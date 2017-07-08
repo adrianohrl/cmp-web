@@ -1,3 +1,13 @@
-1) Tela de cadastro de ordem de produção de fases não está registrando
+1) Tela de cadastro de atividades de produção não está completa.
 
-2) Tela de cadastro de atividades de produção não está completa.
+2) Dialog error messages should be improved (like in model/register.xhtml)
+
+3) file upload and importation
+
+4) file exportation and download
+
+5) subordinate efficiency graphs per period
+
+6) "Sair" button of entry/register.xhtml is not working properly
+
+7) production states selectOneMenu should handle string, so that the cmp model doesn't be changed to portuguese.

@@ -38,10 +38,9 @@ import org.primefaces.context.RequestContext;
 public class PhaseProductionOrderBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
-    private final PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
-    private ProductionOrder productionOrder = new ProductionOrder("", null);
     private PhaseProductionOrder phaseProductionOrder;
     private final List<PhaseProductionOrder> phaseProductionOrders = new ArrayList<>();
+    private ProductionOrder productionOrder;
     private final ProductionOrder emptyProductionOrder = new ProductionOrder("", null);
     private final List<ProductionOrder> productionOrders = new ArrayList<>();
     private Phase phase;
@@ -81,6 +80,7 @@ public class PhaseProductionOrderBean implements Serializable {
                 }
             }
         }
+        PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
         for (PhaseProductionOrder ppe : phaseProductionOrders) {
             try {
                 phaseProductionOrderDAO.create(ppe);

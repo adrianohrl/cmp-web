@@ -35,9 +35,9 @@ public class ModelBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final Model model = new Model();
+    private Phase phase;
     private final Phase emptyPhase = new Phase("", null);
     private final List<Phase> phases = new ArrayList<>();
-    private ModelPhase modelPhase = new ModelPhase();
     private int minutes = 0;
     private double seconds = 0.0;
     
@@ -81,7 +81,7 @@ public class ModelBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                 "Dado inconsistente", "A duração da fase não pode ser nula!!!");
-        modelPhase.setExpectedDuration(minutes + seconds / 60);
+        ModelPhase modelPhase = new ModelPhase(phase, minutes + seconds / 60);
         boolean positiveExpectedDuration = modelPhase.getExpectedDuration() > 0.0;
         if (positiveExpectedDuration) {
             model.getPhases().add(modelPhase);
@@ -102,7 +102,6 @@ public class ModelBean implements Serializable {
     }
     
     private void reset() {
-        modelPhase = new ModelPhase();
         minutes = 0;
         seconds = 0.0;
     }
@@ -124,8 +123,12 @@ public class ModelBean implements Serializable {
         return phases;
     }
 
-    public ModelPhase getModelPhase() {
-        return modelPhase;
+    public Phase getPhase() {
+        return phase;
+    }
+
+    public void setPhase(Phase phase) {
+        this.phase = phase;
     }
 
     public int getMinutes() {

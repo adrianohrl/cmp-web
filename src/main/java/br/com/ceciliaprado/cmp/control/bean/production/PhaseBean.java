@@ -61,7 +61,7 @@ public class PhaseBean implements Serializable {
                 PhaseDAO phaseDAO = new PhaseDAO(em);
                 phaseDAO.create(phase);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                    "Sucesso no cadastro", phase + " foi cadastrado com sucesso!!!");
+                    "Sucesso no cadastro", phase + " foZi cadastrado com sucesso!!!");
                 next = "/index";
             } catch (EntityExistsException e) {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
