@@ -35,8 +35,9 @@
                                  effect="fade" var="emp" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Funcionário inválido!!!"
-                                 requiredMessage="Selecione o funcionário!!!">
-                    <f:selectItem itemLabel="Selecione um" itemValue="#{timeClockEventBean.emptyEmployee}"
+                                 requiredMessage="Selecione o funcionário!!!"
+                                 disabled="#{empty timeClockEventBean.employees}">
+                    <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
                                   noSelectionOption="true" />
                     
                     <f:selectItems value="#{timeClockEventBean.employees}" var="employee" 

@@ -36,7 +36,6 @@ public class ModelBean implements Serializable {
     private final EntityManager em = DataSource.createEntityManager();
     private final Model model = new Model();
     private Phase phase;
-    private final Phase emptyPhase = new Phase("", null);
     private final List<Phase> phases = new ArrayList<>();
     private int minutes = 0;
     private double seconds = 0.0;
@@ -113,10 +112,6 @@ public class ModelBean implements Serializable {
     
     public Model getModel() {
         return model;
-    }
-
-    public Phase getEmptyPhase() {
-        return emptyPhase;
     }
 
     public List<Phase> getPhases() {

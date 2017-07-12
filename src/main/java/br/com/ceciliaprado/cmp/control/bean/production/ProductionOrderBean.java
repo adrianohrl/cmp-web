@@ -33,7 +33,6 @@ public class ProductionOrderBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final ProductionOrder productionOrder = new ProductionOrder();
-    private final Model emptyModel = new Model("", "");
     private final List<Model> models = new ArrayList<>();
     
     @PostConstruct
@@ -74,10 +73,6 @@ public class ProductionOrderBean implements Serializable {
 
     public ProductionOrder getProductionOrder() {
         return productionOrder;
-    }
-
-    public Model getEmptyModel() {
-        return emptyModel;
     }
 
     public List<Model> getModels() {

@@ -5,7 +5,6 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.production.converters;
 
-import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
 import br.com.ceciliaprado.cmp.model.production.ProductionStates;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;

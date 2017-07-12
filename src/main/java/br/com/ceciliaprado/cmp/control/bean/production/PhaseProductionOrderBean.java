@@ -24,7 +24,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import org.primefaces.context.RequestContext;
@@ -41,10 +40,8 @@ public class PhaseProductionOrderBean implements Serializable {
     private PhaseProductionOrder phaseProductionOrder;
     private final List<PhaseProductionOrder> phaseProductionOrders = new ArrayList<>();
     private ProductionOrder productionOrder;
-    private final ProductionOrder emptyProductionOrder = new ProductionOrder("", null);
     private final List<ProductionOrder> productionOrders = new ArrayList<>();
     private Phase phase;
-    private final Phase emptyPhase = new Phase("", null);
     private final List<Phase> phases = new ArrayList<>();
     private boolean allPhases = false;
     private int totalQuantity;
@@ -134,7 +131,7 @@ public class PhaseProductionOrderBean implements Serializable {
         phaseProductionOrder.setProductionOrder(productionOrder);
     }
     
-    public void clear(AjaxBehaviorEvent event) {
+    public void clear() {
         phaseProductionOrders.clear();
         phases.clear();
         Model model = productionOrder.getModel();
@@ -172,10 +169,6 @@ public class PhaseProductionOrderBean implements Serializable {
         return phaseProductionOrders;
     }
 
-    public ProductionOrder getEmptyProductionOrder() {
-        return emptyProductionOrder;
-    }
-
     public List<ProductionOrder> getProductionOrders() {
         return productionOrders;
     }
@@ -186,10 +179,6 @@ public class PhaseProductionOrderBean implements Serializable {
 
     public void setPhase(Phase phase) {
         this.phase = phase;
-    }
-
-    public Phase getEmptyPhase() {
-        return emptyPhase;
     }
 
     public List<Phase> getPhases() {

@@ -26,8 +26,9 @@
                                  effect="fade" var="sup" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Supervisor inválido!!!"
-                                 requiredMessage="Selecione o supervisor do setor!!!">
-                    <f:selectItem itemLabel="Selecione um" itemValue="#{sectorBean.emptySupervisor}"
+                                 requiredMessage="Selecione o supervisor do setor!!!"
+                                 disabled="#{empty sectorBean.supervisors}">
+                    <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
                                   noSelectionOption="true" />
                     
                     <f:selectItems value="#{sectorBean.supervisors}" var="supervisor" 

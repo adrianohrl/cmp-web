@@ -24,10 +24,9 @@
                                  converter="modelConverter" panelStyle="width: 250px;"
                                  effect="fade" var="md" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" 
-                                 converterMessage="Modelo inválido!!!" 
-                                 requiredMessage="Selecione o modelo que esta ordem de produção está associada!!!">
-                    <f:selectItem itemLabel="Selecione um" itemValue="#{productionOrderBean.emptyModel}" 
-                                  noSelectionOption="true" />
+                                 requiredMessage="Selecione o modelo que esta ordem de produção está associada!!!"
+                                 disabled="#{empty productionOrderBean.models}">
+                    <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
                     
                     <f:selectItems value="#{productionOrderBean.models}" var="model" 
                                    itemLabel="#{model.name}" itemValue="#{model}" />

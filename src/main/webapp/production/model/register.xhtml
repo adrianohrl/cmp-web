@@ -19,8 +19,9 @@
                                      effect="fade" var="ph" style="width: 250px;" filter="true" 
                                      filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!"
-                                     converterMessage="Fase inválida!!!">
-                        <f:selectItem itemLabel="Selecione uma" itemValue="#{modelBean.emptyPhase}" 
+                                     converterMessage="Fase inválida!!!"
+                                     disabled="#{empty modelBean.phases}">
+                        <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true"
                                       noSelectionOption="true" />
                         
                         <f:selectItems value="#{modelBean.phases}" var="p" 
@@ -73,7 +74,8 @@
                 </h:panelGrid>
             
                 <p:dataTable id="phases" var="phase" value="#{modelBean.model.phases}" 
-                             rowKey="#{phase.phase.name}" style="width: 500px; margin-bottom: 20px;">                
+                             rowKey="#{phase.phase.name}" emptyMessage="Nenhuma fase selecionada ainda."
+                             style="width: 500px; margin-bottom: 20px;">                
                     <f:facet name="header">
                         <h:outputText value="Fases"/>
                     </f:facet>

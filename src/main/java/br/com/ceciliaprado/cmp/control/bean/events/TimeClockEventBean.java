@@ -38,7 +38,6 @@ public class TimeClockEventBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final TimeClockEvent timeClockEvent = new TimeClockEvent();
-    private final Employee emptyEmployee = new Subordinate("", "");
     private final List<Employee> employees = new ArrayList<>();
     private final Calendar maxDate = new GregorianCalendar();
     private Date date;
@@ -87,10 +86,6 @@ public class TimeClockEventBean implements Serializable {
 
     public TimeClockEvent getTimeClockEvent() {
         return timeClockEvent;
-    }
-
-    public Employee getEmptyEmployee() {
-        return emptyEmployee;
     }
 
     public List<Employee> getEmployees() {

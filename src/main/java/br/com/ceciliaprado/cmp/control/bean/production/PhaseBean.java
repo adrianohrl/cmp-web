@@ -33,7 +33,6 @@ public class PhaseBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final Phase phase = new Phase();
-    private final Sector emptySector = new Sector("", null);
     private final List<Sector> sectors = new ArrayList<>();
     
     @PostConstruct
@@ -79,10 +78,6 @@ public class PhaseBean implements Serializable {
 
     public Phase getPhase() {
         return phase;
-    }
-
-    public Sector getEmptySector() {
-        return emptySector;
     }
 
     public List<Sector> getSectors() {

@@ -33,7 +33,6 @@ public class SectorBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final Sector sector = new Sector();
-    private final Supervisor emptySupervisor = new Supervisor("", "", "", "");
     private final List<Supervisor> supervisors = new ArrayList<>();
     
     @PostConstruct
@@ -79,10 +78,6 @@ public class SectorBean implements Serializable {
 
     public Sector getSector() {
         return sector;
-    }
-
-    public Supervisor getEmptySupervisor() {
-        return emptySupervisor;
     }
 
     public List<Supervisor> getSupervisors() {
