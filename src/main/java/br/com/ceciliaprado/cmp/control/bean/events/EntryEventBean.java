@@ -8,12 +8,14 @@ package br.com.ceciliaprado.cmp.control.bean.events;
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.bean.SessionUtils;
 import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
+import br.com.ceciliaprado.cmp.control.dao.events.CasualtyEntryEventDAO;
 import br.com.ceciliaprado.cmp.control.dao.events.EntryEventDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SubordinateDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.control.dao.production.PhaseProductionOrderDAO;
 import br.com.ceciliaprado.cmp.control.model.production.EntryEventsBuilder;
 import br.com.ceciliaprado.cmp.control.model.production.reports.filters.EntryEventsList;
+import br.com.ceciliaprado.cmp.exceptions.ProductionException;
 import br.com.ceciliaprado.cmp.model.events.Casualty;
 import br.com.ceciliaprado.cmp.model.events.EntryEvent;
 import br.com.ceciliaprado.cmp.model.personnel.Sector;
@@ -69,6 +71,8 @@ public class EntryEventBean implements Serializable {
     private PhaseProductionOrder phaseProductionOrder;
     private ProductionStates productionState;
     private String observation;
+    private int producedQuantity;
+    private int returnedQuantity;
     private Casualty casualty;
     private final List<Casualty> casualties = new ArrayList<>();
     
@@ -94,20 +98,39 @@ public class EntryEventBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no cadastro", 
                 "A data e o horário da atividade de produção deve ser antes da data e horário atual!!!");
-        EntryEvent entryEvent = new EntryEvent();
         try {
-            entryEvent.setEventDate(Calendars.sum(date, time));
-            if (maxDate.after(entryEvent.getEventDate())) {
+            Calendar eventDate = Calendars.sum(date, time);
+            if (maxDate.after(eventDate)) {
+                EntryEvent entryEvent = null;
                 EntryEventDAO entryEventDAO = new EntryEventDAO(em);
+                switch (productionState) {
+                    case STARTED:
+                        entryEvent = builder.buildEntryEvent(phaseProductionOrder, subordinate, eventDate, observation);
+                        break;
+                    case RESTARTED:
+                    case FINISHED:
+                        entryEvent = builder.buildEntryEvent(phaseProductionOrder, subordinate, productionState, eventDate, observation);
+                        break;
+                    case PAUSED:
+                    case RETURNED:
+                        entryEvent = builder.buildEntryEvent(phaseProductionOrder, subordinate, productionState, producedQuantity, eventDate, observation, casualty);
+                        entryEventDAO = new CasualtyEntryEventDAO(em);
+                        break;
+                    default:
+                        throw new ProductionException("Tipo de atividade desconhecido: " + productionState + "!!!");
+                }
                 entryEventDAO.create(entryEvent);
                 entryEvents.add(entryEvent);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                    "Sucesso no cadastro", entryEvent + " foi cadastrado com sucesso!!!");
+                    "Sucesso no cadastro", entryEvent + " foi cadastrada com sucesso!!!");
                 next = "/index";
             }
         } catch (EntityExistsException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Erro no cadastro", entryEvent + " já foi cadastrado!!!");
+                "Erro no cadastro", "Atividade de produção já foi cadastrada!!!");
+        } catch (ProductionException e) {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                "Fatalidade no cadastro", e.getMessage());
         }
         context.addMessage(null, message);
         return next;
@@ -139,6 +162,10 @@ public class EntryEventBean implements Serializable {
         phases.clear();
         phaseProductionOrder = null;
         productionState = null;
+        producedQuantity = 0;
+        returnedQuantity = 0;
+        observation = null;
+        casualty = null;
     }
     
     public void onIdle() {
@@ -211,7 +238,24 @@ public class EntryEventBean implements Serializable {
         phaseProductionOrder = phaseProductionOrderDAO.find(phase, productionOrder);
     }
     
+    public void updateProducedQuantity() {
+        if (productionState.isStartingState()) {
+            producedQuantity = 0;
+        } else {
+            producedQuantity = phaseProductionOrder.getTotalQuantity() - 
+                    phaseProductionOrder.getProducedQuantity() - 
+                    (!productionState.isFinished() ? returnedQuantity : 0);
+        }
+    }
+    
+    public void clearReturnedQuantity() {
+        returnedQuantity = 0;
+    }
+    
     public String toString(ProductionStates state) {
+        if (state == null) {
+            return "";
+        }
         String str = "";
         switch (state) {
             case STARTED:
@@ -229,8 +273,6 @@ public class EntryEventBean implements Serializable {
             case RETURNED:
                 str = "Devolução";
                 break;
-            default:
-                throw new AssertionError(state.name());
         }
         return str;
     }
@@ -351,16 +393,32 @@ public class EntryEventBean implements Serializable {
         this.observation = observation;
     }
 
+    public int getProducedQuantity() {
+        return producedQuantity;
+    }
+
+    public void setProducedQuantity(int producedQuantity) {
+        this.producedQuantity = producedQuantity;
+    }
+
+    public int getReturnedQuantity() {
+        return returnedQuantity;
+    }
+
+    public void setReturnedQuantity(int returnedQuantity) {
+        this.returnedQuantity = returnedQuantity;
+    }
+
     public Casualty getCasualty() {
         return casualty;
     }
 
-    public List<Casualty> getCasualties() {
-        return casualties;
-    }
-
     public void setCasualty(Casualty casualty) {
         this.casualty = casualty;
+    }
+
+    public List<Casualty> getCasualties() {
+        return casualties;
     }
     
 }

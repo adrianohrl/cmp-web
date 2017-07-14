@@ -5,7 +5,8 @@
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" autoUpdate="true" showDetail="true" life="#{parametersBean.growlLife}" />   
@@ -37,8 +38,7 @@
                                      style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione um subordinado disponível!!!" 
                                      disabled="#{empty entryEventBean.subordinates}">
-                        <p:ajax listener="#{entryEventBean.selectProductionOrders()}" 
-                                update="@form:dlgGrid" />
+                        <p:ajax listener="#{entryEventBean.selectProductionOrders()}" update="@form:dlgGrid" />
                         
                         <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
                         
@@ -78,7 +78,8 @@
                                      requiredMessage="Selecione a fase desejada!!!"
                                      disabled="#{empty entryEventBean.phases}">
                         <p:ajax listener="#{entryEventBean.selectPhaseProductionOrder()}" 
-                                update="@form:expectedDuration, @form:productionState, @form:totalQuantity" />
+                                update="@form:expectedDuration, @form:productionState, 
+                                        @form:remainingQuantity, @form:totalQuantity" />
                         
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
                         
@@ -98,8 +99,11 @@
                                      converter="productionStateConverter" panelStyle="width: 250px;" effect="fade" var="state" 
                                      style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!"
-                                     disabled="#{empty entryEventBean.phaseProductionOrder.possibleNextStates}"> 
-                        <p:ajax update="@form:casualty" />
+                                     disabled="#{empty entryEventBean.phaseProductionOrder.possibleNextStates}">  
+                        <p:ajax listener="#{entryEventBean.clearReturnedQuantity()}" update="@form:returnedQuantity" />
+                        <p:ajax listener="#{entryEventBean.updateProducedQuantity()}"
+                                update="@form:producedQuantityLabel, @form:producedQuantity, @form:returnedQuantityLabel, 
+                                        @form:returnedQuantity, @form:casualty" />
                         
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
                         
@@ -111,13 +115,40 @@
                         </p:column>
                     </p:selectOneMenu>
                     
-                    <p:outputLabel for="producedQuantity" value="Quantidade Produzida: " style="font-weight: bold;" />
-                    <h:outputText id="producedQuantity" value="#{entryEventBean.phaseProductionOrder.producedQuantity > 0 ? 
-                                                                 entryEventBean.phaseProductionOrder.producedQuantity : 0} [un]"/>
+                    <p:outputLabel id="producedQuantityLabel" for="producedQuantity" value="Quantidade Produzida: " 
+                                   style="font-weight: bold;" />
+                    <p:inputNumber id="producedQuantity" value="#{entryEventBean.producedQuantity}" 
+                                   label="Quantidade produzida [un]" required="#{entryEventBean.productionState.paused}" 
+                                   disabled="#{!entryEventBean.productionState.paused}" style="width: 250px;" 
+                                   emptyValue="zero" decimalPlaces="0" symbol=" [un]" symbolPosition="s" minValue="0"
+                                   maxValue="#{entryEventBean.phaseProductionOrder.totalQuantity - 
+                                               entryEventBean.phaseProductionOrder.producedQuantity}"
+                                   converterMessage="A quantidade produzida deve ser um número inteiro positivo!!!"
+                                   requiredMessage="Digite a quantidade produzida a ser produzida nesta fase!!!" 
+                                   validatorMessage="A quantidade produzida deve ser um número inteiro positivo!!!">
+                        <p:ajax event="keyup" update="@form:remainingQuantity" />
+                    </p:inputNumber>
 
-                    <p:outputLabel for="returnedQuantity" value="Quantidade Retornada: " style="font-weight: bold;" />
-                    <h:outputText id="returnedQuantity" value="#{entryEventBean.phaseProductionOrder.returnedQuantity > 0 ? 
-                                                                 entryEventBean.phaseProductionOrder.returnedQuantity : 0} [un]" />
+                    <p:outputLabel for="remainingQuantity" value="Quantidade Remanecente: " style="font-weight: bold;" />
+                    <h:outputText id="remainingQuantity" value="#{entryEventBean.phaseProductionOrder.totalQuantity - 
+                                                                  entryEventBean.phaseProductionOrder.producedQuantity - 
+                                                                  entryEventBean.producedQuantity} [un]" />
+
+                    <p:outputLabel id="returnedQuantityLabel" for="returnedQuantity" value="Quantidade Retornada: " 
+                                   style="font-weight: bold;" />
+                    <p:inputNumber id="returnedQuantity" value="#{entryEventBean.returnedQuantity}" 
+                                   label="Quantidade devolvida [un]" required="#{entryEventBean.productionState.returned}"
+                                   disabled="#{!entryEventBean.productionState.returned}" style="width: 250px;" 
+                                   emptyValue="zero" decimalPlaces="0" symbol=" [un]" symbolPosition="s" 
+                                   minValue="#{entryEventBean.productionState.returned ? 1 : 0}"
+                                   maxValue="#{entryEventBean.phaseProductionOrder.totalQuantity - 
+                                               entryEventBean.phaseProductionOrder.producedQuantity}"
+                                   converterMessage="A quantidade devolvida deve ser um número inteiro positivo!!!"
+                                   requiredMessage="Digite a quantidade devolvida a ser produzida nesta fase!!!" 
+                                   validatorMessage="A quantidade devolvida deve ser um número inteiro positivo!!!">
+                        <p:ajax event="keyup" listener="#{entryEventBean.updateProducedQuantity()}" 
+                                update="@form:producedQuantity, @form:remainingQuantity" />
+                    </p:inputNumber>
 
                     <p:outputLabel for="totalQuantity" value="Quantidade Total: " style="font-weight: bold;" />
                     <h:outputText id="totalQuantity" value="#{entryEventBean.phaseProductionOrder.totalQuantity > 0 ? 
@@ -125,14 +156,16 @@
 
                     <p:outputLabel for="observation" value="Observação: " style="font-weight: bold;" /> 
                     <p:inputTextarea id="observation" label="Observação" value="#{entryEventBean.observation}" 
-                                     rows="5" autoResize="false" cols="5" style="width: 250px;"/>
+                                     rows="5" autoResize="false" cols="5" style="width: 250px;"  />
 
                     <p:outputLabel for="casualty" value="Sinistro: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="casualty" value="#{entryEventBean.casualty}" 
                                      converter="casualtyConverter" panelStyle="width: 250px;" effect="fade" var="cas" 
-                                     style="width: 250px;" filter="true" filterMatchMode="startsWith" required="#{maybe}" 
-                                     requiredMessage="Selecione o sinistro desejado!!!" disabled="#{empty entryEventBean.casualties}"
-                                     rendered="#{entryEventBean.productionState.hasCasualty()}">
+                                     style="width: 250px;" filter="true" filterMatchMode="startsWith" 
+                                     required="#{entryEventBean.productionState.hasCasualty()}" 
+                                     requiredMessage="Selecione o sinistro desejado!!!" 
+                                     disabled="#{empty entryEventBean.casualties or 
+                                                 not entryEventBean.productionState.hasCasualty()}">
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
 
                         <f:selectItems value="#{entryEventBean.casualties}" var="c" 
@@ -176,7 +209,7 @@
                                         required="true" requiredMessage="Digite a sua senha, supervisor!!!"
                                         promptLabel="Digite a sua senha, supervisor!!!" style="width: 250px;" />
 
-                            <h:outputLabel for="sector" value="Setor: " style="font-weight: bold;" />              
+                            <p:outputLabel for="sector" value="Setor: " style="font-weight: bold;" />              
                             <p:selectOneMenu id="sector" value="#{entryEventBean.sector}" 
                                              converter="sectorConverter" panelStyle="width: 250px;"
                                              effect="fade" var="sec" style="width: 250px;" filter="true" 
@@ -209,6 +242,7 @@
                             
                             <p:dataTable id="entries" value="#{entryEventBean.entryEvents}" var="entry" 
                                          rowKey="#{entry.eventDate}" style="margin-bottom: 20px;"
+                                         scrollable="true" scrollHeight="300"
                                          emptyMessage="Nenhuma atividade de produção registrada nesta sessão ainda.">                
                                 <f:facet name="header">
                                     <h:outputText value="Atividades de Produção"/>
@@ -236,13 +270,13 @@
                                 </p:columnGroup>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.eventDate}">
+                                    <h:outputText value="#{entry.eventDate.time}">
                                         <f:convertDateTime locale="pt" pattern="dd/MM/yyyy" />
                                     </h:outputText>
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.eventDate}">
+                                    <h:outputText value="#{entry.eventDate.time}">
                                         <f:convertDateTime locale="pt" pattern="HH:mm" />
                                     </h:outputText>
                                 </p:column>
@@ -268,7 +302,7 @@
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.productionState}" />
+                                    <h:outputText value="#{entryEventBean.toString(entry.productionState)}" />
                                 </p:column>
                                 
                                 <p:column>
@@ -276,7 +310,8 @@
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.returnedQuantity}" />
+                                    <h:outputText value="#{entry.class.simpleName == 'CasualtyEntryEvent' ? 
+                                                           entry.returnedQuantity : 0}" />
                                 </p:column>
                                 
                                 <p:column>
@@ -288,7 +323,8 @@
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.casualty.name}" />
+                                    <h:outputText value="#{entry.class.simpleName == 'CasualtyEntryEvent' ? 
+                                                           entry.casualty.name : ' '}" />
                                 </p:column>
 
                                 <f:facet name="footer">
@@ -303,10 +339,12 @@
                     </p:tab>
                 </p:wizard>
                 
-                <p:commandButton value="Sair" action="#{entryEventBean.logout()}"
-                                 update="@form:messages" title="Sair" style="font-size: 18px;">
-                    <p:ajax update="@form" resetValues="true" />
-                </p:commandButton>
+                <f:facet name="footer">
+                    <p:commandButton value="Sair" action="#{entryEventBean.logout()}"
+                                     update="@form:messages" title="Sair" style="font-size: 18px;">
+                        <p:ajax update="@form" resetValues="true" />
+                    </p:commandButton>
+                </f:facet>
             </h:panelGrid>
         </h:form>
         
