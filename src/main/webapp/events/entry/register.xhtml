@@ -5,10 +5,9 @@
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
-        <h:form>
+        <h:form id="viewForm">
             <p:growl id="messages" autoUpdate="true" showDetail="true" life="#{parametersBean.growlLife}" />   
             
             <p:idleMonitor timeout="#{parametersBean.timeout}">
@@ -31,7 +30,7 @@
                                 mask="true" timeOnly="true" maskAutoClear="true" required="true" 
                                 requiredMessage="Selecione o horário da atividade!!!" style="width: 250px;" 
                                 converterMessage="Horário com formato errado!!!" locale="pt" />                
-                
+
                     <p:outputLabel for="subordinate" value="Subordinado: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="subordinate" value="#{entryEventBean.subordinate}" 
                                      converter="subordinateConverter" panelStyle="width: 250px;" effect="fade" var="sub" 
@@ -39,9 +38,9 @@
                                      requiredMessage="Selecione um subordinado disponível!!!" 
                                      disabled="#{empty entryEventBean.subordinates}">
                         <p:ajax listener="#{entryEventBean.selectProductionOrders()}" update="@form:dlgGrid" />
-                        
+
                         <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
-                        
+
                         <f:selectItems value="#{entryEventBean.subordinates}" var="s" 
                                        itemLabel="#{s.name}" itemValue="#{s}" />
 
@@ -49,7 +48,7 @@
                             <h:outputText value="#{sub.name}" />
                         </p:column>
                     </p:selectOneMenu>
-                    
+
                     <p:outputLabel for="productionOrder" value="Ordem de Produção: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="productionOrder" value="#{entryEventBean.productionOrder}" 
                                      converter="productionOrderConverter" panelStyle="width: 250px;" effect="fade" var="order" 
@@ -57,9 +56,9 @@
                                      requiredMessage="Selecione um subordinado disponível!!!"
                                      disabled="#{empty entryEventBean.productionOrders}">
                         <p:ajax listener="#{entryEventBean.selectPhases()}" update="@form:model, @form:phase" />
-                        
+
                         <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
-                        
+
                         <f:selectItems value="#{entryEventBean.productionOrders}" var="po" 
                                        itemLabel="#{po.reference}" itemValue="#{po}" />
 
@@ -67,10 +66,10 @@
                             <h:outputText value="#{order.reference}" />
                         </p:column>
                     </p:selectOneMenu>
-                    
+
                     <p:outputLabel for="model" value="Modelo: " style="font-weight: bold;" />
                     <h:outputText id="model" value="#{entryEventBean.productionOrder.model.reference}" />
-                    
+
                     <p:outputLabel for="phase" value="Fase: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="phase" value="#{entryEventBean.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;" effect="fade" var="ph" 
@@ -80,20 +79,20 @@
                         <p:ajax listener="#{entryEventBean.selectPhaseProductionOrder()}" 
                                 update="@form:expectedDuration, @form:productionState, 
                                         @form:remainingQuantity, @form:totalQuantity" />
-                        
+
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
-                        
+
                         <f:selectItems value="#{entryEventBean.phases}" var="p" itemLabel="#{p.name}" itemValue="#{p}" />
 
                         <p:column>
                             <h:outputText value="#{ph.name}" />
                         </p:column>
                     </p:selectOneMenu>
-                    
+
                     <p:outputLabel for="expectedDuration" value="Duração esperada: " style="font-weight: bold;" />
                     <h:outputText id="expectedDuration" value="#{entryEventBean.phaseProductionOrder.phase.expectedDuration > 0.0 ? 
                                                                  entryEventBean.phaseProductionOrder.phase.expectedDuration : 0.0} [min/un]" />
-                    
+
                     <p:outputLabel for="productionState" value="Tipo de Atividade: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="productionState" value="#{entryEventBean.productionState}" 
                                      converter="productionStateConverter" panelStyle="width: 250px;" effect="fade" var="state" 
@@ -104,9 +103,9 @@
                         <p:ajax listener="#{entryEventBean.updateProducedQuantity()}"
                                 update="@form:producedQuantityLabel, @form:producedQuantity, @form:returnedQuantityLabel, 
                                         @form:returnedQuantity, @form:casualty" />
-                        
+
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
-                        
+
                         <f:selectItems value="#{entryEventBean.phaseProductionOrder.possibleNextStates}" var="s" 
                                        itemLabel="#{entryEventBean.toString(s)}" itemValue="#{s}" />
 
@@ -114,7 +113,7 @@
                             <h:outputText value="#{entryEventBean.toString(state)}" />
                         </p:column>
                     </p:selectOneMenu>
-                    
+
                     <p:outputLabel id="producedQuantityLabel" for="producedQuantity" value="Quantidade Produzida: " 
                                    style="font-weight: bold;" />
                     <p:inputNumber id="producedQuantity" value="#{entryEventBean.producedQuantity}" 
@@ -175,12 +174,13 @@
                             <h:outputText value="#{cas.name}" />
                         </p:column>
                     </p:selectOneMenu>
-                    
+
                     <p:commandButton process="@this" value="Limpar" update="@parent" title="Limpar os campos" 
                                      actionListener="#{entryEventBean.reset()}" style="font-size: 18px;">
-                        <p:ajax update="@form:dlgGrid" resetValues="true" />
+                        <p:ajax update="@form" resetValues="true" />
                     </p:commandButton>
-                    <p:commandButton process="@form:dialog" value="Registrar" update="@form:dialog, @form:messages, @form:entries" 
+                    <p:commandButton process="@this, @form:dialog" value="Registrar" 
+                                     update="@form:dlgGrid, @form:messages, @form:entries" 
                                      title="Registrar a nova atividade de produção" actionListener="#{entryEventBean.register()}" 
                                      style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)" />        
                 </h:panelGrid>
@@ -198,10 +198,8 @@
                             <p:inputText id="login" label="Login" value="#{entryEventBean.supervisorLogin}"
                                          required="true" requiredMessage="Digite o seu login, supervisor!!!" 
                                          style="width: 250px;" validator="supervisorLoginValidator">
-                                <p:ajax event="focus" listener="#{entryEventBean.sectors.clear()}" 
-                                        update="@form:sector, @form:subordinate" />
-                                <p:ajax event="blur" listener="#{entryEventBean.selectSupervisor()}" 
-                                        update="@form:sector, @form:subordinate" />
+                                <p:ajax event="focus" listener="#{entryEventBean.sectors.clear()}" update="@form:sector" />
+                                <p:ajax event="blur" listener="#{entryEventBean.selectSupervisor()}" update="@form:sector" />
                             </p:inputText>
 
                             <p:outputLabel for="password" value="Senha: " style="font-weight: bold;"/> 
@@ -216,8 +214,6 @@
                                              filterMatchMode="startsWith" required="true"
                                              requiredMessage="Selecione o setor onde está fase é executada!!!"
                                              disabled="#{empty entryEventBean.sectors}">
-                                <p:ajax listener="#{entryEventBean.selectSubordinates()}" update="@form:subordinate" />
-                                
                                 <f:selectItem itemLabel="Selecione um ..."  itemDisabled="true" noSelectionOption="true" />
 
                                 <f:selectItems value="#{entryEventBean.sectors}" var="s"
@@ -332,7 +328,9 @@
                                                      title="Adicionar nova atividade de produção"
                                                      onclick="PF('dlg').show();" update="@form:entries, @form:messages" 
                                                      disabled="#{empty entryEventBean.subordinates}"
-                                                     style="width: 20px; height: 20px;" />                        
+                                                     style="width: 20px; height: 20px;">
+                                        <p:ajax listener="#{entryEventBean.reset()}" update="@form:subordinate" />
+                                    </p:commandButton> 
                                 </f:facet>
                             </p:dataTable>
                         </h:panelGrid>

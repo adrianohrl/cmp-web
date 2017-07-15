@@ -145,7 +145,7 @@ public class PhaseProductionOrderBean implements Serializable {
     }
 
     @PreDestroy
-    void destroy() {
+    public void destroy() {
         em.close();
     }
 

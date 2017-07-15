@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -59,7 +60,7 @@ public class EntryEventBean implements Serializable {
     private final List<Supervisor> supervisors = new ArrayList<>();
     private Sector sector;
     private final List<Sector> sectors = new ArrayList<>();
-    private final Calendar maxDate = new GregorianCalendar();
+    private Calendar maxDate;
     private Date date;
     private Date time;
     private Subordinate subordinate;
@@ -100,7 +101,7 @@ public class EntryEventBean implements Serializable {
                 "A data e o horário da atividade de produção deve ser antes da data e horário atual!!!");
         try {
             Calendar eventDate = Calendars.sum(date, time);
-            if (maxDate.after(eventDate)) {
+            if (eventDate.before(new GregorianCalendar())) {
                 EntryEvent entryEvent = null;
                 EntryEventDAO entryEventDAO = new EntryEventDAO(em);
                 switch (productionState) {
@@ -124,6 +125,7 @@ public class EntryEventBean implements Serializable {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Sucesso no cadastro", entryEvent + " foi cadastrada com sucesso!!!");
                 next = "/index";
+                reset();
             }
         } catch (EntityExistsException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -141,6 +143,7 @@ public class EntryEventBean implements Serializable {
             logout();
         } else if (event.getNewStep().equals("entriesTab")) {
             builder = new EntryEventsBuilder(sector, supervisor);
+            reset();
         }
         return event.getNewStep();
     }
@@ -150,34 +153,6 @@ public class EntryEventBean implements Serializable {
         sectors.clear();
         sector = null;
         builder = null;
-    }
-    
-    public void reset() {
-        date = new Date();
-        time = new Date();
-        subordinate = null;
-        productionOrder = null;
-        productionOrders.clear();
-        phase = null;
-        phases.clear();
-        phaseProductionOrder = null;
-        productionState = null;
-        producedQuantity = 0;
-        returnedQuantity = 0;
-        observation = null;
-        casualty = null;
-    }
-    
-    public void onIdle() {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, 
-                "Saindo...", "Tempo expirado!!!"));
-        logout();
-    }
-    
-    public String logout() {
-        HttpSession session = SessionUtils.getSession();
-        session.invalidate();
-        return "/index";
     }
     
     public void selectSupervisor() {
@@ -198,16 +173,33 @@ public class EntryEventBean implements Serializable {
         }
     }
     
-    public void selectSubordinates() {
+    public void reset() {
+        maxDate = new GregorianCalendar();
+        date = new Date();
+        time = new Date();
+        subordinate = null;
         subordinates.clear();
-        SubordinateDAO subordinateDAO = new SubordinateDAO(em);
-        subordinates.addAll(subordinateDAO.findSupervisorAndSectorSubordinates(supervisor, sector));
-        Collections.sort(subordinates);
+        if (supervisor != null && sector != null) {
+            SubordinateDAO subordinateDAO = new SubordinateDAO(em);
+            subordinates.addAll(subordinateDAO.findSupervisorAndSectorSubordinates(supervisor, sector));
+            Collections.sort(subordinates);
+        }
+        productionOrder = null;
+        productionOrders.clear();
+        phase = null;
+        phases.clear();
+        phaseProductionOrder = null;
+        productionState = null;
+        producedQuantity = 0;
+        returnedQuantity = 0;
+        observation = null;
+        casualty = null;
     }
     
     public void selectProductionOrders() {
         productionOrders.clear();
         PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
+        System.out.println(subordinate + " is " + (subordinate.isAvailable() ? "" : "not ") + "available!!!");
         if (subordinate.isAvailable()) {
             for (PhaseProductionOrder ppo : phaseProductionOrderDAO.findPendents(sector)) {
                 ProductionOrder po = ppo.getProductionOrder();
@@ -217,6 +209,7 @@ public class EntryEventBean implements Serializable {
             }
         } else {
             phaseProductionOrder = phaseProductionOrderDAO.findCurrent(subordinate);
+            System.out.println(subordinate + "'s current ppo: " + phaseProductionOrder);
             productionOrder = phaseProductionOrder.getProductionOrder();
             productionOrders.clear();
             phase = phaseProductionOrder.getPhase().getPhase();
@@ -250,6 +243,24 @@ public class EntryEventBean implements Serializable {
     
     public void clearReturnedQuantity() {
         returnedQuantity = 0;
+    }
+    
+    public void onIdle() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, 
+                "Saindo...", "Tempo expirado!!!"));
+        logout();
+    }
+    
+    public String logout() {
+        HttpSession session = SessionUtils.getSession();
+        session.invalidate();
+        return "/index";
+    }
+    
+    @PreDestroy
+    public void destroy() {
+        System.out.println("Destroying entryEventBean!!!");
+        em.close();
     }
     
     public String toString(ProductionStates state) {

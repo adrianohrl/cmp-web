@@ -10,7 +10,6 @@ import br.com.ceciliaprado.cmp.control.dao.events.TimeClockEventDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
 import br.com.ceciliaprado.cmp.model.events.TimeClockEvent;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
-import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
 import br.com.ceciliaprado.cmp.util.Calendars;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -80,7 +79,7 @@ public class TimeClockEventBean implements Serializable {
     }
 
     @PreDestroy
-    void destroy() {
+    public void destroy() {
         em.close();
     }
 

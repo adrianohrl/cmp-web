@@ -72,7 +72,7 @@ public class SectorBean implements Serializable {
     }
 
     @PreDestroy
-    void destroy() {
+    public void destroy() {
         em.close();
     }
 
