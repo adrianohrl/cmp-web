@@ -91,7 +91,7 @@ public class ModelBean implements Serializable {
         }
         context.addMessage(null, message);
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.addCallbackParam("otherValidationsFailed", !positiveExpectedDuration);
+        requestContext.addCallbackParam("validationFailed", !positiveExpectedDuration);
     }
     
     public void remove(ModelPhase modelPhase) {    

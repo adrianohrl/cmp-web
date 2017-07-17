@@ -53,7 +53,7 @@
                     <p:selectOneMenu id="productionOrder" value="#{entryEventBean.productionOrder}" 
                                      converter="productionOrderConverter" panelStyle="width: 250px;" effect="fade" var="order" 
                                      style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
-                                     requiredMessage="Selecione um subordinado disponível!!!"
+                                     requiredMessage="Selecione a ordem de produção desejada!!!"
                                      disabled="#{empty entryEventBean.productionOrders}">
                         <p:ajax listener="#{entryEventBean.selectPhases()}" update="@form:dlgGrid" />
 
@@ -100,7 +100,7 @@
                                      disabled="#{empty entryEventBean.phaseProductionOrder.possibleNextStates}">  
                         <p:ajax listener="#{entryEventBean.clearReturnedQuantity()}" update="@form:returnedQuantity" />
                         
-                        <p:ajax listener="#{entryEventBean.updateProducedQuantity()}" update="@form:producedQuantity" />
+                        <p:ajax listener="#{entryEventBean.updateProducedQuantity()}" update="@form:dlgGrid" />
 
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
 
@@ -123,7 +123,7 @@
                                    converterMessage="A quantidade produzida deve ser um número inteiro positivo!!!"
                                    requiredMessage="Digite a quantidade produzida a ser produzida nesta fase!!!" 
                                    validatorMessage="A quantidade produzida deve ser um número inteiro positivo!!!">
-                        <p:ajax event="keyup" update="@form:dlgGrid" />
+                        <p:ajax event="keyup" update="@form:remainingQuantity" />
                     </p:inputNumber>
 
                     <p:outputLabel for="remainingQuantity" value="Quantidade Remanecente: " style="font-weight: bold;" />
@@ -155,7 +155,7 @@
                     <p:inputTextarea id="observation" label="Observação" value="#{entryEventBean.observation}" 
                                      rows="5" autoResize="false" cols="5" style="width: 250px;"  />
 
-                    <p:outputLabel for="casualty" value="Sinistro: " style="font-weight: bold;" /> 
+                    <p:outputLabel id="casualtyLabel" for="casualty" value="Sinistro: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="casualty" value="#{entryEventBean.casualty}" 
                                      converter="casualtyConverter" panelStyle="width: 250px;" effect="fade" var="cas" 
                                      style="width: 250px;" filter="true" filterMatchMode="startsWith" 
@@ -173,14 +173,16 @@
                         </p:column>
                     </p:selectOneMenu>
 
-                    <p:commandButton process="@this, @form:dlgGrid" value="Limpar" update="@form:dlgGrid" title="Limpar os campos" 
+                    <p:commandButton process="@this" value="Limpar" update="@form:dlgGrid" title="Limpar os campos" 
                                      actionListener="#{entryEventBean.reset()}" style="font-size: 18px;">
                         <p:ajax update="@form:dlgGrid" resetValues="true" />
                     </p:commandButton>
-                    <p:commandButton process="@this, @form:dialog" value="Registrar" 
-                                     update="@form:dialog, @form:messages, @form:entries" 
-                                     title="Registrar a nova atividade de produção" actionListener="#{entryEventBean.register()}" 
-                                     style="font-size: 18px;" />        
+                    <p:commandButton process="@form:dlgGrid" value="Registrar" 
+                                     update="@form:dlgGrid, @form:messages, @form:entries" 
+                                     title="Registrar a nova atividade de produção" 
+                                     actionListener="#{entryEventBean.register()}" 
+                                     style="font-size: 18px;"
+                                     oncomplete="if (!args.validationFailed) PF('dlg').hide();" />
                 </h:panelGrid>
             </p:dialog>          
             
@@ -236,7 +238,7 @@
                             
                             <p:dataTable id="entries" value="#{entryEventBean.entryEvents}" var="entry" 
                                          rowKey="#{entry.eventDate}" style="margin-bottom: 20px;"
-                                         scrollable="true" scrollHeight="300"
+                                         scrollable="true" scrollHeight="300" rowStyleClass="#{entry.phaseProductionOrder.pendent ? 'blue' : null}"
                                          emptyMessage="Nenhuma atividade de produção registrada nesta sessão ainda.">                
                                 <f:facet name="header">
                                     <h:outputText value="Atividades de Produção"/>
@@ -271,7 +273,7 @@
                                 
                                 <p:column>
                                     <h:outputText value="#{entry.eventDate.time}">
-                                        <f:convertDateTime locale="pt" pattern="HH:mm" />
+                                        <f:convertDateTime locale="pt" pattern="HH:mm:ss" />
                                     </h:outputText>
                                 </p:column>
                                 
@@ -329,6 +331,10 @@
                                                      actionListener="#{entryEventBean.reset()}"
                                                      disabled="#{empty entryEventBean.subordinates}"
                                                      style="width: 20px; height: 20px;" /> 
+                                    
+                                    <p:commandButton id="toggler" type="button" icon="ui-icon-calculator" 
+                                                     style="width: 20px; height: 20px;" />
+                                    <p:columnToggler datasource="entries" trigger="toggler" />
                                 </f:facet>
                             </p:dataTable>
                         </h:panelGrid>

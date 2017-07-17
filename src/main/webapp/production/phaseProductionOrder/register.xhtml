@@ -42,9 +42,9 @@
                                      title="Limpar os campos" style="font-size: 18px;">
                         <p:ajax update="@form:dlgGrid" resetValues="true" />
                     </p:commandButton>
-                    <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:orders" 
+                    <p:commandButton process="@form:dlgGrid" value="Adicionar" update="@form:dlgGrid, @form:messages, @form:orders" 
                                      title="Adicionar a nova ordem de produção de fase" actionListener="#{phaseProductionOrderBean.add()}" 
-                                     style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)" />                        
+                                     style="font-size: 18px;" oncomplete="if (!args.validationFailed) PF('dlg').hide();" />                        
                 </h:panelGrid>
             </p:dialog>
             

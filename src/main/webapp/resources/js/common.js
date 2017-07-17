@@ -6,8 +6,8 @@
 
 
 function handleDialogRequest(xhr, status, args) {
-    if(args.validationFailed || args.otherValidationsFailed) {
-        PF('dlg').jq.effect("shake", {times:5}, 100);
+    if(args && (args.validationFailed || args.otherValidationsFailed)) {
+        PF('dlg').jq.effect('shake', {times:5}, 100);
     } else {
         PF('dlg').hide();
     }

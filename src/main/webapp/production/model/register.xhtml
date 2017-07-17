@@ -11,7 +11,8 @@
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
             
             <p:dialog id="dialog" header="Nova Fase" widgetVar="dlg" resizable="false" modal="true" 
-                      draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+                      draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true"
+                      fitViewport="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
                     <p:outputLabel for="phase" value="Fase: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="phase" value="#{modelBean.phase}" 
@@ -50,9 +51,9 @@
                                      title="Limpar os campos" style="font-size: 18px;">
                         <p:ajax update="@form:dlgGrid" resetValues="true" />
                     </p:commandButton>
-                    <p:commandButton process="@form:dialog" value="Adicionar" update="@form:dialog, @form:messages, @form:phases" 
+                    <p:commandButton process="@form:dlgGrid" value="Adicionar" update="@form:dlgGrid, @form:messages, @form:phases" 
                                      title="Adicionar a nova fase" actionListener="#{modelBean.add()}" 
-                                     style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)" />
+                                     style="font-size: 18px;" oncomplete="if (!args.validationFailed) PF('dlg').hide();" />
                 </h:panelGrid>
             </p:dialog>
             
