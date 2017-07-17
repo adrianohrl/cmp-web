@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
-        <h:form id="viewForm">
+        <h:form>
             <p:growl id="messages" autoUpdate="true" showDetail="true" life="#{parametersBean.growlLife}" />   
             
             <p:idleMonitor timeout="#{parametersBean.timeout}">
@@ -16,7 +16,7 @@
     
             <p:dialog id="dialog" header="Nova Atividade de Produção" widgetVar="dlg" 
                       resizable="false" modal="true" draggable="false" showEffect="fade" 
-                      hideEffect="fade" closeOnEscape="true">
+                      hideEffect="fade" closeOnEscape="true" fitViewport="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
                     <p:outputLabel for="date" value="Data: " style="font-weight: bold;" /> 
                     <p:calendar id="date" value="#{entryEventBean.date}" pattern="dd-MM-yyyy" effect="fade"
@@ -55,7 +55,7 @@
                                      style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione um subordinado disponível!!!"
                                      disabled="#{empty entryEventBean.productionOrders}">
-                        <p:ajax listener="#{entryEventBean.selectPhases()}" update="@form:model, @form:phase" />
+                        <p:ajax listener="#{entryEventBean.selectPhases()}" update="@form:dlgGrid" />
 
                         <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
 
@@ -77,8 +77,7 @@
                                      requiredMessage="Selecione a fase desejada!!!"
                                      disabled="#{empty entryEventBean.phases}">
                         <p:ajax listener="#{entryEventBean.selectPhaseProductionOrder()}" 
-                                update="@form:expectedDuration, @form:productionState, 
-                                        @form:remainingQuantity, @form:totalQuantity" />
+                                update="@form:dlgGrid" />
 
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
 
@@ -100,9 +99,8 @@
                                      requiredMessage="Selecione a fase desejada!!!"
                                      disabled="#{empty entryEventBean.phaseProductionOrder.possibleNextStates}">  
                         <p:ajax listener="#{entryEventBean.clearReturnedQuantity()}" update="@form:returnedQuantity" />
-                        <p:ajax listener="#{entryEventBean.updateProducedQuantity()}"
-                                update="@form:producedQuantityLabel, @form:producedQuantity, @form:returnedQuantityLabel, 
-                                        @form:returnedQuantity, @form:casualty" />
+                        
+                        <p:ajax listener="#{entryEventBean.updateProducedQuantity()}" update="@form:producedQuantity" />
 
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
 
@@ -125,7 +123,7 @@
                                    converterMessage="A quantidade produzida deve ser um número inteiro positivo!!!"
                                    requiredMessage="Digite a quantidade produzida a ser produzida nesta fase!!!" 
                                    validatorMessage="A quantidade produzida deve ser um número inteiro positivo!!!">
-                        <p:ajax event="keyup" update="@form:remainingQuantity" />
+                        <p:ajax event="keyup" update="@form:dlgGrid" />
                     </p:inputNumber>
 
                     <p:outputLabel for="remainingQuantity" value="Quantidade Remanecente: " style="font-weight: bold;" />
@@ -175,14 +173,14 @@
                         </p:column>
                     </p:selectOneMenu>
 
-                    <p:commandButton process="@this" value="Limpar" update="@parent" title="Limpar os campos" 
+                    <p:commandButton process="@this, @form:dlgGrid" value="Limpar" update="@form:dlgGrid" title="Limpar os campos" 
                                      actionListener="#{entryEventBean.reset()}" style="font-size: 18px;">
-                        <p:ajax update="@form" resetValues="true" />
+                        <p:ajax update="@form:dlgGrid" resetValues="true" />
                     </p:commandButton>
                     <p:commandButton process="@this, @form:dialog" value="Registrar" 
-                                     update="@form:dlgGrid, @form:messages, @form:entries" 
+                                     update="@form:dialog, @form:messages, @form:entries" 
                                      title="Registrar a nova atividade de produção" actionListener="#{entryEventBean.register()}" 
-                                     style="font-size: 18px;" oncomplete="handleDialogRequest(xhr, status, args)" />        
+                                     style="font-size: 18px;" />        
                 </h:panelGrid>
             </p:dialog>          
             
@@ -326,11 +324,11 @@
                                 <f:facet name="footer">
                                     <p:commandButton process="@form:entries" icon="ui-icon-plus" 
                                                      title="Adicionar nova atividade de produção"
-                                                     onclick="PF('dlg').show();" update="@form:entries, @form:messages" 
+                                                     onclick="PF('dlg').show();" 
+                                                     update="@form:entries, @form:messages, @form:dlgGrid" 
+                                                     actionListener="#{entryEventBean.reset()}"
                                                      disabled="#{empty entryEventBean.subordinates}"
-                                                     style="width: 20px; height: 20px;">
-                                        <p:ajax listener="#{entryEventBean.reset()}" update="@form:subordinate" />
-                                    </p:commandButton> 
+                                                     style="width: 20px; height: 20px;" /> 
                                 </f:facet>
                             </p:dataTable>
                         </h:panelGrid>

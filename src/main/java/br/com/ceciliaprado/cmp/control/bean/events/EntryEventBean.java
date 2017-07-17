@@ -42,6 +42,7 @@ import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 
 /**
@@ -60,7 +61,7 @@ public class EntryEventBean implements Serializable {
     private final List<Supervisor> supervisors = new ArrayList<>();
     private Sector sector;
     private final List<Sector> sectors = new ArrayList<>();
-    private Calendar maxDate;
+    private Calendar maxDate = new GregorianCalendar();
     private Date date;
     private Date time;
     private Subordinate subordinate;
@@ -79,6 +80,7 @@ public class EntryEventBean implements Serializable {
     
     @PostConstruct
     public void init() {
+        System.out.println("Initializing...");
         SupervisorDAO supervisorDAO = new SupervisorDAO(em);
         supervisors.addAll(supervisorDAO.findAll());
         Collections.sort(supervisors);
@@ -91,19 +93,23 @@ public class EntryEventBean implements Serializable {
                     "Fatalidade no login", "Nenhum supervisor foi cadastrado ainda!!!");
             context.addMessage(null, message);
         }
-        reset();
+        //reset();
     }
     
-    public String register() {
-        String next = "";
+    public void register() {
+        System.out.println("Registering...");
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no cadastro", 
                 "A data e o horário da atividade de produção deve ser antes da data e horário atual!!!");
+        boolean succeeded = false;
         try {
+            if (date == null || time == null) {
+                return;
+            }
             Calendar eventDate = Calendars.sum(date, time);
-            if (eventDate.before(new GregorianCalendar())) {
+            if (eventDate.before(new GregorianCalendar()) && productionState != null) {
                 EntryEvent entryEvent = null;
-                EntryEventDAO entryEventDAO = new EntryEventDAO(em);
+                EntryEventDAO entryEventDAO = new EntryEventDAO(em);                
                 switch (productionState) {
                     case STARTED:
                         entryEvent = builder.buildEntryEvent(phaseProductionOrder, subordinate, eventDate, observation);
@@ -124,8 +130,8 @@ public class EntryEventBean implements Serializable {
                 entryEvents.add(entryEvent);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Sucesso no cadastro", entryEvent + " foi cadastrada com sucesso!!!");
-                next = "/index";
                 reset();
+                succeeded = true;
             }
         } catch (EntityExistsException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
@@ -135,10 +141,12 @@ public class EntryEventBean implements Serializable {
                 "Fatalidade no cadastro", e.getMessage());
         }
         context.addMessage(null, message);
-        return next;
+        RequestContext requestContext = RequestContext.getCurrentInstance();
+        requestContext.addCallbackParam("otherValidationsFailed", !succeeded);
     }
     
     public String onFlowProcess(FlowEvent event) {
+        System.out.println("Going to " + event.getNewStep() + "...");
         if (event.getNewStep().equals("supervisorTab")) {
             logout();
         } else if (event.getNewStep().equals("entriesTab")) {
@@ -149,6 +157,7 @@ public class EntryEventBean implements Serializable {
     }
     
     public void clear() {
+        System.out.println("Clearing...");
         supervisor = null;
         sectors.clear();
         sector = null;
@@ -156,6 +165,7 @@ public class EntryEventBean implements Serializable {
     }
     
     public void selectSupervisor() {
+        System.out.println("Selecting supervisor...");
         clear();
         if (supervisorLogin == null || supervisorLogin.isEmpty()) {
             return;
@@ -167,6 +177,9 @@ public class EntryEventBean implements Serializable {
 			session.setAttribute("loggedEmployee", supervisor);
                 SupervisorDAO supervisorDAO = new SupervisorDAO(em);
                 sectors.addAll(supervisorDAO.findSupervisorSectors(supervisor));
+                if (sectors.size() == 1) {
+                    sector = sectors.get(0);
+                }
                 Collections.sort(sectors);
                 return;
             }
@@ -174,6 +187,7 @@ public class EntryEventBean implements Serializable {
     }
     
     public void reset() {
+        System.out.println("Reseting...");
         maxDate = new GregorianCalendar();
         date = new Date();
         time = new Date();
@@ -182,6 +196,10 @@ public class EntryEventBean implements Serializable {
         if (supervisor != null && sector != null) {
             SubordinateDAO subordinateDAO = new SubordinateDAO(em);
             subordinates.addAll(subordinateDAO.findSupervisorAndSectorSubordinates(supervisor, sector));
+            if (subordinates.size() == 1) {
+                subordinate = subordinates.get(0);
+                selectProductionOrders();
+            }
             Collections.sort(subordinates);
         }
         productionOrder = null;
@@ -197,15 +215,19 @@ public class EntryEventBean implements Serializable {
     }
     
     public void selectProductionOrders() {
+        System.out.println("Selecting production order...");
         productionOrders.clear();
         PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
-        System.out.println(subordinate + " is " + (subordinate.isAvailable() ? "" : "not ") + "available!!!");
         if (subordinate.isAvailable()) {
             for (PhaseProductionOrder ppo : phaseProductionOrderDAO.findPendents(sector)) {
                 ProductionOrder po = ppo.getProductionOrder();
                 if (!productionOrders.contains(po)) {
                     productionOrders.add(po);
                 }
+            }
+            if (productionOrders.size() == 1) {
+                productionOrder = productionOrders.get(0);
+                selectPhases();
             }
         } else {
             phaseProductionOrder = phaseProductionOrderDAO.findCurrent(subordinate);
@@ -215,23 +237,44 @@ public class EntryEventBean implements Serializable {
             phase = phaseProductionOrder.getPhase().getPhase();
             phases.clear();
         }
+        if (productionOrders.isEmpty()) {
+            System.out.println("POs list is empty!!!");
+        }
         Collections.sort(productionOrders);
     }
     
     public void selectPhases() {
+        System.out.println("Selecting phase...");
         phases.clear();
         PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
         for (PhaseProductionOrder ppo : phaseProductionOrderDAO.findPendents(productionOrder)) {
-            phases.add(ppo.getPhase().getPhase());
+            Phase p = ppo.getPhase().getPhase();
+            if (sector.equals(p.getSector())) {
+                phases.add(p);
+            }
+        }
+        if (phases.isEmpty()) {
+            productionOrders.remove(productionOrder);
+            productionOrder = null;
+        } else if (phases.size() == 1) {
+            phase = phases.get(0);
+            selectPhaseProductionOrder();
         }
     }
     
     public void selectPhaseProductionOrder() {
+        System.out.println("Selecting phase production order...");
         PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
         phaseProductionOrder = phaseProductionOrderDAO.find(phase, productionOrder);
+        if (phaseProductionOrder.getPossibleNextStates().size() == 1) {
+            productionState = phaseProductionOrder.getPossibleNextStates().get(0);
+            clearReturnedQuantity();
+            updateProducedQuantity();
+        }
     }
     
     public void updateProducedQuantity() {
+        System.out.println("Updating produced quantity...");
         if (productionState.isStartingState()) {
             producedQuantity = 0;
         } else {
@@ -242,24 +285,26 @@ public class EntryEventBean implements Serializable {
     }
     
     public void clearReturnedQuantity() {
+        System.out.println("Clearing returned quantity...");
         returnedQuantity = 0;
     }
     
     public void onIdle() {
+        System.out.println("Got idle!!!");
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, 
                 "Saindo...", "Tempo expirado!!!"));
         logout();
     }
     
     public String logout() {
+        System.out.println("Logging out...");
         HttpSession session = SessionUtils.getSession();
         session.invalidate();
         return "/index";
     }
     
     @PreDestroy
-    public void destroy() {
-        System.out.println("Destroying entryEventBean!!!");
+    public void destroy() {        
         em.close();
     }
     
