@@ -236,9 +236,10 @@
                                 <h:outputText value="#{entryEventBean.sector}" />
                             </h:panelGrid>
                             
-                            <p:dataTable id="entries" value="#{entryEventBean.entryEvents}" var="entry" 
-                                         rowKey="#{entry.eventDate}" style="margin-bottom: 20px;"
-                                         scrollable="true" scrollHeight="300" rowStyleClass="#{entry.phaseProductionOrder.pendent ? 'blue' : null}"
+                            <p:dataTable id="entries" value="#{entryEventBean.entryEvents}" var="event" 
+                                         rowKey="#{event.eventDate}" style="margin-bottom: 20px;"
+                                         scrollable="true" scrollHeight="300" 
+                                         rowStyleClass="#{event.phaseProductionOrder.pendent ? 'blue' : null}"
                                          emptyMessage="Nenhuma atividade de produção registrada nesta sessão ainda.">                
                                 <f:facet name="header">
                                     <h:outputText value="Atividades de Produção"/>
@@ -246,81 +247,94 @@
                                 
                                 <p:columnGroup type="header">
                                     <p:row>
-                                        <p:column rowspan="2" headerText="Data" />
-                                        <p:column rowspan="2" headerText="Horário" />
-                                        <p:column rowspan="2" headerText="Subordinado" style="width: 100px;" />
-                                        <p:column rowspan="2" headerText="Modelo" />
-                                        <p:column rowspan="2" headerText="Ordem de Produção" />
-                                        <p:column rowspan="2" headerText="Fase" />
-                                        <p:column rowspan="2" headerText="Duração [min/un]" />
-                                        <p:column rowspan="2" headerText="Tipo de Atividade" />
+                                        <p:column rowspan="2" headerText="Data" style="text-align: center;" />
+                                        
+                                        <p:column rowspan="2" headerText="Horário" style="text-align: center;" />
+                                        
+                                        <p:column rowspan="2" headerText="Subordinado" style="width: 100px; text-align: center;" />
+                                        
+                                        <p:column rowspan="2" headerText="Modelo" style="text-align: center;" />
+                                        
+                                        <p:column rowspan="2" headerText="Ordem de Produção" style="text-align: center;" />
+                                        
+                                        <p:column rowspan="2" headerText="Fase" style="text-align: center;" />
+                                        
+                                        <p:column rowspan="2" headerText="Duração [min/un]" style="text-align: center;" />
+                                        
+                                        <p:column rowspan="2" headerText="Tipo de Atividade" style="text-align: center;" />
+                                        
                                         <p:column colspan="3" headerText="Quantidades [un]" />
-                                        <p:column rowspan="2" headerText="Observação" style="width: 100px;" />
-                                        <p:column rowspan="2" headerText="Sinistro" />
+                                        
+                                        <p:column rowspan="2" headerText="Observação" style="width: 100px; text-align: center;" />
+                                        
+                                        <p:column rowspan="2" headerText="Sinistro" style="text-align: center;" />
                                     </p:row>
+                                    
                                     <p:row>
-                                        <p:column headerText="Produzida" />
-                                        <p:column headerText="Retornada" />
-                                        <p:column headerText="Total" />
+                                        <p:column headerText="Produzida" style="text-align: center;" />
+                                        
+                                        <p:column headerText="Retornada" style="text-align: center;" />
+                                        
+                                        <p:column headerText="Total" style="text-align: center;" />
                                     </p:row>
                                 </p:columnGroup>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.eventDate.time}">
-                                        <f:convertDateTime locale="pt" pattern="dd/MM/yyyy" />
+                                    <h:outputText value="#{event.eventDate.time}">
+                                        <f:convertDateTime locale="pt" pattern="dd/MMM/yyyy" />
                                     </h:outputText>
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.eventDate.time}">
+                                    <h:outputText value="#{event.eventDate.time}">
                                         <f:convertDateTime locale="pt" pattern="HH:mm:ss" />
                                     </h:outputText>
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.employee}" />
+                                    <h:outputText value="#{event.employee.name}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.phaseProductionOrder.productionOrder.model.reference}" />
+                                    <h:outputText value="#{event.phaseProductionOrder.productionOrder.model.reference}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.phaseProductionOrder.productionOrder.reference}" />
+                                    <h:outputText value="#{event.phaseProductionOrder.productionOrder.reference}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.phaseProductionOrder.phase.phase.name}" />
+                                    <h:outputText value="#{event.phaseProductionOrder.phase.phase.name}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.phaseProductionOrder.phase.expectedDuration}" />
+                                    <h:outputText value="#{event.phaseProductionOrder.phase.expectedDuration}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entryEventBean.toString(entry.productionState)}" />
+                                    <h:outputText value="#{entryEventBean.toString(event.productionState)}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.producedQuantity}" />
+                                    <h:outputText value="#{event.producedQuantity}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.class.simpleName == 'CasualtyEntryEvent' ? 
-                                                           entry.returnedQuantity : 0}" />
+                                    <h:outputText value="#{event.class.simpleName == 'CasualtyEntryEvent' ? 
+                                                           event.returnedQuantity : 0}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.phaseProductionOrder.totalQuantity}" />
+                                    <h:outputText value="#{event.phaseProductionOrder.totalQuantity}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.observation}" />
+                                    <h:outputText value="#{event.observation}" />
                                 </p:column>
                                 
                                 <p:column>
-                                    <h:outputText value="#{entry.class.simpleName == 'CasualtyEntryEvent' ? 
-                                                           entry.casualty.name : ' '}" />
+                                    <h:outputText value="#{event.class.simpleName == 'CasualtyEntryEvent' ? 
+                                                           event.casualty.name : ' '}" />
                                 </p:column>
 
                                 <f:facet name="footer">

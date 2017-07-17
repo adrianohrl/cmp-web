@@ -4,18 +4,59 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h2>Importação de Ordens de Produção de Fase</h2>
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
-            <p:fileUpload fileUploadListener="#{phaseProductionOrderImportBean.upload}" label="Escolher" 
-                          mode="advanced" dragDropSupport="true" update="messages" auto="true" 
-                          sizeLimit="1024" allowTypes="/(\.|\/)(csv)$/" oncomplete="/index"
-                          invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
-                          invalidSizeMessage="O tamanho máximo permitido é de 1kB!!!" />
+            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+                <f:facet name="header">
+                    <h:outputText value="Importação de Ordens de Produção de Fase" 
+                                  style="font-weight: bold; font-size: 24px;" />
+                </f:facet>     
+            
+                <p:fileUpload fileUploadListener="#{phaseProductionOrderImportBean.upload}" label="Escolher" 
+                              mode="advanced" dragDropSupport="true" update="@form:messages, @form:phaseProductionOrders" 
+                              auto="true" sizeLimit="1048576" allowTypes="/(\.|\/)(csv)$/"
+                              invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
+                              invalidSizeMessage="O tamanho máximo permitido do arquivo é de 1Mb!!!" />
+                
+                <p:dataTable id="phaseProductionOrders" var="phaseProductionOrder" 
+                             value="#{phaseProductionOrderImportBean.phaseProductionOrders}" 
+                             emptyMessage="Nenhuma ordem de produção de fase importada ainda."
+                             scrollable="true" scrollHeight="300">                
+                    <f:facet name="header">
+                        <h:outputText value="Ordens de Produção de Fase Importadas" />
+                    </f:facet> 
+                    
+                    <p:column headerText="Modelo" sortBy="#{phaseProductionOrder.productionOrder.model.name}" 
+                              style="width: 300px; text-align: center;">
+                         <h:outputText value="#{phaseProductionOrder.productionOrder.model.name}" />
+                    </p:column>
+                    
+                    <p:column headerText="Fase" sortBy="#{phaseProductionOrder.phase.phase.name}" 
+                              style="width: 300px; text-align: center;">
+                         <h:outputText value="#{phaseProductionOrder.phase.phase.name}" />
+                    </p:column>
+                    
+                    <p:column headerText="Quantidade [un]" style="width: 300px; text-align: center;">
+                         <h:outputText value="#{phaseProductionOrder.totalQuantity}" />
+                    </p:column>
+                    
+                    <p:column headerText="Duração [h]" style="width: 300px; text-align: center;">
+                        <h:outputText value="#{phaseProductionOrder.totalQuantity * 
+                                               phaseProductionOrder.phase.expectedDuration / 60}">
+                            <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
         </h:form>
     </ui:define>
 

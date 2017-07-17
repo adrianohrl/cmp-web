@@ -6,12 +6,11 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.io;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.io.PersonnelReaderDAO;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import br.com.ceciliaprado.cmp.control.dao.personnel.io.SectorsReaderDAO;
+import br.com.ceciliaprado.cmp.model.personnel.Sector;
 import java.io.Serializable;
-import javax.annotation.PreDestroy;
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -28,36 +27,30 @@ import org.primefaces.model.UploadedFile;
 @ViewScoped
 public class SectorImportBean implements Serializable {
     
-    private final EntityManager em = DataSource.createEntityManager();
-    private final PersonnelReaderDAO readerDAO = new PersonnelReaderDAO(em);
-    private UploadedFile file;
+    private final List<Sector> sectors = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage message = null;
-        file = event.getFile();
+        FacesMessage message;
+        UploadedFile file = event.getFile();
+        EntityManager em = DataSource.createEntityManager();
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputstream()));
-        } catch (IOException e) {
+            SectorsReaderDAO readerDAO = new SectorsReaderDAO(em);
+            readerDAO.readFile(file.getInputstream());
+            sectors.addAll(readerDAO.getRegisteredSectors());
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
+                    "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
+        } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no upload", 
-                    "Não foi possível fazer o upload do arquivo " + event.getFile().getFileName());
+                    "Não foi possível fazer o upload do arquivo " + event.getFile().getFileName() + "!!!");
+            System.out.println("IOException catched during importation: " + e.getMessage());
         }
-        if (message != null) {
-            context.addMessage(null, message);
-        }
-    }
-
-    @PreDestroy
-    void destroy() {
         em.close();
+        context.addMessage(null, message);
     }
 
-    public UploadedFile getFile() {
-        return file;
-    }
-
-    public void setFile(UploadedFile file) {
-        this.file = file;
+    public List<Sector> getSectors() {
+        return sectors;
     }
     
 }

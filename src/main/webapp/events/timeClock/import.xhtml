@@ -4,18 +4,56 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h2>Importação de Entradas e Saídas de Ponto</h2>
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
-            <p:fileUpload fileUploadListener="#{timeClockImportBean.upload}" label="Escolher" 
-                          mode="advanced" dragDropSupport="true" update="messages" auto="true" 
-                          sizeLimit="1024" allowTypes="/(\.|\/)(csv)$/" oncomplete="/index"
-                          invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
-                          invalidSizeMessage="O tamanho máximo permitido é de 1kB!!!" />
+            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+                <f:facet name="header">
+                    <h:outputText value="Importação de Entradas e Saídas de Ponto" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+            
+                <p:fileUpload fileUploadListener="#{timeClockImportBean.upload}" label="Escolher" 
+                              mode="advanced" dragDropSupport="true" update="@form:messages, @form:events" 
+                              auto="true" sizeLimit="1048576" allowTypes="/(\.|\/)(csv)$/"
+                              invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
+                              invalidSizeMessage="O tamanho máximo permitido do arquivo é de 1Mb!!!" />
+                
+                <p:dataTable id="events" var="event" value="#{timeClockImportBean.events}" 
+                             rowKey="#{event.eventDate}" emptyMessage="Nenhuma entrada/saída importada ainda."
+                             scrollable="true" scrollHeight="300">                
+                    <f:facet name="header">
+                        <h:outputText value="Entradas e Saídas de Ponto Importadas" />
+                    </f:facet>
+                    
+                    <p:column headerText="Data" style="width: 50px; text-align: center;">
+                        <h:outputText value="#{event.eventDate.time}">
+                            <f:convertDateTime locale="pt" pattern="dd/MMM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Horário" style="width: 50px; text-align: center;">
+                        <h:outputText value="#{event.eventDate.time}">
+                            <f:convertDateTime locale="pt" pattern="HH:mm:ss" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Funcionário" style="width: 300px; text-align: center;">
+                        <h:outputText value="#{event.employee.name}" />
+                    </p:column>
+                    
+                    <p:column headerText="Entrada" style="width: 100px; text-align: center;">
+                        <p:selectBooleanCheckbox value="#{event.arrival}" disabled="true" />
+                    </p:column>
+                </p:dataTable>
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
         </h:form>
     </ui:define>
 

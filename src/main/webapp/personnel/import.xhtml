@@ -4,18 +4,55 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h2>Importação de Pessoal</h2>
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
-            <p:fileUpload fileUploadListener="#{personnelImportBean.upload}" label="Escolher" 
-                          mode="advanced" dragDropSupport="true" update="messages" auto="true" 
-                          sizeLimit="1024" allowTypes="/(\.|\/)(csv)$/" oncomplete="/index"
-                          invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
-                          invalidSizeMessage="O tamanho máximo permitido é de 1kB!!!" />
+            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+                <f:facet name="header">
+                    <h:outputText value="Importação de Pessoal" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+            
+                <p:fileUpload fileUploadListener="#{personnelImportBean.upload}" label="Escolher" 
+                              mode="advanced" dragDropSupport="true" update="@form:messages, @form:personnel" auto="true" 
+                              sizeLimit="1048576" allowTypes="/(\.|\/)(csv)$/"
+                              invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
+                              invalidSizeMessage="O tamanho máximo permitido do arquivo é de 1Mb!!!" />
+                
+                <p:dataTable id="personnel" var="employee" value="#{personnelImportBean.employees}" 
+                             rowKey="#{employee.name}" emptyMessage="Nenhum funcionário importado ainda."
+                             scrollable="true" scrollHeight="300">                
+                    <f:facet name="header">
+                        <h:outputText value="Funcionários Importados" />
+                    </f:facet>
+                    
+                    <p:column headerText="Tipo" style="width: 100px; text-align: center;">
+                        <h:outputText value="#{personnelImportBean.toString(employee.class.simpleName)}" />
+                    </p:column>
+                    
+                    <p:column headerText="Código" sortBy="#{employee.code}" 
+                              style="width: 100px; text-align: center;">
+                        <h:outputText value="#{employee.code}" />
+                    </p:column>
+                    
+                    <p:column headerText="Nome" sortBy="#{employee.name}" 
+                              style="width: 300px; text-align: center;">
+                         <h:outputText value="#{employee.name}" />
+                    </p:column>
+                    
+                    <p:column headerText="Login" style="width: 100px; text-align: center;">
+                         <h:outputText value="#{employee.class.simpleName != 'Subordinate' 
+                                                ? employee.login : ' '}" />
+                    </p:column>
+                </p:dataTable>
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
         </h:form>
     </ui:define>
 

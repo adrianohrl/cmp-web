@@ -80,7 +80,6 @@ public class EntryEventBean implements Serializable {
     
     @PostConstruct
     public void init() {
-        System.out.println("Initializing...");
         SupervisorDAO supervisorDAO = new SupervisorDAO(em);
         supervisors.addAll(supervisorDAO.findAll());
         Collections.sort(supervisors);
@@ -96,7 +95,6 @@ public class EntryEventBean implements Serializable {
     }
     
     public void register() {
-        System.out.println("Registering...");
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no cadastro", 
                 "A data e o horário da atividade de produção deve ser antes da data e horário atual!!!");
@@ -145,7 +143,6 @@ public class EntryEventBean implements Serializable {
     }
     
     public String onFlowProcess(FlowEvent event) {
-        System.out.println("Going to " + event.getNewStep() + "...");
         if (event.getNewStep().equals("supervisorTab")) {
             logout();
         } else if (event.getNewStep().equals("entriesTab")) {
@@ -156,7 +153,6 @@ public class EntryEventBean implements Serializable {
     }
     
     public void clear() {
-        System.out.println("Clearing...");
         supervisor = null;
         sectors.clear();
         sector = null;
@@ -164,7 +160,6 @@ public class EntryEventBean implements Serializable {
     }
     
     public void selectSupervisor() {
-        System.out.println("Selecting supervisor...");
         clear();
         if (supervisorLogin == null || supervisorLogin.isEmpty()) {
             return;
@@ -186,7 +181,6 @@ public class EntryEventBean implements Serializable {
     }
     
     public void reset() {
-        System.out.println("Reseting...");
         maxDate = new GregorianCalendar();
         date = new Date();
         time = new Date();
@@ -214,7 +208,6 @@ public class EntryEventBean implements Serializable {
     }
     
     public void selectProductionOrders() {
-        System.out.println("Selecting production order...");
         productionOrders.clear();
         PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
         if (subordinate.isAvailable()) {
@@ -230,20 +223,15 @@ public class EntryEventBean implements Serializable {
             }
         } else {
             phaseProductionOrder = phaseProductionOrderDAO.findCurrent(subordinate);
-            System.out.println(subordinate + "'s current ppo: " + phaseProductionOrder);
             productionOrder = phaseProductionOrder.getProductionOrder();
             productionOrders.clear();
             phase = phaseProductionOrder.getPhase().getPhase();
             phases.clear();
         }
-        if (productionOrders.isEmpty()) {
-            System.out.println("POs list is empty!!!");
-        }
         Collections.sort(productionOrders);
     }
     
     public void selectPhases() {
-        System.out.println("Selecting phase...");
         phases.clear();
         PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
         for (PhaseProductionOrder ppo : phaseProductionOrderDAO.findPendents(productionOrder)) {
@@ -262,7 +250,6 @@ public class EntryEventBean implements Serializable {
     }
     
     public void selectPhaseProductionOrder() {
-        System.out.println("Selecting phase production order...");
         PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
         phaseProductionOrder = phaseProductionOrderDAO.find(phase, productionOrder);
         if (phaseProductionOrder.getPossibleNextStates().size() == 1) {
@@ -273,7 +260,6 @@ public class EntryEventBean implements Serializable {
     }
     
     public void updateProducedQuantity() {
-        System.out.println("Updating produced quantity...");
         if (productionState.isStartingState()) {
             producedQuantity = 0;
         } else {
@@ -284,19 +270,16 @@ public class EntryEventBean implements Serializable {
     }
     
     public void clearReturnedQuantity() {
-        System.out.println("Clearing returned quantity...");
         returnedQuantity = 0;
     }
     
     public void onIdle() {
-        System.out.println("Got idle!!!");
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, 
                 "Saindo...", "Tempo expirado!!!"));
         logout();
     }
     
     public String logout() {
-        System.out.println("Logging out...");
         HttpSession session = SessionUtils.getSession();
         session.invalidate();
         return "/index";

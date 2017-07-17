@@ -4,18 +4,140 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h2>Importação de Atividades de Produção</h2>
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
-            <p:fileUpload fileUploadListener="#{entyImportBean.upload}" label="Escolher" 
-                          mode="advanced" dragDropSupport="true" update="messages" auto="true" 
-                          sizeLimit="1024" allowTypes="/(\.|\/)(csv)$/" oncomplete="/index"
-                          invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
-                          invalidSizeMessage="O tamanho máximo permitido é de 1kB!!!" />
+            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+                <f:facet name="header">
+                    <h:outputText value="Importação de Atividades de Produção" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+            
+                <p:fileUpload fileUploadListener="#{entryImportBean.upload}" label="Escolher" 
+                              mode="advanced" dragDropSupport="true" update="@form:messages, @form:events" 
+                              auto="true" sizeLimit="1048576" allowTypes="/(\.|\/)(csv)$/"
+                              invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
+                              invalidSizeMessage="O tamanho máximo permitido do arquivo é de 1Mb!!!" />
+                
+                <p:dataTable id="events" var="event" value="#{entryImportBean.events}" 
+                             rowKey="#{event.eventDate}" emptyMessage="Nenhuma atividade de produção importada ainda."
+                             scrollable="true" scrollHeight="300">                
+                    <f:facet name="header">
+                        <h:outputText value="Atividades de Produção Importadas" />
+                    </f:facet>
+                                
+                    <p:columnGroup type="header">
+                        <p:row>
+                            <p:column rowspan="2" headerText="Data" style="text-align: center;" />
+                            
+                            <p:column rowspan="2" headerText="Horário" style="text-align: center;" />
+                                        
+                            <p:column rowspan="2" headerText="Setor" style="width: 100px; text-align: center;" />
+
+                            <p:column rowspan="2" headerText="Supervisor" style="width: 100px; text-align: center;" />
+                            
+                            <p:column rowspan="2" headerText="Subordinado" style="width: 100px; text-align: center;" />
+                            
+                            <p:column rowspan="2" headerText="Modelo" style="text-align: center;" />
+                            
+                            <p:column rowspan="2" headerText="Ordem de Produção" style="text-align: center;" />
+                            
+                            <p:column rowspan="2" headerText="Fase" style="text-align: center;" />
+                            
+                            <p:column rowspan="2" headerText="Duração [min/un]" style="text-align: center;" />
+                            
+                            <p:column rowspan="2" headerText="Tipo de Atividade" style="text-align: center;" />
+                            
+                            <p:column colspan="3" headerText="Quantidades [un]" />
+                            
+                            <p:column rowspan="2" headerText="Observação" style="width: 100px; text-align: center;" />
+                            
+                            <p:column rowspan="2" headerText="Sinistro" style="text-align: center;" />
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column headerText="Produzida" style="text-align: center;" />
+                            
+                            <p:column headerText="Retornada" style="text-align: center;" />
+                            
+                            <p:column headerText="Total" style="text-align: center;" />
+                        </p:row>
+                    </p:columnGroup>
+                    
+                    <p:column>
+                        <h:outputText value="#{event.eventDate.time}">
+                            <f:convertDateTime locale="pt" pattern="dd/MMM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column>
+                        <h:outputText value="#{event.eventDate.time}">
+                            <f:convertDateTime locale="pt" pattern="HH:mm:ss" />
+                        </h:outputText>
+                    </p:column>
+                                
+                    <p:column>
+                        <h:outputText value="#{event.sector.name}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.supervisor.name}" />
+                    </p:column>
+                    
+                    <p:column>
+                        <h:outputText value="#{event.employee.name}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.phaseProductionOrder.productionOrder.model.reference}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.phaseProductionOrder.productionOrder.reference}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.phaseProductionOrder.phase.phase.name}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.phaseProductionOrder.phase.expectedDuration}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{entryImportBean.toString(event.productionState)}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.producedQuantity}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.class.simpleName == 'CasualtyEntryEvent' ? 
+                                               event.returnedQuantity : 0}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.phaseProductionOrder.totalQuantity}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.observation}" />
+                    </p:column>
+
+                    <p:column>
+                        <h:outputText value="#{event.class.simpleName == 'CasualtyEntryEvent' ? 
+                                               event.casualty.name : ' '}" />
+                    </p:column>
+                </p:dataTable>
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
         </h:form>
     </ui:define>
 
