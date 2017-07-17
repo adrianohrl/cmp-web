@@ -93,7 +93,6 @@ public class EntryEventBean implements Serializable {
                     "Fatalidade no login", "Nenhum supervisor foi cadastrado ainda!!!");
             context.addMessage(null, message);
         }
-        //reset();
     }
     
     public void register() {
@@ -142,7 +141,7 @@ public class EntryEventBean implements Serializable {
         }
         context.addMessage(null, message);
         RequestContext requestContext = RequestContext.getCurrentInstance();
-        requestContext.addCallbackParam("otherValidationsFailed", !succeeded);
+        requestContext.addCallbackParam("validationFailed", !succeeded);
     }
     
     public String onFlowProcess(FlowEvent event) {
@@ -249,7 +248,7 @@ public class EntryEventBean implements Serializable {
         PhaseProductionOrderDAO phaseProductionOrderDAO = new PhaseProductionOrderDAO(em);
         for (PhaseProductionOrder ppo : phaseProductionOrderDAO.findPendents(productionOrder)) {
             Phase p = ppo.getPhase().getPhase();
-            if (sector.equals(p.getSector())) {
+            if (sector.equals(p.getSector()) && !ppo.isBeingProcessed()) {
                 phases.add(p);
             }
         }
