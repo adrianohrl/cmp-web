@@ -6,7 +6,7 @@
 
     <groupId>br.com.ceciliaprado</groupId>
     <artifactId>cmp-web</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>war</packaging>
 
     <name>cmp-web</name>
@@ -24,8 +24,8 @@
 	</repository>
         
         <repository>
-            <id>cmp-repo</id>
-            <url>https://github.com/adrianohrl/cmp</url>
+            <id>cmp-mvn-repo</id>
+            <url>https://raw.github.com/adrianohrl/cmp/mvn-repo/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
@@ -56,13 +56,6 @@
             <groupId>org.primefaces.themes</groupId>
             <artifactId>all-themes</artifactId>
             <version>1.0.10</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>4.3.5.Final</version>
-            <scope>provided</scope>
         </dependency>
         
         <dependency>

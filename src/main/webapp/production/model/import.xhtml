@@ -24,7 +24,7 @@
                 
                 <p:dataTable id="models" var="model" value="#{modelImportBean.models}" 
                              rowKey="#{model.reference}" emptyMessage="Nenhum modelo importado ainda."
-                             scrollable="true" scrollHeight="300">                
+                             scrollable="true" scrollHeight="300" rowExpandMode="single">                
                     <f:facet name="header">
                         <h:outputText value="Modelos Importados" />
                     </f:facet>      

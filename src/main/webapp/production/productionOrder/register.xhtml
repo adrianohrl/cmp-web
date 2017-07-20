@@ -15,16 +15,16 @@
                     <h:outputText value="Cadastro de Ordem de Produção" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
                 
-                <h:outputLabel for="reference" value="Referência: " style="font-weight: bold;"/> 
-                <p:inputText id="reference" label="Referência" value="#{productionOrderBean.productionOrder.reference}"
-                             required="true" requiredMessage="Digite a referência da ordem de produção!!!" style="width: 250px;" />
+                <h:outputLabel for="reference" value="Ordem de Produção: " style="font-weight: bold;"/> 
+                <p:inputText id="reference" label="Ordem de Produção" value="#{productionOrderBean.productionOrder.reference}"
+                             required="true" requiredMessage="Digite a ordem de produção!!!" style="width: 250px;" />
 
-                <h:outputLabel for="model" value="Modelo: " style="font-weight: bold;" />              
+                <h:outputLabel for="model" value="Referência: " style="font-weight: bold;" />              
                 <p:selectOneMenu id="model" value="#{productionOrderBean.productionOrder.model}" 
                                  converter="modelConverter" panelStyle="width: 250px;"
                                  effect="fade" var="md" style="width: 250px;" filter="true" 
-                                 filterMatchMode="startsWith" required="true" 
-                                 requiredMessage="Selecione o modelo que esta ordem de produção está associada!!!"
+                                 filterMatchMode="startsWith" required="true" label="Referência"
+                                 requiredMessage="Selecione a referência do modelo que esta ordem de produção está associada!!!"
                                  disabled="#{empty productionOrderBean.models}">
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
                     
@@ -38,7 +38,7 @@
                 
                 <f:facet name="footer">
                     <p:commandButton value="Registrar" action="#{productionOrderBean.register()}" 
-                                     update="@form" title="Registrar a fase"
+                                     update="@form" title="Registrar a ordem de produção"
                                      style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>            
