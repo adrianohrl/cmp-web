@@ -31,9 +31,9 @@
                         <h:outputText value="Ordens de Produção de Fase Importadas" />
                     </f:facet> 
                     
-                    <p:column headerText="Modelo" sortBy="#{phaseProductionOrder.productionOrder.model.name}" 
+                    <p:column headerText="Referência" sortBy="#{phaseProductionOrder.productionOrder.model.reference}" 
                               style="width: 300px; text-align: center;">
-                         <h:outputText value="#{phaseProductionOrder.productionOrder.model.name}" />
+                         <h:outputText value="#{phaseProductionOrder.productionOrder.model.reference}" />
                     </p:column>
                     
                     <p:column headerText="Fase" sortBy="#{phaseProductionOrder.phase.phase.name}" 

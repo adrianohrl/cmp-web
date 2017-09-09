@@ -42,7 +42,7 @@ public class ModelConverter implements Converter {
             return null;
         }
         for (Model model : models) {
-            if (value.equals(model.getName())) {
+            if (value.equals(model.getReference())) {
                 return model;
             }
         }
@@ -53,7 +53,7 @@ public class ModelConverter implements Converter {
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((Model) obj).getName() : null;
+        return obj != null ? ((Model) obj).getReference(): null;
     }
     
 }

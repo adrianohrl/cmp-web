@@ -6,6 +6,7 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.SessionUtils;
 import br.com.ceciliaprado.cmp.control.dao.personnel.ManagerDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
@@ -23,6 +24,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -33,21 +35,34 @@ import javax.persistence.EntityManager;
 public class ManagerBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
-    private final Manager manager = new Manager();
+    private Manager manager = new Manager();
     private final List<Supervisor> supervisors = new ArrayList<>();  
     private Supervisor[] selectedSupervisors;
+    private final List<Manager> managers = new ArrayList<>();
+    private String managerLogin;
+    private String managerPassword;
 
     @PostConstruct
     public void init() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage message;
         SupervisorDAO supervisorDAO = new SupervisorDAO(em);
         supervisors.addAll(supervisorDAO.findAll());
         if (supervisors.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, 
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, 
                     "Atenção", "Nenhum supervisor foi cadastrado ainda!!!");
             context.addMessage(null, message);
         } else {
             Collections.sort(supervisors);
+        }
+        ManagerDAO managerDAO = new ManagerDAO(em);
+        managers.addAll(managerDAO.findAll());
+        if (managers.isEmpty()) {
+            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
+                    "Fatalidade no login", "Nenhum gerente foi cadastrado ainda!!!");
+            context.addMessage(null, message);
+        } else {
+            Collections.sort(managers);
         }
     }
     
@@ -69,6 +84,31 @@ public class ManagerBean implements Serializable {
         context.addMessage(null, message);
         return next;
     }
+    
+    public String alter() {
+        if (managerPassword.isEmpty())
+        {
+            return "";
+        }
+        manager.setPassword(managerPassword);
+        ManagerDAO managerDAO = new ManagerDAO(em);
+        managerDAO.update(manager);
+        return "/index";
+    }
+    
+    public void selectSupervisor() {
+        manager = null;
+        if (managerLogin == null || managerLogin.isEmpty()) {
+            return;
+        }
+        for (Manager m : managers) {
+            if (managerLogin.equals(m.getLogin())) {
+                manager = m;
+                HttpSession session = SessionUtils.getSession();
+                session.setAttribute("loggedEmployee", manager);
+            }
+        }
+    }
 
     @PreDestroy
     public void destroy() {
@@ -89,6 +129,22 @@ public class ManagerBean implements Serializable {
 
     public void setSelectedSupervisors(Supervisor[] selectedSupervisors) {
         this.selectedSupervisors = selectedSupervisors;
+    }
+
+    public String getManagerLogin() {
+        return managerLogin;
+    }
+
+    public void setManagerLogin(String managerLogin) {
+        this.managerLogin = managerLogin;
+    }
+
+    public String getManagerPassword() {
+        return managerPassword;
+    }
+
+    public void setManagerPassword(String managerPassword) {
+        this.managerPassword = managerPassword;
     }
     
 }

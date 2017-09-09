@@ -29,14 +29,14 @@
                         <h:outputText value="Ordens de Produção Importadas" />
                     </f:facet>      
                     
-                    <p:column headerText="Referência" sortBy="#{productionOrder.reference}" 
+                    <p:column headerText="Ordem de Produção" sortBy="#{productionOrder.reference}" 
                               style="width: 100px; text-align: center;">
                         <h:outputText value="#{productionOrder.reference}" />
                     </p:column>
                     
-                    <p:column headerText="Modelo" sortBy="#{productionOrder.model.name}" 
+                    <p:column headerText="Refência" sortBy="#{productionOrder.model.reference}" 
                               style="width: 300px; text-align: center;">
-                         <h:outputText value="#{productionOrder.model.name}" />
+                         <h:outputText value="#{productionOrder.model.reference}" />
                     </p:column>
                 </p:dataTable>
                     

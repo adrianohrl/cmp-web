@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
+
+            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+                <f:facet name="header">
+                    <h:outputText value="Alterar senha de Supervisor" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+                
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:outputLabel for="login" value="Login: " style="font-weight: bold;"/> 
+                    <p:inputText id="login" label="Login: " value="#{supervisorBean.supervisorLogin}"
+                                 required="true" requiredMessage="Digite o seu login, supervisor!!!" 
+                                 style="width: 250px;" validator="supervisorLoginValidator">
+                        <p:ajax event="blur" listener="#{supervisorBean.selectSupervisor()}" />
+                    </p:inputText>
+
+                    <p:outputLabel for="password" value="Senha Atual: " style="font-weight: bold;"/> 
+                    <p:password id="password" label="Senha atual" validator="supervisorPasswordValidator"
+                                required="true" requiredMessage="Digite a sua senha, supervisor!!!"
+                                promptLabel="Digite a sua senha, supervisor!!!" style="width: 250px;" />
+
+                    <h:outputLabel for="password1" value="Nova Senha: " style="font-weight: bold;" /> 
+                    <p:password id="password1" value="#{supervisorBean.supervisorPassword}" 
+                                feedback="true" match="password2" label="Nova senha" required="true" 
+                                promptLabel="Nova senha" weakLabel="Fraca" goodLabel="Boa" 
+                                strongLabel="Forte" requiredMessage="Digite a senha do supervisor!!!" 
+                                validatorMessage="As senhas não conferem!!!" style="width: 250px;" />
+
+                    <h:outputLabel for="password2" value="Confirmar Senha: " style="font-weight: bold;" /> 
+                    <p:password id="password2" label="Confirmação da senha" required="true" 
+                                requiredMessage="Digite a senha do supervisor novamente!!!" style="width: 250px;" />
+                </h:panelGrid>   
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Alterar" action="#{supervisorBean.alter()}" 
+                                     update="@form" title="Alterar a senha do supervisor" 
+                                     style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

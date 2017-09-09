@@ -29,10 +29,10 @@
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
                     
                     <f:selectItems value="#{productionOrderBean.models}" var="model" 
-                                   itemLabel="#{model.name}" itemValue="#{model}" />
+                                   itemLabel="#{model.reference}" itemValue="#{model}" />
 
                     <p:column>
-                        <h:outputText value="#{md.name}" />
+                        <h:outputText value="#{md.reference}" />
                     </p:column>
                 </p:selectOneMenu>
                 

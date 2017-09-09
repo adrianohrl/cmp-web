@@ -32,6 +32,8 @@
                                 <p:submenu label="Supervisor" expanded="false">
                                     <p:menuitem value="Registrar" outcome="/personnel/supervisor/register" 
                                                 icon="ui-icon-plus" />
+                                    <p:menuitem value="Alterar senha" outcome="/personnel/supervisor/alter" 
+                                                icon="ui-icon-pencil" />
                                     <p:menuitem value="Importar" outcome="/personnel/supervisor/import" 
                                                 icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
@@ -39,6 +41,8 @@
                                 <p:submenu label="Gerente" expanded="false">
                                     <p:menuitem value="Registrar" outcome="/personnel/manager/register" 
                                                 icon="ui-icon-plus" />
+                                    <p:menuitem value="Alterar senha" outcome="/personnel/manager/alter" 
+                                                icon="ui-icon-pencil" />
                                     <p:menuitem value="Importar" outcome="/personnel/manager/import" 
                                                 icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
@@ -124,12 +128,6 @@
                     </ui:insert>
                 </div>
             </div>
-        </div>
-        
-        <div id="bottom">
-            <ui:insert name="bottom">
-                
-            </ui:insert>
         </div>
     </h:body>
 </html>
