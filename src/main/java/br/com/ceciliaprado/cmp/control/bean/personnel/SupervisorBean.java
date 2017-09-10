@@ -92,6 +92,8 @@ public class SupervisorBean implements Serializable {
         supervisor.setPassword(supervisorPassword);
         SupervisorDAO supervisorDAO = new SupervisorDAO(em);
         supervisorDAO.update(supervisor);
+        HttpSession session = SessionUtils.getSession();
+        session.invalidate();
         return "/index";
     }
     

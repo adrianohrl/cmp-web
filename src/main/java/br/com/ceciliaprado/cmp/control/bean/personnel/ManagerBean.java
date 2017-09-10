@@ -93,6 +93,8 @@ public class ManagerBean implements Serializable {
         manager.setPassword(managerPassword);
         ManagerDAO managerDAO = new ManagerDAO(em);
         managerDAO.update(manager);
+        HttpSession session = SessionUtils.getSession();
+        session.invalidate();
         return "/index";
     }
     

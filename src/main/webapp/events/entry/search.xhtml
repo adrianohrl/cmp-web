@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
+            
+            <h:panelGrid id="grid" columns="2" cellpadding="10">   
+                <f:facet name="header">
+                    <h:outputText value="Consultar atividades de produção de subordinado" 
+                                  style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+                
+                <p:outputLabel for="startDate" value="Data Inicial: " style="font-weight: bold;" /> 
+                <p:calendar id="startDate" value="#{searchEntryEventsBean.startDate}" pattern="dd/MMM/yyyy" 
+                            effect="fade" mask="true" maskAutoClear="true" navigator="true" required="true"
+                            requiredMessage="Selecione a data inicial!!!" 
+                            converterMessage="Data com formato errado!!!" locale="pt" 
+                            maxdate="#{searchEntryEventsBean.maxDate}" />
+
+                <p:outputLabel for="startTime" value="Horário Inicial: " style="font-weight: bold;" /> 
+                <p:calendar id="startTime" value="#{searchEntryEventsBean.startTime}" pattern="HH:mm:ss" 
+                            effect="fade" mask="true" timeOnly="true" maskAutoClear="true" required="true" 
+                            requiredMessage="Selecione o horário inicial!!!"
+                            converterMessage="Horário com formato errado!!!" locale="pt" />                
+                
+                <p:outputLabel for="endDate" value="Data Final: " style="font-weight: bold;" /> 
+                <p:calendar id="endDate" value="#{searchEntryEventsBean.endDate}" pattern="dd/MMM/yyyy" effect="fade"
+                            mask="true" maskAutoClear="true" navigator="true" required="true"
+                            requiredMessage="Selecione a data final!!!" 
+                            converterMessage="Data com formato errado!!!" locale="pt" 
+                            mindate="#{searchEntryEventsBean.startDate}"
+                            maxdate="#{searchEntryEventsBean.maxDate}" />
+
+                <p:outputLabel for="endTime" value="Horário Final: " style="font-weight: bold;" /> 
+                <p:calendar id="endTime" value="#{searchEntryEventsBean.endTime}" pattern="HH:mm:ss" effect="fade"
+                            mask="true" timeOnly="true" maskAutoClear="true" required="true" 
+                            requiredMessage="Selecione o horário final!!!"
+                            converterMessage="Horário com formato errado!!!" locale="pt" />                
+                
+                <p:outputLabel for="subordinate" value="Subordinado: " style="font-weight: bold;" />              
+                <p:selectOneMenu id="subordinate" value="#{searchEntryEventsBean.subordinate}" 
+                                 converter="subordinateConverter" panelStyle="width: 250px;"
+                                 effect="fade" var="sub" style="width: 250px;" filter="true" 
+                                 filterMatchMode="startsWith" required="true" 
+                                 converterMessage="Subordinado inválido!!!"
+                                 requiredMessage="Selecione o subordinado!!!"
+                                 disabled="#{empty searchEntryEventsBean.subordinates}">
+                    <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
+                                  noSelectionOption="true" />
+                    
+                    <f:selectItems value="#{searchEntryEventsBean.subordinates}" var="subordinate" 
+                                   itemLabel="#{subordinate.name}" itemValue="#{subordinate}" />
+
+                    <p:column>
+                        <h:outputText value="#{sub.name}" />
+                    </p:column>
+                </p:selectOneMenu>
+                
+                <f:facet name="footer">
+                    <p:commandButton value="Consultar" action="#{searchEntryEventsBean.search()}" 
+                                     update="@form" title="Consultar entradas e saídas do funcionário"
+                                     style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
+            
+            <p:separator/>
+            
+            <p:dataTable id="entries" value="#{searchEntryEventsBean.events}" var="event" 
+                         rowKey="#{event.eventDate}" style="margin-bottom: 20px;"
+                         scrollable="true" scrollHeight="300" 
+                         rowStyleClass="#{event.phaseProductionOrder.pendent ? 'blue' : null}"
+                         emptyMessage="Nenhuma atividade de produção encontrada.">                
+                <f:facet name="header">
+                    <h:outputText value="Atividades de Produção"/>
+                </f:facet>
+                                
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column rowspan="2" headerText="Data" style="text-align: center;" />
+
+                        <p:column rowspan="2" headerText="Horário" style="text-align: center;" />
+
+                        <p:column rowspan="2" headerText="Subordinado" style="width: 100px; text-align: center;" />
+
+                        <p:column rowspan="2" headerText="Modelo" style="text-align: center;" />
+
+                        <p:column rowspan="2" headerText="Ordem de Produção" style="text-align: center;" />
+
+                        <p:column rowspan="2" headerText="Fase" style="text-align: center;" />
+
+                        <p:column rowspan="2" headerText="Duração [min/un]" style="text-align: center;" />
+
+                        <p:column rowspan="2" headerText="Tipo de Atividade" style="text-align: center;" />
+
+                        <p:column colspan="3" headerText="Quantidades [un]" />
+
+                        <p:column rowspan="2" headerText="Observação" style="width: 100px; text-align: center;" />
+
+                        <p:column rowspan="2" headerText="Sinistro" style="text-align: center;" />
+                    </p:row>
+
+                    <p:row>
+                        <p:column headerText="Produzida" style="text-align: center;" />
+
+                        <p:column headerText="Retornada" style="text-align: center;" />
+
+                        <p:column headerText="Total" style="text-align: center;" />
+                    </p:row>
+                </p:columnGroup>
+                                
+                <p:column>
+                    <h:outputText value="#{event.eventDate.time}">
+                        <f:convertDateTime locale="pt" pattern="dd/MMM/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.eventDate.time}">
+                        <f:convertDateTime locale="pt" pattern="HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.employee.name}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.phaseProductionOrder.productionOrder.model.reference}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.phaseProductionOrder.productionOrder.reference}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.phaseProductionOrder.phase.phase.name}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.phaseProductionOrder.phase.expectedDuration}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{entryEventBean.toString(event.productionState)}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.producedQuantity}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.class.simpleName == 'CasualtyEntryEvent' ? 
+                                           event.returnedQuantity : 0}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.phaseProductionOrder.totalQuantity}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.observation}" />
+                </p:column>
+
+                <p:column>
+                    <h:outputText value="#{event.class.simpleName == 'CasualtyEntryEvent' ? 
+                                           event.casualty.name : ' '}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        
+        <h:outputScript library="js" name="pt_calendar.js" />
+    </ui:define>
+</ui:composition>

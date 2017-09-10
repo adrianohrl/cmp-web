@@ -8,10 +8,10 @@ package br.com.ceciliaprado.cmp.control.bean.events;
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.events.TimeClockEventDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
+import br.com.ceciliaprado.cmp.exceptions.DAOException;
 import br.com.ceciliaprado.cmp.model.events.TimeClockEvent;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
 import br.com.ceciliaprado.cmp.util.Calendars;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -24,7 +24,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 
 /**
@@ -33,14 +32,17 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class TimeClockEventBean implements Serializable {
+public class SearchTimeClockEventsBean {
     
     private final EntityManager em = DataSource.createEntityManager();
-    private final TimeClockEvent timeClockEvent = new TimeClockEvent();
+    private final List<TimeClockEvent> events = new ArrayList<>();
+    private Employee employee;
     private final List<Employee> employees = new ArrayList<>();
     private final Calendar maxDate = new GregorianCalendar();
-    private Date date;
-    private Date time;
+    private Date startDate;
+    private Date startTime;
+    private Date endDate;
+    private Date endTime;
     
     @PostConstruct
     public void init() {
@@ -55,26 +57,20 @@ public class TimeClockEventBean implements Serializable {
         }
     }
     
-    public String register() {
-        String next = "";
+    public void search() {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no cadastro", 
-                "A data e o horário de entrada/saída deve ser antes da data e horário atual!!!");
+        FacesMessage message;
+        TimeClockEventDAO eventDAO = new TimeClockEventDAO(em);
+        events.clear();
         try {
-            timeClockEvent.setEventDate(Calendars.sum(date, time));
-            if (maxDate.after(timeClockEvent.getEventDate())) {
-                TimeClockEventDAO timeClockEventDAO = new TimeClockEventDAO(em);
-                timeClockEventDAO.create(timeClockEvent);
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                    "Sucesso no cadastro", timeClockEvent + " foi cadastrado com sucesso!!!");
-                next = "/index";
-            }
-        } catch (EntityExistsException e) {
-            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Erro no cadastro", timeClockEvent + " já foi cadastrado!!!");
-        }
+            events.addAll(eventDAO.findEmployeeEvents(employee, getStart(), getEnd()));
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Resultado", 
+                    events.size() + " registro(s) encontrado(s)!!!");
+        } catch (DAOException e) {
+            message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", 
+                    "A data e o horário iniciais da consulta deve ser antes da data e horário finais!!!");
+        }  
         context.addMessage(null, message);
-        return next;
     }
 
     @PreDestroy
@@ -82,32 +78,64 @@ public class TimeClockEventBean implements Serializable {
         em.close();
     }
 
-    public TimeClockEvent getTimeClockEvent() {
-        return timeClockEvent;
+    public List<TimeClockEvent> getEvents() {
+        return events;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public List<Employee> getEmployees() {
         return employees;
     }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
     
     public Date getMaxDate() {
         return maxDate.getTime();
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+    
+    public Calendar getStart() {
+        return Calendars.sum(startDate, startTime);
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+    
+    public Calendar getEnd() {
+        return Calendars.sum(endDate, endTime);
     }
     
 }
