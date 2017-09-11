@@ -71,33 +71,39 @@
             
             <p:separator/>
             
-            <p:dataTable id="events" var="event" value="#{searchTimeClockEventsBean.events}" 
-                         rowKey="#{event.eventDate}" emptyMessage="Nenhuma entrada/saída encontrada."
-                         scrollable="true" scrollHeight="300">                
-                <f:facet name="header">
-                    <h:outputText value="Entradas e Saídas de Ponto Encontradas" />
+            <h:panelGrid id="gridDT" columns="1" cellpadding="10"> 
+                <p:dataTable id="events" var="event" value="#{searchTimeClockEventsBean.events}" 
+                             rowKey="#{event.eventDate}" emptyMessage="Nenhuma entrada/saída encontrada."
+                             scrollable="true" scrollHeight="300">                
+                    <f:facet name="header">
+                        <h:outputText value="Entradas e Saídas de Ponto Encontradas" />
+                    </f:facet>
+
+                    <p:column headerText="Data" style="width: 50px; text-align: center;">
+                        <h:outputText value="#{event.eventDate.time}">
+                            <f:convertDateTime locale="pt" pattern="dd/MMM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Horário" style="width: 50px; text-align: center;">
+                        <h:outputText value="#{event.eventDate.time}">
+                            <f:convertDateTime locale="pt" pattern="HH:mm:ss" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Funcionário" style="width: 300px; text-align: center;">
+                        <h:outputText value="#{event.employee.name}" />
+                    </p:column>
+
+                    <p:column headerText="Entrada" style="width: 100px; text-align: center;">
+                        <p:selectBooleanCheckbox value="#{event.arrival}" disabled="true" />
+                    </p:column>
+                </p:dataTable>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Voltar" process="@this" action="/index" title="Voltar" style="font-size: 18px;" />
                 </f:facet>
-
-                <p:column headerText="Data" style="width: 50px; text-align: center;">
-                    <h:outputText value="#{event.eventDate.time}">
-                        <f:convertDateTime locale="pt" pattern="dd/MMM/yyyy" />
-                    </h:outputText>
-                </p:column>
-
-                <p:column headerText="Horário" style="width: 50px; text-align: center;">
-                    <h:outputText value="#{event.eventDate.time}">
-                        <f:convertDateTime locale="pt" pattern="HH:mm:ss" />
-                    </h:outputText>
-                </p:column>
-
-                <p:column headerText="Funcionário" style="width: 300px; text-align: center;">
-                    <h:outputText value="#{event.employee.name}" />
-                </p:column>
-
-                <p:column headerText="Entrada" style="width: 100px; text-align: center;">
-                    <p:selectBooleanCheckbox value="#{event.arrival}" disabled="true" />
-                </p:column>
-            </p:dataTable>
+            </h:panelGrid>
         </h:form>
         
         <h:outputScript library="js" name="pt_calendar.js" />

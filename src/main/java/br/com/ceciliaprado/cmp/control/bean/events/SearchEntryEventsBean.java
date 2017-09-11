@@ -12,6 +12,7 @@ import br.com.ceciliaprado.cmp.exceptions.DAOException;
 import br.com.ceciliaprado.cmp.model.events.EntryEvent;
 import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
 import br.com.ceciliaprado.cmp.util.Calendars;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -32,7 +33,7 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class SearchEntryEventsBean {
+public class SearchEntryEventsBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final List<EntryEvent> events = new ArrayList<>();

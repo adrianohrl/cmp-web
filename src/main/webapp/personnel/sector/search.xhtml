@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
+            
+            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+                <f:facet name="header">
+                    <h:outputText value="Lista de Setores Registrados" style="font-weight: bold; font-size: 24px;" />
+                </f:facet> 
+                
+                <p:dataTable id="sectors" var="sector" value="#{phaseBean.sectors}" 
+                             rowKey="#{sector.name}" emptyMessage="Nenhum setor registrado ainda."
+                             scrollable="true" scrollHeight="300" rowExpandMode="single">                
+                    <f:facet name="header">
+                        <h:outputText value="Setores Registrados" />
+                    </f:facet> 
+                    
+                    <p:column style="width:16px">
+                        <p:rowToggler />
+                    </p:column>
+                    
+                    <p:column headerText="Nome" sortBy="#{sector.name}" 
+                              style="width: 300px; text-align: center;">
+                         <h:outputText value="#{sector.name}" />
+                    </p:column>
+                    
+                    <p:column headerText="Supervisor" sortBy="#{sector.supervisor.name}" 
+                              style="width: 300px; text-align: center;">
+                         <h:outputText value="#{sector.supervisor.name}" />
+                    </p:column>
+                    
+                    <p:rowExpansion>
+                        <p:dataTable id="subordinates" var="subordinate" value="#{sector.supervisor.subordinates}" 
+                                     emptyMessage="#{sector.supervisor.name} não supervisiona nenhum subordinado ainda.">                
+                            <f:facet name="header">
+                                <h:outputText value="Subordinados supervisionados por #{sector.supervisor.name}" />
+                            </f:facet>   
+
+                            <p:column headerText="Tipo" style="width: 100px; text-align: center;">
+                                <h:outputText value="Subordinado" />
+                            </p:column>
+
+                            <p:column headerText="Código" sortBy="#{subordinate.code}" 
+                                      style="width: 100px; text-align: center;">
+                                <h:outputText value="#{subordinate.code}" />
+                            </p:column>
+
+                            <p:column headerText="Nome" sortBy="#{subordinate.name}" 
+                                      style="width: 300px; text-align: center;">
+                                 <h:outputText value="#{subordinate.name}" />
+                            </p:column>     
+                            
+                            <f:facet name="footer">
+                                <h:outputText value=" " />
+                            </f:facet>  
+                        </p:dataTable>
+                    </p:rowExpansion>
+                </p:dataTable>
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

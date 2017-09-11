@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/WEB-INF/templates/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        <h:form>
+            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
+            
+            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+                <f:facet name="header">
+                    <h:outputText value="Lista de Modelos Registrados" style="font-weight: bold; font-size: 24px;" />
+                </f:facet>
+                
+                <p:dataTable id="models" var="model" value="#{productionOrderBean.models}" 
+                             rowKey="#{model.reference}" emptyMessage="Nenhum modelo registrado ainda."
+                             scrollable="true" scrollHeight="300" rowExpandMode="single">                
+                    <f:facet name="header">
+                        <h:outputText value="Modelos Registrados" />
+                    </f:facet>      
+                    
+                    <p:column style="width:16px">
+                        <p:rowToggler />
+                    </p:column>
+                    
+                    <p:column headerText="Referência" sortBy="#{model.reference}" style="width: 100px; text-align: center;">
+                        <h:outputText value="#{model.reference}" />
+                    </p:column>
+                    
+                    <p:column headerText="Nome" sortBy="#{model.name}" 
+                              style="width: 300px; text-align: center;">
+                         <h:outputText value="#{model.name}" />
+                    </p:column>
+                    
+                    <p:rowExpansion>
+                        <p:dataTable id="phases" var="phase" value="#{model.phases}" 
+                                     emptyMessage="#{model.name} não tem fases cadastradas ainda.">                
+                            <f:facet name="header">
+                                <h:outputText value="Fases do modelo #{model.name}" />
+                            </f:facet>   
+
+                            <p:column headerText="Fase" sortBy="#{phase.phase.name}" 
+                                      style="width: 100px; text-align: center;">
+                                <h:outputText value="#{phase.phase.name}" />
+                            </p:column>
+
+                            <p:column headerText="Duração [min]" style="width: 300px; text-align: center;">
+                                 <h:outputText value="#{phase.expectedDuration}" />
+                            </p:column>     
+                            
+                            <f:facet name="footer">
+                                <h:outputText value=" " />
+                            </f:facet>  
+                        </p:dataTable>
+                    </p:rowExpansion>
+                </p:dataTable>
+                    
+                <f:facet name="footer">
+                    <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />
+                </f:facet>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
