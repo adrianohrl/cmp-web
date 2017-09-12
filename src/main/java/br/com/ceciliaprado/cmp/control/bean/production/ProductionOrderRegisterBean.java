@@ -29,24 +29,10 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class ProductionOrderBean implements Serializable {
+public class ProductionOrderRegisterBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final ProductionOrder productionOrder = new ProductionOrder();
-    private final List<Model> models = new ArrayList<>();
-    
-    @PostConstruct
-    public void init() {
-        ModelDAO modelDAO = new ModelDAO(em);
-        models.addAll(modelDAO.findAll());
-        Collections.sort(models);
-        if (models.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no cadastro", "Nenhum modelo foi cadastrado ainda!!!");
-            context.addMessage(null, message);
-        }
-    }
     
     public String register() {
         String next = "";
@@ -73,10 +59,6 @@ public class ProductionOrderBean implements Serializable {
 
     public ProductionOrder getProductionOrder() {
         return productionOrder;
-    }
-
-    public List<Model> getModels() {
-        return models;
     }
     
 }

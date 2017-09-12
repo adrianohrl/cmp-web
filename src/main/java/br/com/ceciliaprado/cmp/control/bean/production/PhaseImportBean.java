@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.production.io;
+package br.com.ceciliaprado.cmp.control.bean.production;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.production.io.ProductionOrdersReaderDAO;
-import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
+import br.com.ceciliaprado.cmp.control.dao.production.io.PhasesReaderDAO;
+import br.com.ceciliaprado.cmp.model.production.Phase;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class ProductionOrderImportBean implements Serializable {
+public class PhaseImportBean implements Serializable {
     
-    private final List<ProductionOrder> productionOrders = new ArrayList<>();
+    private final List<Phase> phases = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -35,9 +35,9 @@ public class ProductionOrderImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            ProductionOrdersReaderDAO readerDAO = new ProductionOrdersReaderDAO(em);
+            PhasesReaderDAO readerDAO = new PhasesReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            productionOrders.addAll(readerDAO.getRegisteredProductionOrders());
+            phases.addAll(readerDAO.getRegisteredPhases());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,8 +49,8 @@ public class ProductionOrderImportBean implements Serializable {
         context.addMessage(null, message);
     }
 
-    public List<ProductionOrder> getProductionOrders() {
-        return productionOrders;
+    public List<Phase> getPhases() {
+        return phases;
     }
     
 }

@@ -34,7 +34,7 @@ import org.primefaces.context.RequestContext;
  */
 @ManagedBean
 @ViewScoped
-public class PhaseProductionOrderBean implements Serializable {
+public class PhaseProductionOrderRegisterBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private PhaseProductionOrder phaseProductionOrder;

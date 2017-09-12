@@ -33,20 +33,6 @@ public class PhaseRegisterBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final Phase phase = new Phase();
-    private final List<Sector> sectors = new ArrayList<>();
-    
-    @PostConstruct
-    public void init() {
-        SectorDAO sectorDAO = new SectorDAO(em);
-        sectors.addAll(sectorDAO.findAll());
-        Collections.sort(sectors);
-        if (sectors.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no cadastro", "Nenhum setor foi cadastrado ainda!!!");
-            context.addMessage(null, message);
-        }
-    }
     
     public String register() {
         String next = "";
@@ -78,10 +64,6 @@ public class PhaseRegisterBean implements Serializable {
 
     public Phase getPhase() {
         return phase;
-    }
-
-    public List<Sector> getSectors() {
-        return sectors;
     }
     
 }

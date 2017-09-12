@@ -21,7 +21,7 @@
                                      filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!"
                                      converterMessage="Fase inválida!!!"
-                                     disabled="#{empty phaseService.phases}">
+                                     disabled="#{empty modelRegisterBean.phases}">
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true"
                                       noSelectionOption="true" />
                         
@@ -32,20 +32,13 @@
                             <h:outputText value="#{ph.name}" />
                         </p:column>
                     </p:selectOneMenu>
-
-                    <p:outputLabel for="minutes" value="Duração: " style="font-weight: bold;" /> 
-                    <p:inputNumber id="minutes" value="#{modelRegisterBean.minutes}" label="Parcela da duração [min]" style="width: 100px;"
-                                   required="true" emptyValue="zero" decimalPlaces="0" symbol=" [min]" symbolPosition="s" minValue="0"
-                                   converterMessage="Esta parcela da duração esperada desta fase deve ser um número inteiro não-negativo!!!"
-                                   requiredMessage="Digite a parcela em minutos da duração esperada desta fase!!!" 
-                                   validatorMessage="O valor desta parcela da duração esperada deve ser um número inteiro não-negativo!!!" />
                         
-                    <p:outputLabel />
-                    <p:inputNumber id="seconds" value="#{modelRegisterBean.seconds}" label="Parcela da duração [s]" required="true" 
-                                   decimalPlaces="2" symbol=" [s]" symbolPosition="s" minValue="0.0" style="width: 100px;"
-                                   converterMessage="Esta parcela da duração esperada desta fase deve ser um número real não-negativo!!!"
-                                   requiredMessage="Digite a parcela em segundos da duração esperada desta fase!!!" 
-                                   validatorMessage="O valor desta parcela da duração esperada deve ser um número real não-negativo!!!" />
+                    <p:outputLabel for="expectedDuration" value="Duração Esperada: " style="font-weight: bold;" /> 
+                    <p:inputNumber id="expectedDuration" value="#{modelRegisterBean.expectedDuration}" label="Duração [min]" required="true" 
+                                   decimalPlaces="2" symbol=" [min]" symbolPosition="s" minValue="0.01" style="width: 100px;"
+                                   converterMessage="A duração esperada desta fase deve ser um número real não-negativo!!!"
+                                   requiredMessage="Digite a duração esperada desta fase!!!" 
+                                   validatorMessage="A duração esperada desta fase deve ser um número real não-negativo!!!" />
 
                     <p:commandButton process="@this" value="Limpar" update="@parent" 
                                      title="Limpar os campos" style="font-size: 18px;">

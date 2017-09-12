@@ -50,11 +50,11 @@
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Funcionário inválido!!!"
                                  requiredMessage="Selecione o funcionário!!!"
-                                 disabled="#{empty timeClockEventsSearchBean.employees}">
+                                 disabled="#{empty employeeService.employees}">
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
                                   noSelectionOption="true" />
                     
-                    <f:selectItems value="#{timeClockEventsSearchBean.employees}" var="employee" 
+                    <f:selectItems value="#{employeeService.employees}" var="employee" 
                                    itemLabel="#{employee.name}" itemValue="#{employee}" />
 
                     <p:column>

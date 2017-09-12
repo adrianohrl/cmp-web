@@ -38,25 +38,11 @@ public class EntryEventsSearchBean implements Serializable {
     private final EntityManager em = DataSource.createEntityManager();
     private final List<EntryEvent> events = new ArrayList<>();
     private Subordinate subordinate;
-    private final List<Subordinate> subordinates = new ArrayList<>();
     private final Calendar maxDate = new GregorianCalendar();
     private Date startDate;
     private Date startTime;
     private Date endDate;
     private Date endTime;
-    
-    @PostConstruct
-    public void init() {
-        SubordinateDAO subordinateDAO = new SubordinateDAO(em);
-        subordinates.addAll(subordinateDAO.findAll());
-        Collections.sort(subordinates);
-        if (subordinates.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no cadastro", "Nenhum funcionário foi cadastrado ainda!!!");
-            context.addMessage(null, message);
-        }
-    }
     
     public void search() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -89,10 +75,6 @@ public class EntryEventsSearchBean implements Serializable {
 
     public void setSubordinate(Subordinate subordinate) {
         this.subordinate = subordinate;
-    }
-
-    public List<Subordinate> getSubordinates() {
-        return subordinates;
     }
     
     public Date getMaxDate() {

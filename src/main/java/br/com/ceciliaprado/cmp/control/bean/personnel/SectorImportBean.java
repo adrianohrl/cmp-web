@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel.io;
+package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.io.PersonnelReaderDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Employee;
+import br.com.ceciliaprado.cmp.control.dao.personnel.io.SectorsReaderDAO;
+import br.com.ceciliaprado.cmp.model.personnel.Sector;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class EmployeeImportBean implements Serializable {
+public class SectorImportBean implements Serializable {
     
-    private final List<Employee> employees = new ArrayList<>();
+    private final List<Sector> sectors = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -35,9 +35,9 @@ public class EmployeeImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            PersonnelReaderDAO readerDAO = new PersonnelReaderDAO(em);
+            SectorsReaderDAO readerDAO = new SectorsReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            employees.addAll(readerDAO.getRegisteredEmployees());
+            sectors.addAll(readerDAO.getRegisteredSectors());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,24 +49,8 @@ public class EmployeeImportBean implements Serializable {
         context.addMessage(null, message);
     }
 
-    public List<Employee> getEmployees() {
-        return employees;
-    }
-    
-    public String toString(String employeeType) {
-        String str = "";
-        switch (employeeType) {
-            case "Subordinate":
-                str = "Subordinado";
-                break;
-            case "Supervisor":
-                str = "Supervisor";
-                break;
-            case "Manager":
-                str = "Gerente";
-                break;
-        }
-        return str;
+    public List<Sector> getSectors() {
+        return sectors;
     }
     
 }

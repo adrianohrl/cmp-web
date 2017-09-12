@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel.io;
+package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.io.SectorsReaderDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Sector;
+import br.com.ceciliaprado.cmp.control.dao.personnel.io.SupervisorsReaderDAO;
+import br.com.ceciliaprado.cmp.model.personnel.Manager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class SectorImportBean implements Serializable {
+public class ManagerImportBean implements Serializable {
     
-    private final List<Sector> sectors = new ArrayList<>();
+    private final List<Manager> managers = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -35,9 +35,9 @@ public class SectorImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            SectorsReaderDAO readerDAO = new SectorsReaderDAO(em);
+            SupervisorsReaderDAO readerDAO = new SupervisorsReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            sectors.addAll(readerDAO.getRegisteredSectors());
+            managers.addAll(readerDAO.getRegisteredManagers());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,8 +49,10 @@ public class SectorImportBean implements Serializable {
         context.addMessage(null, message);
     }
 
-    public List<Sector> getSectors() {
-        return sectors;
+    public List<Manager> getManagers() {
+        return managers;
     }
+
+    
     
 }

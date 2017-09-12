@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel.io;
+package br.com.ceciliaprado.cmp.control.bean.events;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.io.SubordinatesReaderDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
+import br.com.ceciliaprado.cmp.control.dao.events.io.CasualtiesReaderDAO;
+import br.com.ceciliaprado.cmp.model.events.Casualty;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class SupervisorImportBean implements Serializable {
+public class CasualtyImportBean implements Serializable {
     
-    private final List<Supervisor> supervisors = new ArrayList<>();
+    private final List<Casualty> casualties = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -35,9 +35,9 @@ public class SupervisorImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            SubordinatesReaderDAO readerDAO = new SubordinatesReaderDAO(em);
+            CasualtiesReaderDAO readerDAO = new CasualtiesReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            supervisors.addAll(readerDAO.getRegisteredSupervisors());
+            casualties.addAll(readerDAO.getRegisteredCasualties());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,8 +49,8 @@ public class SupervisorImportBean implements Serializable {
         context.addMessage(null, message);
     }
 
-    public List<Supervisor> getSupervisors() {
-        return supervisors;
+    public List<Casualty> getCasualties() {
+        return casualties;
     }
     
 }

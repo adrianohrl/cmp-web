@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.personnel.io;
+package br.com.ceciliaprado.cmp.control.bean.production;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.io.SupervisorsReaderDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Manager;
+import br.com.ceciliaprado.cmp.control.dao.production.io.ProductionOrdersReaderDAO;
+import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class ManagerImportBean implements Serializable {
+public class ProductionOrderImportBean implements Serializable {
     
-    private final List<Manager> managers = new ArrayList<>();
+    private final List<ProductionOrder> productionOrders = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -35,9 +35,9 @@ public class ManagerImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            SupervisorsReaderDAO readerDAO = new SupervisorsReaderDAO(em);
+            ProductionOrdersReaderDAO readerDAO = new ProductionOrdersReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            managers.addAll(readerDAO.getRegisteredManagers());
+            productionOrders.addAll(readerDAO.getRegisteredProductionOrders());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,10 +49,8 @@ public class ManagerImportBean implements Serializable {
         context.addMessage(null, message);
     }
 
-    public List<Manager> getManagers() {
-        return managers;
+    public List<ProductionOrder> getProductionOrders() {
+        return productionOrders;
     }
-
-    
     
 }

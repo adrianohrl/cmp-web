@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.events.io;
+package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.events.io.EntryEventsReaderDAO;
-import br.com.ceciliaprado.cmp.model.events.EntryEvent;
-import br.com.ceciliaprado.cmp.model.production.ProductionStates;
+import br.com.ceciliaprado.cmp.control.dao.personnel.io.SubordinatesReaderDAO;
+import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class EntryImportBean implements Serializable {
+public class SupervisorImportBean implements Serializable {
     
-    private final List<EntryEvent> events = new ArrayList<>();
+    private final List<Supervisor> supervisors = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -36,9 +35,9 @@ public class EntryImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            EntryEventsReaderDAO readerDAO = new EntryEventsReaderDAO(em);
+            SubordinatesReaderDAO readerDAO = new SubordinatesReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            events.addAll(readerDAO.getRegisteredEvents());
+            supervisors.addAll(readerDAO.getRegisteredSupervisors());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,34 +48,9 @@ public class EntryImportBean implements Serializable {
         em.close();
         context.addMessage(null, message);
     }
-    
-    public String toString(ProductionStates state) {
-        if (state == null) {
-            return "";
-        }
-        String str = "";
-        switch (state) {
-            case STARTED:
-                str = "Início";
-                break;
-            case RESTARTED:
-                str = "Reinício";
-                break;
-            case PAUSED:
-                str = "Pausa";
-                break;
-            case FINISHED:
-                str = "Término";
-                break;
-            case RETURNED:
-                str = "Devolução";
-                break;
-        }
-        return str;
-    }
 
-    public List<EntryEvent> getEvents() {
-        return events;
+    public List<Supervisor> getSupervisors() {
+        return supervisors;
     }
     
 }

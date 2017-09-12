@@ -7,7 +7,6 @@ package br.com.ceciliaprado.cmp.control.bean.events;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.events.TimeClockEventDAO;
-import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
 import br.com.ceciliaprado.cmp.exceptions.DAOException;
 import br.com.ceciliaprado.cmp.model.events.TimeClockEvent;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
@@ -15,11 +14,9 @@ import br.com.ceciliaprado.cmp.util.Calendars;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -38,25 +35,11 @@ public class TimeClockEventsSearchBean implements Serializable {
     private final EntityManager em = DataSource.createEntityManager();
     private final List<TimeClockEvent> events = new ArrayList<>();
     private Employee employee;
-    private final List<Employee> employees = new ArrayList<>();
     private final Calendar maxDate = new GregorianCalendar();
     private Date startDate;
     private Date startTime;
     private Date endDate;
     private Date endTime;
-    
-    @PostConstruct
-    public void init() {
-        EmployeeDAO employeeDAO = new EmployeeDAO(em);
-        employees.addAll(employeeDAO.findAll());
-        Collections.sort(employees);
-        if (employees.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no cadastro", "Nenhum funcionário foi cadastrado ainda!!!");
-            context.addMessage(null, message);
-        }
-    }
     
     public void search() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -89,10 +72,6 @@ public class TimeClockEventsSearchBean implements Serializable {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
-    }
-
-    public List<Employee> getEmployees() {
-        return employees;
     }
     
     public Date getMaxDate() {

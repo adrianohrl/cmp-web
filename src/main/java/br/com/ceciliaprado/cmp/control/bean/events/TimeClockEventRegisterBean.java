@@ -33,27 +33,13 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class TimeClockEventBean implements Serializable {
+public class TimeClockEventRegisterBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final TimeClockEvent timeClockEvent = new TimeClockEvent();
-    private final List<Employee> employees = new ArrayList<>();
     private final Calendar maxDate = new GregorianCalendar();
     private Date date;
     private Date time;
-    
-    @PostConstruct
-    public void init() {
-        EmployeeDAO employeeDAO = new EmployeeDAO(em);
-        employees.addAll(employeeDAO.findAll());
-        Collections.sort(employees);
-        if (employees.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no cadastro", "Nenhum funcionário foi cadastrado ainda!!!");
-            context.addMessage(null, message);
-        }
-    }
     
     public String register() {
         String next = "";
@@ -84,10 +70,6 @@ public class TimeClockEventBean implements Serializable {
 
     public TimeClockEvent getTimeClockEvent() {
         return timeClockEvent;
-    }
-
-    public List<Employee> getEmployees() {
-        return employees;
     }
 
     public Date getDate() {

@@ -16,19 +16,19 @@
                 </f:facet>
                 
                 <p:outputLabel for="reference" value="Ordem de Produção: " style="font-weight: bold;"/> 
-                <p:inputText id="reference" label="Ordem de Produção" value="#{productionOrderBean.productionOrder.reference}"
+                <p:inputText id="reference" label="Ordem de Produção" value="#{productionOrderRegisterBean.productionOrder.reference}"
                              required="true" requiredMessage="Digite a ordem de produção!!!" style="width: 250px;" />
 
                 <p:outputLabel for="model" value="Referência: " style="font-weight: bold;" />              
-                <p:selectOneMenu id="model" value="#{productionOrderBean.productionOrder.model}" 
+                <p:selectOneMenu id="model" value="#{productionOrderRegisterBean.productionOrder.model}" 
                                  converter="modelConverter" panelStyle="width: 250px;"
                                  effect="fade" var="md" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" label="Referência"
                                  requiredMessage="Selecione a referência do modelo que esta ordem de produção está associada!!!"
-                                 disabled="#{empty productionOrderBean.models}">
+                                 disabled="#{empty modelService.models}">
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
                     
-                    <f:selectItems value="#{productionOrderBean.models}" var="model" 
+                    <f:selectItems value="#{modelService.models}" var="model" 
                                    itemLabel="#{model.reference}" itemValue="#{model}" />
 
                     <p:column>
@@ -37,7 +37,7 @@
                 </p:selectOneMenu>
                 
                 <f:facet name="footer">
-                    <p:commandButton value="Registrar" action="#{productionOrderBean.register()}" 
+                    <p:commandButton value="Registrar" action="#{productionOrderRegisterBean.register()}" 
                                      update="@form" title="Registrar a ordem de produção"
                                      style="font-size: 18px;" />
                 </f:facet>

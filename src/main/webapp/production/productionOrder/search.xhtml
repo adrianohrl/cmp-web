@@ -16,7 +16,7 @@
                     <h:outputText value="Lista de Ordens de Produção Registradas" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
                 
-                <p:dataTable id="productionOrders" var="productionOrder" value="#{phaseProductionOrderBean.productionOrders}" 
+                <p:dataTable id="productionOrders" var="productionOrder" value="#{productionOrderService.productionOrders}" 
                              rowKey="#{model.reference}" emptyMessage="Nenhuma ordem de produção registrada ainda."
                              scrollable="true" scrollHeight="300">                
                     <f:facet name="header">

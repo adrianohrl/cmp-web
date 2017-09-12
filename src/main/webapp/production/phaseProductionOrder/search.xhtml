@@ -18,7 +18,7 @@
                 </f:facet>  
                 
                 <p:dataTable id="phaseProductionOrders" var="phaseProductionOrder" 
-                             value="#{phaseProductionOrderImportBean.phaseProductionOrders}" 
+                             value="#{phaseProductionOrderService.phaseProductionOrders}" 
                              emptyMessage="Nenhuma ordem de produção de fase registrada ainda."
                              scrollable="true" scrollHeight="300">                
                     <f:facet name="header">

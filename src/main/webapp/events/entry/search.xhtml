@@ -50,11 +50,11 @@
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Subordinado inválido!!!"
                                  requiredMessage="Selecione o subordinado!!!"
-                                 disabled="#{empty entryEventsSearchBean.subordinates}">
+                                 disabled="#{empty subordinateService.subordinates}">
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
                                   noSelectionOption="true" />
                     
-                    <f:selectItems value="#{entryEventsSearchBean.subordinates}" var="subordinate" 
+                    <f:selectItems value="#{subordinateService.subordinates}" var="subordinate" 
                                    itemLabel="#{subordinate.name}" itemValue="#{subordinate}" />
 
                     <p:column>
@@ -148,7 +148,7 @@
                     </p:column>
 
                     <p:column>
-                        <h:outputText value="#{entryEventBean.toString(event.productionState)}" />
+                        <h:outputText value="#{entryEventRegisterBean.toString(event.productionState)}" />
                     </p:column>
 
                     <p:column>

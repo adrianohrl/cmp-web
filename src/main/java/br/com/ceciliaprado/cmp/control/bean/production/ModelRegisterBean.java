@@ -37,8 +37,7 @@ public class ModelRegisterBean implements Serializable {
     private final Model model = new Model();
     private Phase phase;
     private final List<Phase> phases = new ArrayList<>();
-    private int minutes = 0;
-    private double seconds = 0.0;
+    private double expectedDuration = 0.0;
     
     @PostConstruct
     public void init() {
@@ -80,7 +79,7 @@ public class ModelRegisterBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                 "Dado inconsistente", "A duração da fase não pode ser nula!!!");
-        ModelPhase modelPhase = new ModelPhase(phase, minutes + seconds / 60);
+        ModelPhase modelPhase = new ModelPhase(phase, expectedDuration);
         boolean positiveExpectedDuration = modelPhase.getExpectedDuration() > 0.0;
         if (positiveExpectedDuration) {
             model.getPhases().add(modelPhase);
@@ -101,8 +100,7 @@ public class ModelRegisterBean implements Serializable {
     }
     
     private void reset() {
-        minutes = 0;
-        seconds = 0.0;
+        expectedDuration = 0.0;
     }
 
     @PreDestroy
@@ -126,20 +124,12 @@ public class ModelRegisterBean implements Serializable {
         this.phase = phase;
     }
 
-    public int getMinutes() {
-        return minutes;
+    public double getExpectedDuration() {
+        return expectedDuration;
     }
 
-    public void setMinutes(int minutes) {
-        this.minutes = minutes;
-    }
-
-    public double getSeconds() {
-        return seconds;
-    }
-
-    public void setSeconds(double seconds) {
-        this.seconds = seconds;
+    public void setExpectedDuration(double expectedDuration) {
+        this.expectedDuration = expectedDuration;
     }
     
 }

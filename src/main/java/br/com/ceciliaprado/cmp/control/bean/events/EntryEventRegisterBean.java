@@ -7,6 +7,7 @@ package br.com.ceciliaprado.cmp.control.bean.events;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.bean.SessionUtils;
+import br.com.ceciliaprado.cmp.control.bean.personnel.SupervisorService;
 import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
 import br.com.ceciliaprado.cmp.control.dao.events.CasualtyEntryEventDAO;
 import br.com.ceciliaprado.cmp.control.dao.events.EntryEventDAO;
@@ -37,6 +38,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
@@ -51,14 +53,15 @@ import org.primefaces.event.FlowEvent;
  */
 @ManagedBean
 @ViewScoped
-public class EntryEventBean implements Serializable {
-        
+public class EntryEventRegisterBean implements Serializable {
+    
+    @ManagedProperty(value = "#{supervisorService}")
+    private SupervisorService supervisorService;
     private final EntityManager em = DataSource.createEntityManager();
     private final EntryEventsList entryEvents = new EntryEventsList();
     private EntryEventsBuilder builder;
     private String supervisorLogin;
     private Supervisor supervisor;
-    private final List<Supervisor> supervisors = new ArrayList<>();
     private Sector sector;
     private final List<Sector> sectors = new ArrayList<>();
     private Calendar maxDate = new GregorianCalendar();
@@ -76,23 +79,6 @@ public class EntryEventBean implements Serializable {
     private int producedQuantity;
     private int returnedQuantity;
     private Casualty casualty;
-    private final List<Casualty> casualties = new ArrayList<>();
-    
-    @PostConstruct
-    public void init() {
-        SupervisorDAO supervisorDAO = new SupervisorDAO(em);
-        supervisors.addAll(supervisorDAO.findAll());
-        Collections.sort(supervisors);
-        CasualtyDAO casualtyDAO = new CasualtyDAO(em);
-        casualties.addAll(casualtyDAO.findAll());
-        FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage message;
-        if (supervisors.isEmpty()) {
-            message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no login", "Nenhum supervisor foi cadastrado ainda!!!");
-            context.addMessage(null, message);
-        }
-    }
     
     public void register() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -164,7 +150,7 @@ public class EntryEventBean implements Serializable {
         if (supervisorLogin == null || supervisorLogin.isEmpty()) {
             return;
         }
-        for (Supervisor s : supervisors) {
+        for (Supervisor s : supervisorService.getSupervisors()) {
             if (supervisorLogin.equals(s.getLogin())) {
                 supervisor = s;
                 HttpSession session = SessionUtils.getSession();
@@ -315,6 +301,10 @@ public class EntryEventBean implements Serializable {
         return str;
     }
 
+    public void setSupervisorService(SupervisorService supervisorService) {
+        this.supervisorService = supervisorService;
+    }
+
     public EntryEventsList getEntryEvents() {
         return entryEvents;
     }
@@ -333,10 +323,6 @@ public class EntryEventBean implements Serializable {
 
     public void setSupervisor(Supervisor supervisor) {
         this.supervisor = supervisor;
-    }
-
-    public List<Supervisor> getSupervisors() {
-        return supervisors;
     }
 
     public Sector getSector() {
@@ -453,10 +439,6 @@ public class EntryEventBean implements Serializable {
 
     public void setCasualty(Casualty casualty) {
         this.casualty = casualty;
-    }
-
-    public List<Casualty> getCasualties() {
-        return casualties;
     }
     
 }

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.events.io;
+package br.com.ceciliaprado.cmp.control.bean.events;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.events.io.CasualtiesReaderDAO;
-import br.com.ceciliaprado.cmp.model.events.Casualty;
+import br.com.ceciliaprado.cmp.control.dao.events.io.TimeClockEventsReaderDAO;
+import br.com.ceciliaprado.cmp.model.events.TimeClockEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class CasualtyImportBean implements Serializable {
+public class TimeClockImportBean implements Serializable {
     
-    private final List<Casualty> casualties = new ArrayList<>();
+    private final List<TimeClockEvent> events = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -35,9 +35,9 @@ public class CasualtyImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            CasualtiesReaderDAO readerDAO = new CasualtiesReaderDAO(em);
+            TimeClockEventsReaderDAO readerDAO = new TimeClockEventsReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            casualties.addAll(readerDAO.getRegisteredCasualties());
+            events.addAll(readerDAO.getRegisteredEvents());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,8 +49,8 @@ public class CasualtyImportBean implements Serializable {
         context.addMessage(null, message);
     }
 
-    public List<Casualty> getCasualties() {
-        return casualties;
+    public List<TimeClockEvent> getEvents() {
+        return events;
     }
     
 }

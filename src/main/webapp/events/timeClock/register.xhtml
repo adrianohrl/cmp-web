@@ -17,30 +17,30 @@
                 </f:facet>
                 
                 <p:outputLabel for="date" value="Data: " style="font-weight: bold;" /> 
-                <p:calendar id="date" value="#{timeClockEventBean.date}" pattern="dd/MMM/yyyy" effect="fade"
+                <p:calendar id="date" value="#{timeClockEventRegisterBean.date}" pattern="dd/MMM/yyyy" effect="fade"
                             mask="true" maskAutoClear="true" navigator="true" required="true"
                             requiredMessage="Selecione a data da entrada/saída!!!" 
                             converterMessage="Data com formato errado!!!" locale="pt" 
-                            maxdate="#{timeClockEventBean.getMaxDate()}" />
+                            maxdate="#{timeClockEventRegisterBean.maxDate}" />
 
                 <p:outputLabel for="time" value="Horário: " style="font-weight: bold;" /> 
-                <p:calendar id="time" value="#{timeClockEventBean.time}" pattern="HH:mm:ss" effect="fade"
+                <p:calendar id="time" value="#{timeClockEventRegisterBean.time}" pattern="HH:mm:ss" effect="fade"
                             mask="true" timeOnly="true" maskAutoClear="true" required="true" 
                             requiredMessage="Selecione o horário da entrada/saída!!!"
                             converterMessage="Horário com formato errado!!!" locale="pt" />                
                 
                 <p:outputLabel for="employee" value="Funcionário: " style="font-weight: bold;" />              
-                <p:selectOneMenu id="employee" value="#{timeClockEventBean.timeClockEvent.employee}" 
+                <p:selectOneMenu id="employee" value="#{timeClockEventRegisterBean.timeClockEvent.employee}" 
                                  converter="employeeConverter" panelStyle="width: 250px;"
                                  effect="fade" var="emp" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Funcionário inválido!!!"
                                  requiredMessage="Selecione o funcionário!!!"
-                                 disabled="#{empty timeClockEventBean.employees}">
+                                 disabled="#{empty employeeService.employees}">
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
                                   noSelectionOption="true" />
                     
-                    <f:selectItems value="#{timeClockEventBean.employees}" var="employee" 
+                    <f:selectItems value="#{employeeService.employees}" var="employee" 
                                    itemLabel="#{employee.name}" itemValue="#{employee}" />
 
                     <p:column>
@@ -49,12 +49,12 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel for="type" value="Tipo: " style="font-weight: bold;" /> 
-                <p:selectBooleanButton id="type" value="#{timeClockEventBean.timeClockEvent.arrival}" 
+                <p:selectBooleanButton id="type" value="#{timeClockEventRegisterBean.timeClockEvent.arrival}" 
                                        onLabel="Entrada" offLabel="Saída" onIcon="ui-icon-arrowthick-1-e"
                                        offIcon="ui-icon-arrowthick-1-w" />
                 
                 <f:facet name="footer">
-                    <p:commandButton value="Registrar" action="#{timeClockEventBean.register()}" 
+                    <p:commandButton value="Registrar" action="#{timeClockEventRegisterBean.register()}" 
                                      update="@form" title="Registrar a entrada/saída"
                                      style="font-size: 18px;" />
                 </f:facet>

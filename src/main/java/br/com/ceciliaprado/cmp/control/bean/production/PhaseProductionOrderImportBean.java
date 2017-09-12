@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.production.io;
+package br.com.ceciliaprado.cmp.control.bean.production;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.production.io.ModelsReaderDAO;
-import br.com.ceciliaprado.cmp.model.production.Model;
+import br.com.ceciliaprado.cmp.control.dao.production.io.PhaseProductionOrdersReaderDAO;
+import br.com.ceciliaprado.cmp.model.production.PhaseProductionOrder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class ModelImportBean implements Serializable {
+public class PhaseProductionOrderImportBean implements Serializable {
     
-    private final List<Model> models = new ArrayList<>();
+    private final List<PhaseProductionOrder> phaseProductionOrders = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -35,9 +35,9 @@ public class ModelImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            ModelsReaderDAO readerDAO = new ModelsReaderDAO(em);
+            PhaseProductionOrdersReaderDAO readerDAO = new PhaseProductionOrdersReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            models.addAll(readerDAO.getRegisteredModels());
+            phaseProductionOrders.addAll(readerDAO.getRegisteredPhaseProductionOrders());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,8 +49,8 @@ public class ModelImportBean implements Serializable {
         context.addMessage(null, message);
     }
 
-    public List<Model> getModels() {
-        return models;
+    public List<PhaseProductionOrder> getPhaseProductionOrders() {
+        return phaseProductionOrders;
     }
     
 }

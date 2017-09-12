@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.production.io;
+package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.production.io.PhasesReaderDAO;
-import br.com.ceciliaprado.cmp.model.production.Phase;
+import br.com.ceciliaprado.cmp.control.dao.personnel.io.PersonnelReaderDAO;
+import br.com.ceciliaprado.cmp.model.personnel.Employee;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class PhaseImportBean implements Serializable {
+public class EmployeeImportBean implements Serializable {
     
-    private final List<Phase> phases = new ArrayList<>();
+    private final List<Employee> employees = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -35,9 +35,9 @@ public class PhaseImportBean implements Serializable {
         UploadedFile file = event.getFile();
         EntityManager em = DataSource.createEntityManager();
         try {
-            PhasesReaderDAO readerDAO = new PhasesReaderDAO(em);
+            PersonnelReaderDAO readerDAO = new PersonnelReaderDAO(em);
             readerDAO.readFile(file.getInputstream());
-            phases.addAll(readerDAO.getRegisteredPhases());
+            employees.addAll(readerDAO.getRegisteredEmployees());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
@@ -49,8 +49,24 @@ public class PhaseImportBean implements Serializable {
         context.addMessage(null, message);
     }
 
-    public List<Phase> getPhases() {
-        return phases;
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+    
+    public String toString(String employeeType) {
+        String str = "";
+        switch (employeeType) {
+            case "Subordinate":
+                str = "Subordinado";
+                break;
+            case "Supervisor":
+                str = "Supervisor";
+                break;
+            case "Manager":
+                str = "Gerente";
+                break;
+        }
+        return str;
     }
     
 }
