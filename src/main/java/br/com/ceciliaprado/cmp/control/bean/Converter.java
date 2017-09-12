@@ -19,7 +19,7 @@ import javax.faces.convert.ConverterException;
  * @author adrianohrl
  * @param <T>
  */
-public abstract class Converter<T> implements Serializable, javax.faces.convert.Converter {
+public abstract class Converter<T> implements javax.faces.convert.Converter, Serializable {
     
     private final List<T> elements = new ArrayList<>();
     
@@ -30,11 +30,10 @@ public abstract class Converter<T> implements Serializable, javax.faces.convert.
 
     @Override
     public T getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
+        System.out.println("Converting (number of elements: " + elements.size());
         for (T element : elements) {
-            if (element.equals(value)) {
+            if (toString(element).equals(value)) {
+                System.out.println("Converting (value: " + value + ", element: " + element + ")");
                 return element;
             }
         }
