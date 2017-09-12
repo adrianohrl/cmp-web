@@ -5,55 +5,41 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
-import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
+import br.com.ceciliaprado.cmp.control.bean.Converter;
+import br.com.ceciliaprado.cmp.control.bean.personnel.EmployeeService;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.convert.FacesConverter;
-import javax.persistence.EntityManager;
 
 /**
  *
  * @author adrianohrl
  */
 @FacesConverter("employeeConverter")
-public class EmployeeConverter implements Converter {
+public class EmployeeConverter extends Converter<Employee> {
     
-    private final List<Employee> employees = new ArrayList<>();
+    @ManagedProperty(value = "#{employeeService}")
+    private EmployeeService service;
     
+    @Override
     @PostConstruct
     public void init() {
-        EntityManager em = DataSource.createEntityManager();
-        EmployeeDAO employeeDAO = new EmployeeDAO(em);
-        employees.addAll(employeeDAO.findAll());
-        em.close();
+        addAll(service.getEmployees());
     }
 
     @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        for (Employee employee : employees) {
-            if (value.equals(employee.getName())) {
-                return employee;
-            }
-        }
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Erro na conversão", "Funcionário inválido!!!");
-        throw new ConverterException(message);
+    public String getErrorMessage() {
+        return "Funcionário inválido!!!";
     }
 
     @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((Employee) obj).getName() : null;
+    public String toString(Employee employee) {
+        return employee.getName();
+    }
+
+    public void setService(EmployeeService service) {
+        this.service = service;
     }
     
 }

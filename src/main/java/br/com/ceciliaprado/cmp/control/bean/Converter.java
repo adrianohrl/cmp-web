@@ -44,6 +44,10 @@ public abstract class Converter<T extends Comparable<String>> implements Seriali
     
     public abstract void init();
     
+    protected void addAll(List<T> elements) {
+        this.elements.addAll(elements);
+    }
+    
     public abstract String getErrorMessage();
     
     public abstract String toString(T element);

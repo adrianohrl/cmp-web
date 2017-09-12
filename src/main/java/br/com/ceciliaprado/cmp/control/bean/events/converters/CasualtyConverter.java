@@ -5,55 +5,41 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.events.converters;
 
-import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
+import br.com.ceciliaprado.cmp.control.bean.Converter;
+import br.com.ceciliaprado.cmp.control.bean.events.CasualtyService;
 import br.com.ceciliaprado.cmp.model.events.Casualty;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.convert.FacesConverter;
-import javax.persistence.EntityManager;
 
 /**
  *
  * @author adrianohrl
  */
 @FacesConverter("casualtyConverter")
-public class CasualtyConverter implements Converter {
+public class CasualtyConverter extends Converter<Casualty> {
+   
+    @ManagedProperty(value = "#{casualtyService}")
+    private CasualtyService service;
     
-    private final List<Casualty> casualties = new ArrayList<>();
-    
+    @Override
     @PostConstruct
     public void init() {
-        EntityManager em = DataSource.createEntityManager();
-        CasualtyDAO casualtyDAO = new CasualtyDAO(em);
-        casualties.addAll(casualtyDAO.findAll());
-        em.close();
+        addAll(service.getCasualties());
     }
 
     @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        for (Casualty casualty : casualties) {
-            if (value.equals(casualty.getName())) {
-                return casualty;
-            }
-        }
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Erro na conversão", "Sinistro inválido!!!");
-        throw new ConverterException(message);
+    public String getErrorMessage() {
+        return "Sinistro inválido!!!";
     }
 
     @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((Casualty) obj).getName() : null;
+    public String toString(Casualty casualty) {
+        return casualty.getName();
+    }
+
+    public void setService(CasualtyService service) {
+        this.service = service;
     }
     
 }

@@ -6,8 +6,8 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.personnel.SectorService;
-import br.com.ceciliaprado.cmp.model.personnel.Sector;
+import br.com.ceciliaprado.cmp.control.bean.personnel.ManagerService;
+import br.com.ceciliaprado.cmp.model.personnel.Manager;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.convert.FacesConverter;
@@ -16,29 +16,29 @@ import javax.faces.convert.FacesConverter;
  *
  * @author adrianohrl
  */
-@FacesConverter("sectorConverter")
-public class SectorConverter extends Converter<Sector> {
+@FacesConverter("managerConverter")
+public class ManagerConverter extends Converter<Manager> {
     
-    @ManagedProperty(value = "#{sectorService}")
-    private SectorService service;
+    @ManagedProperty(value = "#{managerService}")
+    private ManagerService service;
     
     @Override
     @PostConstruct
     public void init() {
-        addAll(service.getSectors());
+        addAll(service.getManagers());
     }
 
     @Override
     public String getErrorMessage() {
-        return "Setor inválido!!!";
+        return "Supervisor inválido!!!";
     }
 
     @Override
-    public String toString(Sector sector) {
-        return sector.getName();
+    public String toString(Manager manager) {
+        return manager.getName();
     }
 
-    public void setService(SectorService service) {
+    public void setService(ManagerService service) {
         this.service = service;
     }
     
