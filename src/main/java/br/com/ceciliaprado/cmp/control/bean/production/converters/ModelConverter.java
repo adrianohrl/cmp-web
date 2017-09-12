@@ -5,55 +5,41 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.production.converters;
 
-import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.production.ModelDAO;
+import br.com.ceciliaprado.cmp.control.bean.Converter;
+import br.com.ceciliaprado.cmp.control.bean.production.ModelService;
 import br.com.ceciliaprado.cmp.model.production.Model;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.convert.FacesConverter;
-import javax.persistence.EntityManager;
 
 /**
  *
  * @author adrianohrl
  */
 @FacesConverter("modelConverter")
-public class ModelConverter implements Converter {
+public class ModelConverter extends Converter<Model> {
     
-    private final List<Model> models = new ArrayList<>();
+    @ManagedProperty(value = "#{modelService}")
+    private ModelService service;
     
+    @Override
     @PostConstruct
     public void init() {
-        EntityManager em = DataSource.createEntityManager();
-        ModelDAO modelDAO = new ModelDAO(em);
-        models.addAll(modelDAO.findAll());
-        em.close();
+        addAll(service.getModels());
     }
 
     @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value == null || value.isEmpty()) {
-            return null;
-        }
-        for (Model model : models) {
-            if (value.equals(model.getReference())) {
-                return model;
-            }
-        }
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-            "Erro na conversão", "Modelo inválido!!!");
-        throw new ConverterException(message);
+    public String getErrorMessage() {
+        return "Modelo inválido!!!";
     }
 
     @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object obj) {
-        return obj != null ? ((Model) obj).getReference(): null;
+    public String toString(Model model) {
+        return model.getReference();
+    }
+
+    public void setService(ModelService service) {
+        this.service = service;
     }
     
 }
