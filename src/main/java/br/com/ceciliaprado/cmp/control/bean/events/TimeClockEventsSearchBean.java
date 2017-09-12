@@ -33,7 +33,7 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class SearchTimeClockEventsBean implements Serializable {
+public class TimeClockEventsSearchBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final List<TimeClockEvent> events = new ArrayList<>();

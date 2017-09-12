@@ -16,22 +16,22 @@
                 </f:facet>
                 
                 <p:outputLabel for="name" value="Nome: " style="font-weight: bold;" /> 
-                <p:inputText id="name" label="Nome" value="#{sectorBean.sector.name}"
+                <p:inputText id="name" label="Nome" value="#{sectorRegisterBean.sector.name}"
                              required="true" requiredMessage="Digite o nome do setor!!!" 
                              style="width: 250px;" />
                 
                 <p:outputLabel for="supervisor" value="Supervisor: " style="font-weight: bold;" />              
-                <p:selectOneMenu id="supervisor" value="#{sectorBean.sector.supervisor}" 
+                <p:selectOneMenu id="supervisor" value="#{sectorRegisterBean.sector.supervisor}" 
                                  converter="supervisorConverter" panelStyle="width: 250px;"
                                  effect="fade" var="sup" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Supervisor inválido!!!"
                                  requiredMessage="Selecione o supervisor do setor!!!"
-                                 disabled="#{empty sectorBean.supervisors}">
+                                 disabled="#{empty supervisorService.supervisors}">
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
                                   noSelectionOption="true" />
-                    
-                    <f:selectItems value="#{sectorBean.supervisors}" var="supervisor" 
+
+                    <f:selectItems value="#{supervisorService.supervisors}" var="supervisor" 
                                    itemLabel="#{supervisor.name}" itemValue="#{supervisor}" />
 
                     <p:column>
@@ -40,7 +40,7 @@
                 </p:selectOneMenu>
                 
                 <f:facet name="footer">
-                    <p:commandButton value="Registrar" action="#{sectorBean.register()}" 
+                    <p:commandButton value="Registrar" action="#{sectorRegisterBean.register()}" 
                                      update="@form" title="Registrar o setor"
                                      style="font-size: 18px;" />
                 </f:facet>

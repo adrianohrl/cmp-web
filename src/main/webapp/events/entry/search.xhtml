@@ -17,44 +17,44 @@
                 </f:facet>
                 
                 <p:outputLabel for="startDate" value="Data Inicial: " style="font-weight: bold;" /> 
-                <p:calendar id="startDate" value="#{searchEntryEventsBean.startDate}" pattern="dd/MMM/yyyy" 
+                <p:calendar id="startDate" value="#{entryEventsSearchBean.startDate}" pattern="dd/MMM/yyyy" 
                             effect="fade" mask="true" maskAutoClear="true" navigator="true" required="true"
                             requiredMessage="Selecione a data inicial!!!" 
                             converterMessage="Data com formato errado!!!" locale="pt" 
-                            maxdate="#{searchEntryEventsBean.maxDate}" />
+                            maxdate="#{entryEventsSearchBean.maxDate}" />
 
                 <p:outputLabel for="startTime" value="Horário Inicial: " style="font-weight: bold;" /> 
-                <p:calendar id="startTime" value="#{searchEntryEventsBean.startTime}" pattern="HH:mm:ss" 
+                <p:calendar id="startTime" value="#{entryEventsSearchBean.startTime}" pattern="HH:mm:ss" 
                             effect="fade" mask="true" timeOnly="true" maskAutoClear="true" required="true" 
                             requiredMessage="Selecione o horário inicial!!!"
                             converterMessage="Horário com formato errado!!!" locale="pt" />                
                 
                 <p:outputLabel for="endDate" value="Data Final: " style="font-weight: bold;" /> 
-                <p:calendar id="endDate" value="#{searchEntryEventsBean.endDate}" pattern="dd/MMM/yyyy" effect="fade"
+                <p:calendar id="endDate" value="#{entryEventsSearchBean.endDate}" pattern="dd/MMM/yyyy" effect="fade"
                             mask="true" maskAutoClear="true" navigator="true" required="true"
                             requiredMessage="Selecione a data final!!!" 
                             converterMessage="Data com formato errado!!!" locale="pt" 
-                            mindate="#{searchEntryEventsBean.startDate}"
-                            maxdate="#{searchEntryEventsBean.maxDate}" />
+                            mindate="#{entryEventsSearchBean.startDate}"
+                            maxdate="#{entryEventsSearchBean.maxDate}" />
 
                 <p:outputLabel for="endTime" value="Horário Final: " style="font-weight: bold;" /> 
-                <p:calendar id="endTime" value="#{searchEntryEventsBean.endTime}" pattern="HH:mm:ss" effect="fade"
+                <p:calendar id="endTime" value="#{entryEventsSearchBean.endTime}" pattern="HH:mm:ss" effect="fade"
                             mask="true" timeOnly="true" maskAutoClear="true" required="true" 
                             requiredMessage="Selecione o horário final!!!"
                             converterMessage="Horário com formato errado!!!" locale="pt" />                
                 
                 <p:outputLabel for="subordinate" value="Subordinado: " style="font-weight: bold;" />              
-                <p:selectOneMenu id="subordinate" value="#{searchEntryEventsBean.subordinate}" 
+                <p:selectOneMenu id="subordinate" value="#{entryEventsSearchBean.subordinate}" 
                                  converter="subordinateConverter" panelStyle="width: 250px;"
                                  effect="fade" var="sub" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true" 
                                  converterMessage="Subordinado inválido!!!"
                                  requiredMessage="Selecione o subordinado!!!"
-                                 disabled="#{empty searchEntryEventsBean.subordinates}">
+                                 disabled="#{empty entryEventsSearchBean.subordinates}">
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
                                   noSelectionOption="true" />
                     
-                    <f:selectItems value="#{searchEntryEventsBean.subordinates}" var="subordinate" 
+                    <f:selectItems value="#{entryEventsSearchBean.subordinates}" var="subordinate" 
                                    itemLabel="#{subordinate.name}" itemValue="#{subordinate}" />
 
                     <p:column>
@@ -63,7 +63,7 @@
                 </p:selectOneMenu>
                 
                 <f:facet name="footer">
-                    <p:commandButton value="Consultar" action="#{searchEntryEventsBean.search()}" 
+                    <p:commandButton value="Consultar" action="#{entryEventsSearchBean.search()}" 
                                      update="@form" title="Consultar entradas e saídas do funcionário"
                                      style="font-size: 18px;" />
                 </f:facet>
@@ -72,7 +72,7 @@
             <p:separator/>
             
             <h:panelGrid id="gridDT" columns="1" cellpadding="10">  
-                <p:dataTable id="entries" value="#{searchEntryEventsBean.events}" var="event" 
+                <p:dataTable id="entries" value="#{entryEventsSearchBean.events}" var="event" 
                              rowKey="#{event.eventDate}" style="margin-bottom: 20px;"
                              scrollable="true" scrollHeight="300" 
                              rowStyleClass="#{event.phaseProductionOrder.pendent ? 'blue' : null}"

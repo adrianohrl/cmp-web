@@ -16,7 +16,7 @@
                     <h:outputText value="Lista de Funcionários Registrados" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
                 
-                <p:dataTable id="personnel" var="employee" value="#{timeClockEventBean.employees}" 
+                <p:dataTable id="personnel" var="employee" value="#{employeeService.employees}" 
                              rowKey="#{employee.name}" emptyMessage="Nenhum funcionário registrado ainda."
                              scrollable="true" scrollHeight="300">                
                     <f:facet name="header">
@@ -24,7 +24,7 @@
                     </f:facet>
                     
                     <p:column headerText="Tipo" style="width: 100px; text-align: center;">
-                        <h:outputText value="#{personnelImportBean.toString(employee.class.simpleName)}" />
+                        <h:outputText value="#{employeeService.toString(employee.class.simpleName)}" />
                     </p:column>
                     
                     <p:column headerText="Código" sortBy="#{employee.code}" 

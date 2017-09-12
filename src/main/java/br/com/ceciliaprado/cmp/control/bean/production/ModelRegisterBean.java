@@ -31,7 +31,7 @@ import org.primefaces.context.RequestContext;
  */
 @ManagedBean
 @ViewScoped
-public class ModelBean implements Serializable {
+public class ModelRegisterBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final Model model = new Model();

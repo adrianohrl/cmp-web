@@ -33,7 +33,7 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class SearchEntryEventsBean implements Serializable {
+public class EntryEventsSearchBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final List<EntryEvent> events = new ArrayList<>();

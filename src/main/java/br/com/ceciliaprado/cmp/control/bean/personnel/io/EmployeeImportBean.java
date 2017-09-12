@@ -25,7 +25,7 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class PersonnelImportBean implements Serializable {
+public class EmployeeImportBean implements Serializable {
     
     private final List<Employee> employees = new ArrayList<>();
     

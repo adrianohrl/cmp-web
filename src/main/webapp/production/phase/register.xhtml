@@ -15,23 +15,23 @@
                     <h:outputText value="Cadastro de Fase" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
                 
-                <h:outputLabel for="name" value="Nome: " style="font-weight: bold;" /> 
-                <p:inputText id="name" label="Nome" value="#{phaseBean.phase.name}"
+                <p:outputLabel for="name" value="Nome: " style="font-weight: bold;" /> 
+                <p:inputText id="name" label="Nome" value="#{phaseRegisterBean.phase.name}"
                              required="true" requiredMessage="Digite o nome da fase!!!" 
                              style="width: 250px;" />
                 
-                <h:outputLabel for="sector" value="Setor: " style="font-weight: bold;" />              
-                <p:selectOneMenu id="sector" value="#{phaseBean.phase.sector}" 
+                <p:outputLabel for="sector" value="Setor: " style="font-weight: bold;" />              
+                <p:selectOneMenu id="sector" value="#{phaseRegisterBean.phase.sector}" 
                                  converter="sectorConverter" panelStyle="width: 250px;"
                                  effect="fade" var="sec" style="width: 250px;" filter="true" 
                                  filterMatchMode="startsWith" required="true"
                                  requiredMessage="Selecione o setor onde está fase é executada!!!"
                                  converterMessage="Setor inválido!!!"
-                                 disabled="#{empty phaseBean.sectors}">
+                                 disabled="#{empty sectorService.sectors}">
                     <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
                                   noSelectionOption="true" />
                     
-                    <f:selectItems value="#{phaseBean.sectors}" var="sector" 
+                    <f:selectItems value="#{sectorService.sectors}" var="sector" 
                                    itemLabel="#{sector.name}" itemValue="#{sector}" />
 
                     <p:column>
@@ -40,7 +40,7 @@
                 </p:selectOneMenu>
                 
                 <f:facet name="footer">
-                    <p:commandButton value="Registrar" action="#{phaseBean.register()}" 
+                    <p:commandButton value="Registrar" action="#{phaseRegisterBean.register()}" 
                                      update="@form" title="Registrar a fase"
                                      style="font-size: 18px;" />
                 </f:facet>

@@ -16,17 +16,17 @@
                 </f:facet>
                 
                 <p:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
-                <p:inputText id="name" label="Nome" value="#{casualtyBean.casualty.name}"
+                <p:inputText id="name" label="Nome" value="#{casualtyRegisterBean.casualty.name}"
                              required="true" requiredMessage="Digite o nome do sinistro!!!" 
                              style="width: 250px;" />
                 
                 <p:outputLabel for="collective" value="Coletivo: " style="font-weight: bold;" /> 
-                <p:selectBooleanButton id="collective" value="#{casualtyBean.casualty.collective}" 
+                <p:selectBooleanButton id="collective" value="#{casualtyRegisterBean.casualty.collective}" 
                                        onLabel="Sim" offLabel="Não" onIcon="ui-icon-check" 
                                        offIcon="ui-icon-close" />
                 
                 <f:facet name="footer">
-                    <p:commandButton value="Registrar" action="#{casualtyBean.register()}" 
+                    <p:commandButton value="Registrar" action="#{casualtyRegisterBean.register()}" 
                                      update="@form" title="Registrar o sinistro"
                                      style="font-size: 18px;" />
                 </f:facet>

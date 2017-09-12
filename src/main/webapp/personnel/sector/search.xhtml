@@ -16,7 +16,7 @@
                     <h:outputText value="Lista de Setores Registrados" style="font-weight: bold; font-size: 24px;" />
                 </f:facet> 
                 
-                <p:dataTable id="sectors" var="sector" value="#{phaseBean.sectors}" 
+                <p:dataTable id="sectors" var="sector" value="#{sectorService.sectors}" 
                              rowKey="#{sector.name}" emptyMessage="Nenhum setor registrado ainda."
                              scrollable="true" scrollHeight="300" rowExpandMode="single">                
                     <f:facet name="header">

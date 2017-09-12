@@ -16,13 +16,13 @@
                     <h:outputText value="Importação de Pessoal" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
             
-                <p:fileUpload fileUploadListener="#{personnelImportBean.upload}" label="Escolher" 
+                <p:fileUpload fileUploadListener="#{employeeImportBean.upload}" label="Escolher" 
                               mode="advanced" dragDropSupport="true" update="@form:messages, @form:personnel" auto="true" 
                               sizeLimit="1048576" allowTypes="/(\.|\/)(csv)$/"
                               invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
                               invalidSizeMessage="O tamanho máximo permitido do arquivo é de 1Mb!!!" />
                 
-                <p:dataTable id="personnel" var="employee" value="#{personnelImportBean.employees}" 
+                <p:dataTable id="personnel" var="employee" value="#{employeeImportBean.employees}" 
                              rowKey="#{employee.name}" emptyMessage="Nenhum funcionário importado ainda."
                              scrollable="true" scrollHeight="300">                
                     <f:facet name="header">
@@ -30,7 +30,7 @@
                     </f:facet>
                     
                     <p:column headerText="Tipo" style="width: 100px; text-align: center;">
-                        <h:outputText value="#{personnelImportBean.toString(employee.class.simpleName)}" />
+                        <h:outputText value="#{employeeImportBean.toString(employee.class.simpleName)}" />
                     </p:column>
                     
                     <p:column headerText="Código" sortBy="#{employee.code}" 

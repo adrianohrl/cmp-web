@@ -6,12 +6,13 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
+import br.com.ceciliaprado.cmp.control.dao.personnel.ManagerDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Sector;
+import br.com.ceciliaprado.cmp.model.personnel.Manager;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -29,22 +30,25 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class SectorBean implements Serializable {
+public class ManagerRegisterBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
-    private final Sector sector = new Sector();
-    private final List<Supervisor> supervisors = new ArrayList<>();
-    
+    private final Manager manager = new Manager();
+    private final List<Supervisor> supervisors = new ArrayList<>();  
+    private Supervisor[] selectedSupervisors;
+
     @PostConstruct
     public void init() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage message;
         SupervisorDAO supervisorDAO = new SupervisorDAO(em);
         supervisors.addAll(supervisorDAO.findAll());
-        Collections.sort(supervisors);
         if (supervisors.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no cadastro", "Nenhum supervisor foi cadastrado ainda!!!");
+            message = new FacesMessage(FacesMessage.SEVERITY_WARN, 
+                    "Atenção", "Nenhum supervisor foi cadastrado ainda!!!");
             context.addMessage(null, message);
+        } else {
+            Collections.sort(supervisors);
         }
     }
     
@@ -52,20 +56,16 @@ public class SectorBean implements Serializable {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
-        if (sector.getSupervisor() == null) {
+        try {
+            manager.setSupervisor(Arrays.asList(selectedSupervisors));
+            ManagerDAO managerDAO = new ManagerDAO(em);
+            managerDAO.create(manager);
+            message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                "Sucesso no cadastro", manager + " foi cadastrado com sucesso!!!");
+            next = "/index";
+        } catch (EntityExistsException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Erro no cadastro", sector + " deve estar associado a um supervisor!!!");
-        } else {
-            try {
-                SectorDAO sectorDAO = new SectorDAO(em);
-                sectorDAO.create(sector);
-                message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                    "Sucesso no cadastro", sector + " foi cadastrado com sucesso!!!");
-                next = "/index";
-            } catch (EntityExistsException e) {
-                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                    "Erro no cadastro", sector + " já foi cadastrado!!!");
-            }
+                "Erro no cadastro", manager + " já foi cadastrado!!!");
         }
         context.addMessage(null, message);
         return next;
@@ -76,12 +76,20 @@ public class SectorBean implements Serializable {
         em.close();
     }
 
-    public Sector getSector() {
-        return sector;
+    public Manager getManager() {
+        return manager;
     }
 
     public List<Supervisor> getSupervisors() {
         return supervisors;
+    }
+
+    public Supervisor[] getSelectedSupervisors() {
+        return selectedSupervisors;
+    }
+
+    public void setSelectedSupervisors(Supervisor[] selectedSupervisors) {
+        this.selectedSupervisors = selectedSupervisors;
     }
     
 }

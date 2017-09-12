@@ -15,18 +15,18 @@
                     <h:outputText value="Cadastro de Subordinado" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
                 
-                <h:outputLabel for="code" value="Código: " style="font-weight: bold;" /> 
-                <p:inputText id="code" label="Código" value="#{subordinateBean.subordinate.code}"
+                <p:outputLabel for="code" value="Código: " style="font-weight: bold;" /> 
+                <p:inputText id="code" label="Código" value="#{subordinateRegisterBean.subordinate.code}"
                              required="true" requiredMessage="Digite o código do subordinado!!!" 
                              style="width: 250px;" />
 
-                <h:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
-                <p:inputText id="name" label="Nome" value="#{subordinateBean.subordinate.name}"
+                <p:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
+                <p:inputText id="name" label="Nome" value="#{subordinateRegisterBean.subordinate.name}"
                              required="true" requiredMessage="Digite o nome do subordinado!!!" 
                              style="width: 250px;" />
                     
                 <f:facet name="footer">
-                    <p:commandButton value="Registrar" action="#{subordinateBean.register()}" 
+                    <p:commandButton value="Registrar" action="#{subordinateRegisterBean.register()}" 
                                      update="@form" title="Registrar o subordinado"
                                      style="font-size: 18px;" />
                 </f:facet>

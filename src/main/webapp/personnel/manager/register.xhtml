@@ -16,29 +16,29 @@
                 </f:facet>
                 
                 <h:panelGrid columns="2" cellpadding="10">        
-                    <h:outputLabel for="code" value="Código: " style="font-weight: bold;" /> 
-                    <p:inputText id="code" label="Código" value="#{managerBean.manager.code}"
+                    <p:outputLabel for="code" value="Código: " style="font-weight: bold;" /> 
+                    <p:inputText id="code" label="Código" value="#{managerRegisterBean.manager.code}"
                                  required="true" requiredMessage="Digite o código do gerente!!!" 
                                  style="width: 250px;" />
 
-                    <h:outputLabel for="name" value="Nome: " style="font-weight: bold;" />            
-                    <p:inputText id="name" value="#{managerBean.manager.name}"
+                    <p:outputLabel for="name" value="Nome: " style="font-weight: bold;" />            
+                    <p:inputText id="name" value="#{managerRegisterBean.manager.name}"
                                  required="true" requiredMessage="Digite o nome do gerente!!!" 
                                  style="width: 250px;" />
 
-                    <h:outputLabel for="login" value="Login: " style="font-weight: bold;" />            
-                    <p:inputText id="login" value="#{managerBean.manager.login}"
+                    <p:outputLabel for="login" value="Login: " style="font-weight: bold;" />            
+                    <p:inputText id="login" value="#{managerRegisterBean.manager.login}"
                                  required="true" requiredMessage="Digite o login do gerente!!!" 
                                  style="width: 250px;" />              
 
-                    <h:outputLabel for="password1" value="Senha: " style="font-weight: bold;" /> 
-                    <p:password id="password1" value="#{managerBean.manager.password}" 
+                    <p:outputLabel for="password1" value="Senha: " style="font-weight: bold;" /> 
+                    <p:password id="password1" value="#{managerRegisterBean.manager.password}" 
                                 feedback="true" match="password2" label="Senha" required="true" 
                                 promptLabel="Senha" weakLabel="Fraca" goodLabel="Boa" 
                                 strongLabel="Forte" requiredMessage="Digite a senha do gerente!!!" 
                                 validatorMessage="As senhas não conferem!!!" style="width: 250px;" />                
 
-                    <h:outputLabel for="password2" value="Confirmar Senha: " style="font-weight: bold;" /> 
+                    <p:outputLabel for="password2" value="Confirmar Senha: " style="font-weight: bold;" /> 
                     <p:password id="password2" label="Confirmação da senha" required="true" 
                                 requiredMessage="Digite a senha do gerente novamente!!!" style="width: 250px;" /> 
                 </h:panelGrid> 
@@ -47,15 +47,15 @@
                 
                 <h:outputLabel value="Supervisores: " style="font-weight: bold;" />   
                 
-                <p:selectManyCheckbox id="supervisors" value="#{managerBean.selectedSupervisors}" 
+                <p:selectManyCheckbox id="supervisors" value="#{managerRegisterBean.selectedSupervisors}" 
                                       layout="grid" columns="4" converter="supervisorConverter"
                                       converterMessage="Supervisor inválido!!!">
-                    <f:selectItems value="#{managerBean.supervisors}" var="supervisor" 
+                    <f:selectItems value="#{supervisorService.supervisors}" var="supervisor" 
                                    itemLabel="#{supervisor.name}" itemValue="#{supervisor}" />
                 </p:selectManyCheckbox>   
                 
                 <f:facet name="footer">
-                    <p:commandButton value="Registrar" action="#{managerBean.register()}" 
+                    <p:commandButton value="Registrar" action="#{managerRegisterBean.register()}" 
                                      update="@form" title="Registrar o gerente"
                                      style="font-size: 18px;" />
                 </f:facet>

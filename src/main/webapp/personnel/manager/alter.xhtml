@@ -17,10 +17,10 @@
                 
                 <h:panelGrid columns="2" cellpadding="10">
                     <p:outputLabel for="login" value="Login: " style="font-weight: bold;"/> 
-                    <p:inputText id="login" label="Login: " value="#{managerBean.managerLogin}"
+                    <p:inputText id="login" label="Login: " value="#{managerAlterBean.login}"
                                  required="true" requiredMessage="Digite o seu login, gerente!!!" 
                                  style="width: 250px;" validator="managerLoginValidator">
-                        <p:ajax event="blur" listener="#{managerBean.selectManager()}" />
+                        <p:ajax event="blur" listener="#{managerAlterBean.select()}" />
                     </p:inputText>
 
                     <p:outputLabel for="password" value="Senha Atual: " style="font-weight: bold;"/> 
@@ -28,20 +28,20 @@
                                 required="true" requiredMessage="Digite a sua senha, gerente!!!"
                                 promptLabel="Digite a sua senha, gerente!!!" style="width: 250px;" />
 
-                    <h:outputLabel for="password1" value="Nova Senha: " style="font-weight: bold;" /> 
-                    <p:password id="password1" value="#{managerBean.managerPassword}" 
+                    <p:outputLabel for="password1" value="Nova Senha: " style="font-weight: bold;" /> 
+                    <p:password id="password1" value="#{managerAlterBean.password}" 
                                 feedback="true" match="password2" label="Nova senha" required="true" 
                                 promptLabel="Nova senha" weakLabel="Fraca" goodLabel="Boa" 
                                 strongLabel="Forte" requiredMessage="Digite a senha do gerente!!!" 
                                 validatorMessage="As senhas não conferem!!!" style="width: 250px;" />
 
-                    <h:outputLabel for="password2" value="Confirmar Senha: " style="font-weight: bold;" /> 
+                    <p:outputLabel for="password2" value="Confirmar Senha: " style="font-weight: bold;" /> 
                     <p:password id="password2" label="Confirmação da senha" required="true" 
                                 requiredMessage="Digite a senha do gerente novamente!!!" style="width: 250px;" />
                 </h:panelGrid>   
                     
                 <f:facet name="footer">
-                    <p:commandButton value="Alterar" action="#{managerBean.alter()}" 
+                    <p:commandButton value="Alterar" action="#{managerAlterBean.alter()}" 
                                      update="@form" title="Alterar a senha do gerente" 
                                      style="font-size: 18px;" />
                 </f:facet>

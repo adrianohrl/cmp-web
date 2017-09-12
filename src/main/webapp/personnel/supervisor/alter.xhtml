@@ -17,10 +17,10 @@
                 
                 <h:panelGrid columns="2" cellpadding="10">
                     <p:outputLabel for="login" value="Login: " style="font-weight: bold;"/> 
-                    <p:inputText id="login" label="Login: " value="#{supervisorBean.supervisorLogin}"
+                    <p:inputText id="login" label="Login: " value="#{supervisorAlterBean.login}"
                                  required="true" requiredMessage="Digite o seu login, supervisor!!!" 
                                  style="width: 250px;" validator="supervisorLoginValidator">
-                        <p:ajax event="blur" listener="#{supervisorBean.selectSupervisor()}" />
+                        <p:ajax event="blur" listener="#{supervisorAlterBean.select()}" />
                     </p:inputText>
 
                     <p:outputLabel for="password" value="Senha Atual: " style="font-weight: bold;"/> 
@@ -29,7 +29,7 @@
                                 promptLabel="Digite a sua senha, supervisor!!!" style="width: 250px;" />
 
                     <h:outputLabel for="password1" value="Nova Senha: " style="font-weight: bold;" /> 
-                    <p:password id="password1" value="#{supervisorBean.supervisorPassword}" 
+                    <p:password id="password1" value="#{supervisorAlterBean.password}" 
                                 feedback="true" match="password2" label="Nova senha" required="true" 
                                 promptLabel="Nova senha" weakLabel="Fraca" goodLabel="Boa" 
                                 strongLabel="Forte" requiredMessage="Digite a senha do supervisor!!!" 
@@ -41,7 +41,7 @@
                 </h:panelGrid>   
                     
                 <f:facet name="footer">
-                    <p:commandButton value="Alterar" action="#{supervisorBean.alter()}" 
+                    <p:commandButton value="Alterar" action="#{supervisorAlterBean.alter()}" 
                                      update="@form" title="Alterar a senha do supervisor" 
                                      style="font-size: 18px;" />
                 </f:facet>

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.production;
+package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
-import br.com.ceciliaprado.cmp.control.dao.production.PhaseDAO;
+import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Sector;
-import br.com.ceciliaprado.cmp.model.production.Phase;
+import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
@@ -29,42 +30,31 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ViewScoped
-public class PhaseBean implements Serializable {
+public class SectorRegisterBean implements Serializable {
     
+    @ManagedProperty(value = "#{sectorService}")
+    private SectorService sectorService;
     private final EntityManager em = DataSource.createEntityManager();
-    private final Phase phase = new Phase();
-    private final List<Sector> sectors = new ArrayList<>();
-    
-    @PostConstruct
-    public void init() {
-        SectorDAO sectorDAO = new SectorDAO(em);
-        sectors.addAll(sectorDAO.findAll());
-        Collections.sort(sectors);
-        if (sectors.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no cadastro", "Nenhum setor foi cadastrado ainda!!!");
-            context.addMessage(null, message);
-        }
-    }
+    private final Sector sector = new Sector();
     
     public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
-        if (phase.getSector() == null) {
+        if (sector.getSupervisor() == null) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                "Erro no cadastro", phase + " deve estar associado a um setor!!!");
+                "Erro no cadastro", sector + " deve estar associado a um supervisor!!!");
         } else {
             try {
-                PhaseDAO phaseDAO = new PhaseDAO(em);
-                phaseDAO.create(phase);
+                SectorDAO sectorDAO = new SectorDAO(em);
+                sectorDAO.create(sector);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                    "Sucesso no cadastro", phase + " foZi cadastrado com sucesso!!!");
+                    "Sucesso no cadastro", sector + " foi cadastrado com sucesso!!!");
                 next = "/index";
+                sectorService.update(sector);
             } catch (EntityExistsException e) {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
-                    "Erro no cadastro", phase + " já foi cadastrado!!!");
+                    "Erro no cadastro", sector + " já foi cadastrado!!!");
             }
         }
         context.addMessage(null, message);
@@ -76,12 +66,12 @@ public class PhaseBean implements Serializable {
         em.close();
     }
 
-    public Phase getPhase() {
-        return phase;
+    public void setSectorService(SectorService sectorService) {
+        this.sectorService = sectorService;
     }
 
-    public List<Sector> getSectors() {
-        return sectors;
+    public Sector getSector() {
+        return sector;
     }
     
 }

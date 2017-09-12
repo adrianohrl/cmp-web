@@ -15,17 +15,17 @@
                       fitViewport="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
                     <p:outputLabel for="phase" value="Fase: " style="font-weight: bold;" /> 
-                    <p:selectOneMenu id="phase" value="#{modelBean.phase}" 
+                    <p:selectOneMenu id="phase" value="#{modelRegisterBean.phase}" 
                                      converter="phaseConverter" panelStyle="width: 250px;"
                                      effect="fade" var="ph" style="width: 250px;" filter="true" 
                                      filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione a fase desejada!!!"
                                      converterMessage="Fase inválida!!!"
-                                     disabled="#{empty modelBean.phases}">
+                                     disabled="#{empty phaseService.phases}">
                         <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true"
                                       noSelectionOption="true" />
                         
-                        <f:selectItems value="#{modelBean.phases}" var="p" 
+                        <f:selectItems value="#{modelRegisterBean.phases}" var="p" 
                                        itemLabel="#{p.name}" itemValue="#{p}" />
 
                         <p:column>
@@ -34,14 +34,14 @@
                     </p:selectOneMenu>
 
                     <p:outputLabel for="minutes" value="Duração: " style="font-weight: bold;" /> 
-                    <p:inputNumber id="minutes" value="#{modelBean.minutes}" label="Parcela da duração [min]" style="width: 100px;"
+                    <p:inputNumber id="minutes" value="#{modelRegisterBean.minutes}" label="Parcela da duração [min]" style="width: 100px;"
                                    required="true" emptyValue="zero" decimalPlaces="0" symbol=" [min]" symbolPosition="s" minValue="0"
                                    converterMessage="Esta parcela da duração esperada desta fase deve ser um número inteiro não-negativo!!!"
                                    requiredMessage="Digite a parcela em minutos da duração esperada desta fase!!!" 
                                    validatorMessage="O valor desta parcela da duração esperada deve ser um número inteiro não-negativo!!!" />
                         
                     <p:outputLabel />
-                    <p:inputNumber id="seconds" value="#{modelBean.seconds}" label="Parcela da duração [s]" required="true" 
+                    <p:inputNumber id="seconds" value="#{modelRegisterBean.seconds}" label="Parcela da duração [s]" required="true" 
                                    decimalPlaces="2" symbol=" [s]" symbolPosition="s" minValue="0.0" style="width: 100px;"
                                    converterMessage="Esta parcela da duração esperada desta fase deve ser um número real não-negativo!!!"
                                    requiredMessage="Digite a parcela em segundos da duração esperada desta fase!!!" 
@@ -52,7 +52,7 @@
                         <p:ajax update="@form:dlgGrid" resetValues="true" />
                     </p:commandButton>
                     <p:commandButton process="@form:dlgGrid" value="Adicionar" update="@form:dlgGrid, @form:messages, @form:phases" 
-                                     title="Adicionar a nova fase" actionListener="#{modelBean.add()}" 
+                                     title="Adicionar a nova fase" actionListener="#{modelRegisterBean.add()}" 
                                      style="font-size: 18px;" oncomplete="if (!args.validationFailed) PF('dlg').hide();" />
                 </h:panelGrid>
             </p:dialog>
@@ -64,17 +64,17 @@
                 
                 <h:panelGrid id="grid" columns="2" cellpadding="10">      
                     <p:outputLabel for="reference" value="Referência: " style="font-weight: bold;"/> 
-                    <p:inputText id="reference" label="Referência" value="#{modelBean.model.reference}"
+                    <p:inputText id="reference" label="Referência" value="#{modelRegisterBean.model.reference}"
                                  required="true" requiredMessage="Digite a referência do modelo" 
                                  style="width: 250px;" />
 
                     <p:outputLabel for="name" value="Nome: " style="font-weight: bold;"/> 
-                    <p:inputText id="name" label="Nome" value="#{modelBean.model.name}"
+                    <p:inputText id="name" label="Nome" value="#{modelRegisterBean.model.name}"
                                  required="true" requiredMessage="Digite o nome do modelo" 
                                  style="width: 250px;" />
                 </h:panelGrid>
             
-                <p:dataTable id="phases" var="phase" value="#{modelBean.model.phases}" 
+                <p:dataTable id="phases" var="phase" value="#{modelRegisterBean.model.phases}" 
                              rowKey="#{phase.phase.name}" emptyMessage="Nenhuma fase selecionada ainda."
                              style="width: 500px; margin-bottom: 20px;">                
                     <f:facet name="header">
@@ -91,7 +91,7 @@
 
                     <p:column style="width: 25px; text-align: center;">
                         <p:commandButton process="@form:phases" icon="ui-icon-minus"  title="Remover esta fase" 
-                                         actionListener="#{modelBean.remove(phase)}" 
+                                         actionListener="#{modelRegisterBean.remove(phase)}" 
                                          update="@form:dialog, @form:phases, @form:messages" 
                                          style="width: 20px; height: 20px;" />
                     </p:column>
@@ -99,13 +99,13 @@
                     <f:facet name="footer">
                         <p:commandButton process="@form:phases" icon="ui-icon-plus" title="Adicionar nova fase"
                                          onclick="PF('dlg').show();" update="@form:phases, @form:messages"
-                                         disabled="#{empty modelBean.phases}"  
+                                         disabled="#{empty modelRegisterBean.phases}"  
                                          style="width: 20px; height: 20px;" />                        
                     </f:facet>
                 </p:dataTable>
                 
                 <f:facet name="footer">
-                    <p:commandButton process="@this, @form:grid, @form:phases" value="Registrar" action="#{modelBean.register()}" 
+                    <p:commandButton process="@this, @form:grid, @form:phases" value="Registrar" action="#{modelRegisterBean.register()}" 
                                      title="Registrar o modelo" update="@form:messages" style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>
