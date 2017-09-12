@@ -6,11 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.production.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.production.ProductionOrderService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
 import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -18,14 +19,14 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("productionOrderConverter")
 public class ProductionOrderConverter extends Converter<ProductionOrder> {
- 
-    @ManagedProperty(value = "#{productionOrderService}")
-    private ProductionOrderService service;
-    
+
     @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getProductionOrders());
+    protected List<ProductionOrder> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
+        List<ProductionOrder> productionOrders = productionOrderDAO.findAll();
+        em.close();
+        return productionOrders;
     }
 
     @Override
@@ -36,10 +37,6 @@ public class ProductionOrderConverter extends Converter<ProductionOrder> {
     @Override
     public String toString(ProductionOrder productionOrder) {
         return productionOrder.getReference();
-    }
-
-    public void setService(ProductionOrderService service) {
-        this.service = service;
     }
     
 }

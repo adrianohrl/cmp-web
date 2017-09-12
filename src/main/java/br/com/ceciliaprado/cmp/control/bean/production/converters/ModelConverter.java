@@ -6,11 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.production.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.production.ModelService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.production.ModelDAO;
 import br.com.ceciliaprado.cmp.model.production.Model;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -18,14 +19,14 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("modelConverter")
 public class ModelConverter extends Converter<Model> {
-    
-    @ManagedProperty(value = "#{modelService}")
-    private ModelService service;
-    
+
     @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getModels());
+    protected List<Model> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        ModelDAO modelDAO = new ModelDAO(em);
+        List<Model> models = modelDAO.findAll();
+        em.close();
+        return models;
     }
 
     @Override
@@ -36,10 +37,6 @@ public class ModelConverter extends Converter<Model> {
     @Override
     public String toString(Model model) {
         return model.getReference();
-    }
-
-    public void setService(ModelService service) {
-        this.service = service;
     }
     
 }

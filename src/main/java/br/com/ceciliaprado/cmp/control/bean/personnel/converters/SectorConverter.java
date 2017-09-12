@@ -6,11 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.personnel.SectorService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Sector;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -18,16 +19,16 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("sectorConverter")
 public class SectorConverter extends Converter<Sector> {
-    
-    @ManagedProperty(value = "#{sectorService}")
-    private SectorService service;
-    
-    @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getSectors());
-    }
 
+    @Override
+    protected List<Sector> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        SectorDAO sectorDAO = new SectorDAO(em);
+        List<Sector> sectors = sectorDAO.findAll();
+        em.close();
+        return sectors;
+    }
+    
     @Override
     public String getErrorMessage() {
         return "Setor inválido!!!";
@@ -36,10 +37,6 @@ public class SectorConverter extends Converter<Sector> {
     @Override
     public String toString(Sector sector) {
         return sector.getName();
-    }
-
-    public void setService(SectorService service) {
-        this.service = service;
     }
     
 }

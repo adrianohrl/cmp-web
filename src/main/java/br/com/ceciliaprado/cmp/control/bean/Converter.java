@@ -8,6 +8,7 @@ package br.com.ceciliaprado.cmp.control.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -18,9 +19,14 @@ import javax.faces.convert.ConverterException;
  * @author adrianohrl
  * @param <T>
  */
-public abstract class Converter<T extends Comparable<String>> implements Serializable, javax.faces.convert.Converter {
+public abstract class Converter<T> implements Serializable, javax.faces.convert.Converter {
     
     private final List<T> elements = new ArrayList<>();
+    
+    @PostConstruct
+    public void init() {
+        elements.addAll(getElements());
+    }
 
     @Override
     public T getAsObject(FacesContext fc, UIComponent uic, String value) {
@@ -42,11 +48,7 @@ public abstract class Converter<T extends Comparable<String>> implements Seriali
         return obj != null ? toString((T) obj) : null;
     }
     
-    public abstract void init();
-    
-    protected void addAll(List<T> elements) {
-        this.elements.addAll(elements);
-    }
+    protected abstract List<T> getElements();
     
     public abstract String getErrorMessage();
     

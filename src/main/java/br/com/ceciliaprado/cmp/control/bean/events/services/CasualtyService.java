@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.ceciliaprado.cmp.control.bean.production;
+package br.com.ceciliaprado.cmp.control.bean.events.services;
 
 import br.com.ceciliaprado.cmp.control.bean.Service;
-import br.com.ceciliaprado.cmp.control.dao.production.PhaseDAO;
-import br.com.ceciliaprado.cmp.model.production.Phase;
+import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
+import br.com.ceciliaprado.cmp.model.events.Casualty;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -19,20 +19,20 @@ import javax.persistence.EntityManager;
  */
 @ManagedBean
 @ApplicationScoped
-public class PhaseService extends Service<Phase> {
+public class CasualtyService extends Service<Casualty> {
 
     @Override
     public String getErrorMessage() {
-        return "Nenhuma fase foi cadastrada ainda!!!";
+        return "Nenhum sinistro foi cadastrado ainda!!!";
     }
 
     @Override
-    protected List<Phase> getElements(EntityManager em) {
-        PhaseDAO phaseDAO = new PhaseDAO(em);
-        return phaseDAO.findAll();
+    protected List<Casualty> getElements(EntityManager em) {
+        CasualtyDAO casualtyDAO = new CasualtyDAO(em);
+        return casualtyDAO.findAll();
     }
     
-    public List<Phase> getPhases() {
+    public List<Casualty> getCasualties() {
         return getElements();
     }
     

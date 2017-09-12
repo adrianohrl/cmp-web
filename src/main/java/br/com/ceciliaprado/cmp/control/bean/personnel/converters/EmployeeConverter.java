@@ -6,11 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.personnel.EmployeeService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -18,14 +19,14 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("employeeConverter")
 public class EmployeeConverter extends Converter<Employee> {
-    
-    @ManagedProperty(value = "#{employeeService}")
-    private EmployeeService service;
-    
+
     @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getEmployees());
+    protected List<Employee> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        EmployeeDAO employeeDAO = new EmployeeDAO(em);
+        List<Employee> employees = employeeDAO.findAll();
+        em.close();
+        return employees;
     }
 
     @Override
@@ -36,10 +37,6 @@ public class EmployeeConverter extends Converter<Employee> {
     @Override
     public String toString(Employee employee) {
         return employee.getName();
-    }
-
-    public void setService(EmployeeService service) {
-        this.service = service;
     }
     
 }

@@ -6,11 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.personnel.SubordinateService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.personnel.SubordinateDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -18,14 +19,14 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("subordinateConverter")
 public class SubordinateConverter extends Converter<Subordinate> {
-    
-    @ManagedProperty(value = "#{subordinateService}")
-    private SubordinateService service;
-    
+
     @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getSubordinates());
+    protected List<Subordinate> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        SubordinateDAO subordinateDAO = new SubordinateDAO(em);
+        List<Subordinate> subordinates = subordinateDAO.findAll();
+        em.close();
+        return subordinates;
     }
 
     @Override
@@ -36,10 +37,6 @@ public class SubordinateConverter extends Converter<Subordinate> {
     @Override
     public String toString(Subordinate subordinate) {
         return subordinate.getName();
-    }
-
-    public void setService(SubordinateService service) {
-        this.service = service;
     }
     
 }

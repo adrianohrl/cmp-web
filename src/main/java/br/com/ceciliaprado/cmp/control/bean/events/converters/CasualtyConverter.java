@@ -6,11 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.events.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.events.CasualtyService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
 import br.com.ceciliaprado.cmp.model.events.Casualty;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -18,14 +19,14 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("casualtyConverter")
 public class CasualtyConverter extends Converter<Casualty> {
-   
-    @ManagedProperty(value = "#{casualtyService}")
-    private CasualtyService service;
-    
+
     @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getCasualties());
+    protected List<Casualty> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        CasualtyDAO casualtyDAO = new CasualtyDAO(em);
+        List<Casualty> casualties = casualtyDAO.findAll();
+        em.close();
+        return casualties;
     }
 
     @Override
@@ -36,10 +37,6 @@ public class CasualtyConverter extends Converter<Casualty> {
     @Override
     public String toString(Casualty casualty) {
         return casualty.getName();
-    }
-
-    public void setService(CasualtyService service) {
-        this.service = service;
     }
     
 }

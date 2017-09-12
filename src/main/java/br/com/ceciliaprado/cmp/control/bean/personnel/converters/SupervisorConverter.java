@@ -6,11 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.personnel.SupervisorService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -18,14 +19,14 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("supervisorConverter")
 public class SupervisorConverter extends Converter<Supervisor> {
-    
-    @ManagedProperty(value = "#{supervisorService}")
-    private SupervisorService service;
-    
+
     @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getSupervisors());
+    protected List<Supervisor> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        SupervisorDAO supervisorDAO = new SupervisorDAO(em);
+        List<Supervisor> supervisors = supervisorDAO.findAll();
+        em.close();
+        return supervisors;
     }
 
     @Override
@@ -36,10 +37,6 @@ public class SupervisorConverter extends Converter<Supervisor> {
     @Override
     public String toString(Supervisor supervisor) {
         return supervisor.getName();
-    }
-
-    public void setService(SupervisorService service) {
-        this.service = service;
     }
     
 }

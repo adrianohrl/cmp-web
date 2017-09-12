@@ -6,11 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.personnel.ManagerService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.personnel.ManagerDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -18,28 +19,24 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("managerConverter")
 public class ManagerConverter extends Converter<Manager> {
-    
-    @ManagedProperty(value = "#{managerService}")
-    private ManagerService service;
-    
+
     @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getManagers());
+    protected List<Manager> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        ManagerDAO managerDAO = new ManagerDAO(em);
+        List<Manager> managers = managerDAO.findAll();
+        em.close();
+        return managers;
     }
 
     @Override
     public String getErrorMessage() {
-        return "Supervisor inválido!!!";
+        return "Gerente inválido!!!";
     }
 
     @Override
     public String toString(Manager manager) {
         return manager.getName();
-    }
-
-    public void setService(ManagerService service) {
-        this.service = service;
     }
     
 }

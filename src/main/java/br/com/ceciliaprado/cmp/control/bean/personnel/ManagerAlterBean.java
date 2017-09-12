@@ -5,6 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
+import br.com.ceciliaprado.cmp.control.bean.personnel.services.ManagerService;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
 import java.util.List;
 import javax.faces.bean.ManagedBean;

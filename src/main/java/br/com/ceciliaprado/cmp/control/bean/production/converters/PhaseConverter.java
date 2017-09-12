@@ -6,13 +6,12 @@
 package br.com.ceciliaprado.cmp.control.bean.production.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.production.PhaseService;
+import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.dao.production.PhaseDAO;
 import br.com.ceciliaprado.cmp.model.production.Phase;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import java.util.List;
 import javax.faces.convert.FacesConverter;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -20,14 +19,14 @@ import javax.faces.convert.FacesConverter;
  */
 @FacesConverter("phaseConverter")
 public class PhaseConverter extends Converter<Phase> {
-    
-    @ManagedProperty(value = "#{phaseService}")
-    private PhaseService service;
-    
+
     @Override
-    @PostConstruct
-    public void init() {
-        addAll(service.getPhases());
+    protected List<Phase> getElements() {
+        EntityManager em = DataSource.createEntityManager();
+        PhaseDAO phaseDAO = new PhaseDAO(em);
+        List<Phase> phases = phaseDAO.findAll();
+        em.close();
+        return phases;
     }
 
     @Override
@@ -38,10 +37,6 @@ public class PhaseConverter extends Converter<Phase> {
     @Override
     public String toString(Phase phase) {
         return phase.getName();
-    }
-
-    public void setService(PhaseService service) {
-        this.service = service;
     }
     
 }

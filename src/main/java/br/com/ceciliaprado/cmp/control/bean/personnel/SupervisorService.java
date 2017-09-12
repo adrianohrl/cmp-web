@@ -5,6 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
+import br.com.ceciliaprado.cmp.control.bean.personnel.services.PersonnelService;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
 import java.util.List;
