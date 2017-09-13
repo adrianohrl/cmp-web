@@ -5,25 +5,33 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition>
-
-            <p:outputLabel for="#{id}" value="#{label}" style="font-weight: bold;" />              
-            <p:selectOneMenu id="#{id}" value="#{value}" panelStyle="#{panelStyle}" converter="modelConverter"
-                             effect="#{effect}" style="#{style};" var="m" required="#{required}" 
-                             requiredMessage="#{requiredMessage}" disabled="#{empty models}">                
-                <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
-                              noSelectionOption="true" />
-
-                <f:selectItems value="#{models}" var="model" itemLabel="#{model.reference}" 
-                               itemValue="#{model}" />
-
+            <c:set var="models" value="${(models == null) ? modelService.models : models}" />
+            <c:set var="label" value="${(empty label) ? 'Modelo: ' : label}" />
+            <c:set var="required" value="${(empty required) ? false : required}" />
+            <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione um modelo!!!' : requiredMessage}" />
+            <c:set var="disabled" value="${(empty disabled) ? false : disabled}" />
+            <c:set var="noSelectionItemLabel" value="${(empty noSelectionItemLabel) ? 'Selecione um ...' : noSelectionItemLabel}" />
+            <c:set var="effect" value="${(empty effect) ? 'fade' : effect}" />
+            <c:set var="filter" value="${(empty filter) ? true : filter}" />
+            <c:set var="filterMatchMode" value="${(empty filterMatchMode) ? 'startsWith' : filterMatchMode}" />
+            <c:set var="style" value="${(empty style) ? 'width: 250px;' : style}" />
+            <c:set var="labelStyle" value="${(empty labelStyle) ? 'font-weight: bold;' : labelStyle}" />
+            <c:set var="panelStyle" value="${(empty panelStyle) ? 'width: 250px;' : panelStyle}" />
+            <p:outputLabel for="#{id}" value="#{label}" style="#{labelStyle}" />              
+            <p:selectOneMenu id="#{id}" value="#{model}" required="#{required}" converter="modelConverter"
+                             requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty models)}" 
+                             effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="m" 
+                             style="#{style}" panelStyle="#{panelStyle}">
+                <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
+                <f:selectItems value="#{models}" />
                 <p:column>
                     <h:outputText value="#{m.reference}" />
                 </p:column>
             </p:selectOneMenu>
-
         </ui:composition>
     </h:body>
 </html>

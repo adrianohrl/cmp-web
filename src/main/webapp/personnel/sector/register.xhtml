@@ -21,11 +21,7 @@
                              required="true" requiredMessage="Digite o nome do setor!!!" 
                              style="width: 250px;" />
                 
-                <cmp:selectOneEmployee id="supervisor" value="#{sectorRegisterBean.sector.supervisor}" 
-                                       label="Supervisor: " converter="supervisorConverter" 
-                                       panelStyle="width: 250px;" effect="fade" style="width: 250px;"
-                                       required="true" requiredMessage="Selecione o supervisor do setor!!!" 
-                                       employees="#{supervisorService.supervisors}" />
+                <cmp:selectOneEmployee id="supervisor" type="supervisor" employee="#{sectorRegisterBean.sector.supervisor}" />
                 
                 <f:facet name="footer">
                     <p:commandButton value="Registrar" action="#{sectorRegisterBean.register()}" 

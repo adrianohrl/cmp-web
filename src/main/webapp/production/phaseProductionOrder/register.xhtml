@@ -5,7 +5,8 @@
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:cmp="http://ceciliaprado.com.br/cmp">
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
@@ -13,22 +14,10 @@
             <p:dialog id="dialog" header="Nova Ordem de Produção de Fase" widgetVar="dlg" 
                       resizable="false" modal="true" draggable="false" showEffect="fade"  
                       hideEffect="fade" closeOnEscape="true">
-                <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
-                    <p:outputLabel for="modelPhase" value="Fase: " style="font-weight: bold;" /> 
-                    <p:selectOneMenu id="modelPhase" value="#{phaseProductionOrderRegisterBean.phase}" 
-                                     converter="phaseConverter" panelStyle="width: 250px;" effect="fade" var="ph" 
-                                     style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
-                                     requiredMessage="Selecione a fase desejada!!!" 
-                                     disabled="#{empty phaseProductionOrderRegisterBean.phases}">
-                        <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true" noSelectionOption="true" />
-                        
-                        <f:selectItems value="#{phaseProductionOrderRegisterBean.phases}" var="p" 
-                                       itemLabel="#{p.name}" itemValue="#{p}" />
-
-                        <p:column>
-                            <h:outputText value="#{ph.name}" />
-                        </p:column>
-                    </p:selectOneMenu>
+                <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">   
+                    <cmp:selectOnePhase id="phase" required="true" 
+                                        phase="#{phaseProductionOrderRegisterBean.phase}"
+                                        phases="#{phaseProductionOrderRegisterBean.phases}" />
 
                     <p:outputLabel for="quantity" value="Quantidade: " style="font-weight: bold;" /> 
                     <p:inputNumber id="quantity" value="#{phaseProductionOrderRegisterBean.phaseProductionOrder.totalQuantity}" 
@@ -54,6 +43,14 @@
                 </f:facet>
                 
                 <h:panelGrid columns="2" cellpadding="10">  
+                    
+                    <ui:remove>
+                    <cmp:selectOneProductionOrder id="productionOrder" productionOrder="#{phaseProductionOrderRegisterBean.productionOrder}">
+                        <p:ajax listener="#{phaseProductionOrderRegisterBean.clear()}" 
+                                update="@form:dialog, @form:button, @form:orders" />
+                    </cmp:selectOneProductionOrder>
+                    </ui:remove>
+                    
                     <p:outputLabel for="productionOrder" value="Ordem de Produção: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="productionOrder" value="#{phaseProductionOrderRegisterBean.productionOrder}" 
                                      converter="productionOrderConverter" panelStyle="width: 250px;"

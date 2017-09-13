@@ -44,11 +44,7 @@
                             requiredMessage="Selecione o horário final!!!"
                             converterMessage="Horário com formato errado!!!" locale="pt" />   
                 
-                <cmp:selectOneEmployee id="subordinate" value="#{entryEventsSearchBean.subordinate}" 
-                                       label="Subordinado: " converter="subordinateConverter" 
-                                       panelStyle="width: 250px;" effect="fade" style="width: 250px;"
-                                       required="true" requiredMessage="Selecione o subordinado!!!" 
-                                       employees="#{subordinateService.subordinates}" />
+                <cmp:selectOneEmployee id="subordinate" type="subordinate" employee="#{entryEventsSearchBean.subordinate}" /> 
                 
                 <f:facet name="footer">
                     <p:commandButton value="Consultar" action="#{entryEventsSearchBean.search()}" 

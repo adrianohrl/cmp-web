@@ -5,7 +5,8 @@
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:cmp="http://ceciliaprado.com.br/cmp">
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
@@ -18,23 +19,8 @@
                 <p:outputLabel for="reference" value="Ordem de Produção: " style="font-weight: bold;"/> 
                 <p:inputText id="reference" label="Ordem de Produção" value="#{productionOrderRegisterBean.productionOrder.reference}"
                              required="true" requiredMessage="Digite a ordem de produção!!!" style="width: 250px;" />
-
-                <p:outputLabel for="model" value="Referência: " style="font-weight: bold;" />              
-                <p:selectOneMenu id="model" value="#{productionOrderRegisterBean.productionOrder.model}" 
-                                 converter="modelConverter" panelStyle="width: 250px;"
-                                 effect="fade" var="md" style="width: 250px;" filter="true" 
-                                 filterMatchMode="startsWith" required="true" label="Referência"
-                                 requiredMessage="Selecione a referência do modelo que esta ordem de produção está associada!!!"
-                                 disabled="#{empty modelService.models}">
-                    <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
-                    
-                    <f:selectItems value="#{modelService.models}" var="model" 
-                                   itemLabel="#{model.reference}" itemValue="#{model}" />
-
-                    <p:column>
-                        <h:outputText value="#{md.reference}" />
-                    </p:column>
-                </p:selectOneMenu>
+                
+                <cmp:selectOneModel id="model" model="#{productionOrderRegisterBean.productionOrder.model}" />
                 
                 <f:facet name="footer">
                     <p:commandButton value="Registrar" action="#{productionOrderRegisterBean.register()}" 

@@ -9,12 +9,11 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition>
-            <c:set var="sectors" value="${(sectors == null) ? sectorService.sectors : sectors}" />
-            <c:set var="label" value="${(empty label) ? 'Setor: ' : label}" />
-            <c:set var="required" value="${(empty required) ? false : required}" />
-            <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione um setor!!!' : requiredMessage}" />
+            <c:set var="casualties" value="${(casualties == null) ? casualtyService.casualties : casualties}" />
+            <c:set var="label" value="${(empty label) ? 'Modelo: ' : label}" />
+            <c:set var="required" value="${(empty required) ? true : required}" />
+            <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione um sinistro!!!' : requiredMessage}" />
             <c:set var="disabled" value="${(empty disabled) ? false : disabled}" />
-            <c:set var="converter" value="${(empty converter) ? 'sectorConverter' : converter}" />
             <c:set var="noSelectionItemLabel" value="${(empty noSelectionItemLabel) ? 'Selecione um ...' : noSelectionItemLabel}" />
             <c:set var="effect" value="${(empty effect) ? 'fade' : effect}" />
             <c:set var="filter" value="${(empty filter) ? true : filter}" />
@@ -23,14 +22,14 @@
             <c:set var="labelStyle" value="${(empty labelStyle) ? 'font-weight: bold;' : labelStyle}" />
             <c:set var="panelStyle" value="${(empty panelStyle) ? 'width: 250px;' : panelStyle}" />
             <p:outputLabel for="#{id}" value="#{label}" style="#{labelStyle}" />              
-            <p:selectOneMenu id="#{id}" value="#{sector}" required="#{required}" converter="sectorConverter"
-                             requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty sectors)}" 
-                             effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="s" 
-                             style="#{style}" panelStyle="#{panelStyle}">           
+            <p:selectOneMenu id="#{id}" value="#{casualty}" required="#{required}" converter="casualtyConverter"
+                             requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty casualties)}" 
+                             effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="c" 
+                             style="#{style}" panelStyle="#{panelStyle}">
                 <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
-                <f:selectItems value="#{sectors}" />
+                <f:selectItems value="#{casualties}" />
                 <p:column>
-                    <h:outputText value="#{s.name}" />
+                    <h:outputText value="#{c.name}" />
                 </p:column>
             </p:selectOneMenu>
         </ui:composition>

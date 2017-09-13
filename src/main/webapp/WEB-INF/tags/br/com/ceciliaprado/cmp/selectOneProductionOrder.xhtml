@@ -5,27 +5,33 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition>
-
-            <p:outputLabel for="#{id}" value="#{label}" style="font-weight: bold;" />              
-            <p:selectOneMenu id="#{id}" value="#{value}" panelStyle="#{panelStyle}" 
-                             converter="productionOrderConverter" 
-                             effect="#{effect}" style="#{style};" var="po" required="#{required}" 
-                             requiredMessage="#{requiredMessage}" disabled="#{empty productionOrders}">
-                <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true"
-                              noSelectionOption="true" />
-
-                <f:selectItems value="#{productionOrders}" var="productionOrder" 
-                               itemLabel="#{productionOrder.reference}" 
-                               itemValue="#{productionOrder}" />
-
+            <c:set var="productionOrders" value="${(productionOrders == null) ? productionOrderService.productionOrders : productionOrders}" />
+            <c:set var="label" value="${(empty label) ? 'Order de Produção: ' : label}" />
+            <c:set var="required" value="${(empty required) ? false : required}" />
+            <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione uma order de produção!!!' : requiredMessage}" />
+            <c:set var="disabled" value="${(empty disabled) ? false : disabled}" />
+            <c:set var="noSelectionItemLabel" value="${(empty noSelectionItemLabel) ? 'Selecione uma ...' : noSelectionItemLabel}" />
+            <c:set var="effect" value="${(empty effect) ? 'fade' : effect}" />
+            <c:set var="filter" value="${(empty filter) ? true : filter}" />
+            <c:set var="filterMatchMode" value="${(empty filterMatchMode) ? 'startsWith' : filterMatchMode}" />
+            <c:set var="style" value="${(empty style) ? 'width: 250px;' : style}" />
+            <c:set var="labelStyle" value="${(empty labelStyle) ? 'font-weight: bold;' : labelStyle}" />
+            <c:set var="panelStyle" value="${(empty panelStyle) ? 'width: 250px;' : panelStyle}" />
+            <p:outputLabel for="#{id}" value="#{label}" style="#{labelStyle}" />              
+            <p:selectOneMenu id="#{id}" value="#{productionOrder}" required="#{required}" converter="productionOrderConverter"
+                             requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty productionOrders)}"
+                             effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="po" 
+                             style="#{style}" panelStyle="#{panelStyle}">
+                <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
+                <f:selectItems value="#{productionOrders}" />
                 <p:column>
                     <h:outputText value="#{po.reference}" />
                 </p:column>
             </p:selectOneMenu>
-
         </ui:composition>
     </h:body>
 </html>

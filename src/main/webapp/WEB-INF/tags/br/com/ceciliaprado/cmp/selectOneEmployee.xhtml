@@ -5,27 +5,58 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:body>
         <ui:composition>
-
-            <p:outputLabel for="#{id}" value="#{label}" style="font-weight: bold;" />              
-            <p:selectOneMenu id="#{id}" value="#{value}" panelStyle="#{panelStyle}" 
-                             effect="#{effect}" style="#{style};" var="emp" required="#{required}" 
-                             requiredMessage="#{requiredMessage}" disabled="#{empty employees}">
+            <c:set var="type" value="${(empty type) ? 'employee' : type}" />
+            <c:choose>
+                <c:when test="${type == 'subordinate'}">
+                   <c:set var="employees" value="${(employees == null) ? subordinateService.subordinates : employees}" />
+                   <c:set var="label" value="${(empty label) ? 'Subordinado: ' : label}" />
+                   <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione um subordinado!!!' : requiredMessage}" />
+                   <c:set var="converter" value="${(empty converter) ? 'subordinateConverter' : converter}" />
+                </c:when>
+                <c:when test="${type == 'supervisor'}">
+                   <c:set var="employees" value="${(employees == null) ? supervisorService.supervisors : employees}" />
+                   <c:set var="label" value="${(empty label) ? 'Supervisor: ' : label}" />
+                   <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione um supervisor!!!' : requiredMessage}" />
+                   <c:set var="converter" value="${(empty converter) ? 'supervisorConverter' : converter}" />
+                </c:when>
+                <c:when test="${type == 'manager'}">
+                   <c:set var="employees" value="${(employees == null) ? managerService.managers : employees}" />
+                   <c:set var="label" value="${(empty label) ? 'Gerente: ' : label}" />
+                   <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione um gerente!!!' : requiredMessage}" />
+                   <c:set var="converter" value="${(empty converter) ? 'managerConverter' : converter}" />
+                </c:when>
+                <c:otherwise>
+                   <c:set var="employees" value="${(employees == null) ? employeeService.employees : employees}" />
+                   <c:set var="label" value="${(empty label) ? 'Funcionário: ' : label}" />
+                   <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione um funcionário!!!' : requiredMessage}" />
+                   <c:set var="converter" value="${(empty converter) ? 'employeeConverter' : converter}" />
+                </c:otherwise>
+            </c:choose>
+            <c:set var="required" value="${(empty required) ? false : required}" />
+            <c:set var="disabled" value="${(empty disabled) ? false : disabled}" />
+            <c:set var="noSelectionItemLabel" value="${(empty noSelectionItemLabel) ? 'Selecione um ...' : noSelectionItemLabel}" />
+            <c:set var="effect" value="${(empty effect) ? 'fade' : effect}" />
+            <c:set var="filter" value="${(empty filter) ? true : filter}" />
+            <c:set var="filterMatchMode" value="${(empty filterMatchMode) ? 'startsWith' : filterMatchMode}" />
+            <c:set var="style" value="${(empty style) ? 'width: 250px;' : style}" />
+            <c:set var="labelStyle" value="${(empty labelStyle) ? 'font-weight: bold;' : labelStyle}" />
+            <c:set var="panelStyle" value="${(empty panelStyle) ? 'width: 250px;' : panelStyle}" />
+            <p:outputLabel for="#{id}" value="#{label}" style="#{labelStyle}" />              
+            <p:selectOneMenu id="#{id}" value="#{employee}" required="#{required}"
+                             requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty employees)}"
+                             effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="e" 
+                             style="#{style}" panelStyle="#{panelStyle}">
                 <f:converter converterId="#{converter}" />
-                
-                <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
-                              noSelectionOption="true" />
-
-                <f:selectItems value="#{employees}" var="employee" itemLabel="#{employee.name}" 
-                               itemValue="#{employee}" />
-
+                <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
+                <f:selectItems value="#{employees}" />
                 <p:column>
-                    <h:outputText value="#{emp.name}" />
+                    <h:outputText value="#{e.name}" />
                 </p:column>
             </p:selectOneMenu>
-
         </ui:composition>
     </h:body>
 </html>

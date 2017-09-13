@@ -30,11 +30,7 @@
                             requiredMessage="Selecione o horário da entrada/saída!!!"
                             converterMessage="Horário com formato errado!!!" locale="pt" />                                
                 
-                <cmp:selectOneEmployee id="employee" value="#{timeClockEventRegisterBean.timeClockEvent.employee}" 
-                                       label="Funcionário: " converter="employeeConverter" 
-                                       panelStyle="width: 250px;" effect="fade" style="width: 250px;"
-                                       required="true" requiredMessage="Selecione o funcionário!!!" 
-                                       employees="#{employeeService.employees}" />
+                <cmp:selectOneEmployee id="employee" employee="#{timeClockEventRegisterBean.timeClockEvent.employee}" />
                 
                 <p:outputLabel for="type" value="Tipo: " style="font-weight: bold;" /> 
                 <p:selectBooleanButton id="type" value="#{timeClockEventRegisterBean.timeClockEvent.arrival}" 

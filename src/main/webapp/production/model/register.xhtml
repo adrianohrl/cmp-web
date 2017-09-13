@@ -15,11 +15,9 @@
                       draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true"
                       fitViewport="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">       
-                    <cmp:selectOnePhase id="phase" value="#{modelRegisterBean.phase}" 
-                                           label="Fase: " converter="phaseConverter" 
-                                           panelStyle="width: 250px;" effect="fade" style="width: 250px;"
-                                           required="true" requiredMessage="Selecione a fase desejada!!!" 
-                                           phases="#{modelRegisterBean.phases}" />
+                    <cmp:selectOnePhase id="phase"
+                                        phase="#{modelRegisterBean.phase}"
+                                        phases="#{modelRegisterBean.phases}" />
                         
                     <p:outputLabel for="expectedDuration" value="Duração Esperada: " style="font-weight: bold;" /> 
                     <p:inputNumber id="expectedDuration" value="#{modelRegisterBean.expectedDuration}" label="Duração [min]" required="true" 
