@@ -6,12 +6,8 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Sector;
-import java.util.List;
 import javax.faces.convert.FacesConverter;
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -19,15 +15,6 @@ import javax.persistence.EntityManager;
  */
 @FacesConverter("sectorConverter")
 public class SectorConverter extends Converter<Sector> {
-
-    @Override
-    protected List<Sector> getElements() {
-        EntityManager em = DataSource.createEntityManager();
-        SectorDAO sectorDAO = new SectorDAO(em);
-        List<Sector> sectors = sectorDAO.findAll();
-        em.close();
-        return sectors;
-    }
     
     @Override
     public String getErrorMessage() {

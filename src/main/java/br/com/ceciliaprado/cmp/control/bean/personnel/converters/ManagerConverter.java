@@ -6,12 +6,8 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.converters;
 
 import br.com.ceciliaprado.cmp.control.bean.Converter;
-import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.ManagerDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
-import java.util.List;
 import javax.faces.convert.FacesConverter;
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -19,15 +15,6 @@ import javax.persistence.EntityManager;
  */
 @FacesConverter("managerConverter")
 public class ManagerConverter extends Converter<Manager> {
-
-    @Override
-    protected List<Manager> getElements() {
-        EntityManager em = DataSource.createEntityManager();
-        ManagerDAO managerDAO = new ManagerDAO(em);
-        List<Manager> managers = managerDAO.findAll();
-        em.close();
-        return managers;
-    }
 
     @Override
     public String getErrorMessage() {
