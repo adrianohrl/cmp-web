@@ -7,4 +7,4 @@ Use the following command (inside of the cloned directory) in order to deploy th
 
 	PROJECT_DIRECTORY=<cmp-web cloned directory>
 	VERSION=<desired version>
-	asadmin deploy --force=true --contextroot cmp --name cmp cmp-web-$(VERSION).war
+	asadmin deploy --force=true --contextroot cmp --name cmp target/cmp-web-$(VERSION).war

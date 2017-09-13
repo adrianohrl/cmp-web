@@ -30,10 +30,8 @@ public abstract class Converter<T> implements javax.faces.convert.Converter, Ser
 
     @Override
     public T getAsObject(FacesContext fc, UIComponent uic, String value) {
-        System.out.println("Converting (number of elements: " + elements.size());
         for (T element : elements) {
             if (toString(element).equals(value)) {
-                System.out.println("Converting (value: " + value + ", element: " + element + ")");
                 return element;
             }
         }

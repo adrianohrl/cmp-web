@@ -48,8 +48,7 @@
                 <h:outputLabel value="Supervisores: " style="font-weight: bold;" />   
                 
                 <p:selectManyCheckbox id="supervisors" value="#{managerRegisterBean.selectedSupervisors}" 
-                                      layout="grid" columns="4" converter="supervisorConverter"
-                                      converterMessage="Supervisor inválido!!!">
+                                      layout="grid" columns="4" converter="supervisorConverter">
                     <f:selectItems value="#{supervisorService.supervisors}" var="supervisor" 
                                    itemLabel="#{supervisor.name}" itemValue="#{supervisor}" />
                 </p:selectManyCheckbox>   

@@ -5,7 +5,8 @@
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:cmp="http://ceciliaprado.com.br/cmp">
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
@@ -20,24 +21,11 @@
                              required="true" requiredMessage="Digite o nome do setor!!!" 
                              style="width: 250px;" />
                 
-                <p:outputLabel for="supervisor" value="Supervisor: " style="font-weight: bold;" />              
-                <p:selectOneMenu id="supervisor" value="#{sectorRegisterBean.sector.supervisor}" 
-                                 converter="supervisorConverter" panelStyle="width: 250px;"
-                                 effect="fade" var="sup" style="width: 250px;" filter="true" 
-                                 filterMatchMode="startsWith" required="true" 
-                                 converterMessage="Supervisor inválido!!!"
-                                 requiredMessage="Selecione o supervisor do setor!!!"
-                                 disabled="#{empty supervisorService.supervisors}">
-                    <f:selectItem itemLabel="Selecione um ..." itemDisabled="true"
-                                  noSelectionOption="true" />
-
-                    <f:selectItems value="#{supervisorService.supervisors}" var="supervisor" 
-                                   itemLabel="#{supervisor.name}" itemValue="#{supervisor}" />
-
-                    <p:column>
-                        <h:outputText value="#{sup.name}" />
-                    </p:column>
-                </p:selectOneMenu>
+                <cmp:selectOneEmployee id="supervisor" value="#{sectorRegisterBean.sector.supervisor}" 
+                                       label="Supervisor: " converter="supervisorConverter" 
+                                       panelStyle="width: 250px;" effect="fade" style="width: 250px;"
+                                       required="true" requiredMessage="Selecione o supervisor do setor!!!" 
+                                       employees="#{supervisorService.supervisors}" />
                 
                 <f:facet name="footer">
                     <p:commandButton value="Registrar" action="#{sectorRegisterBean.register()}" 

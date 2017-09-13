@@ -5,7 +5,8 @@
                 template="/WEB-INF/templates/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:cmp="http://ceciliaprado.com.br/cmp">
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
@@ -13,24 +14,12 @@
             <p:dialog id="dialog" header="Nova Fase" widgetVar="dlg" resizable="false" modal="true" 
                       draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true"
                       fitViewport="true">
-                <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
-                    <p:outputLabel for="phase" value="Fase: " style="font-weight: bold;" /> 
-                    <p:selectOneMenu id="phase" value="#{modelRegisterBean.phase}" 
-                                     converter="phaseConverter" panelStyle="width: 250px;"
-                                     effect="fade" var="ph" style="width: 250px;" filter="true" 
-                                     filterMatchMode="startsWith" required="true" 
-                                     requiredMessage="Selecione a fase desejada!!!"
-                                     disabled="#{empty modelRegisterBean.phases}">
-                        <f:selectItem itemLabel="Selecione uma ..." itemDisabled="true"
-                                      noSelectionOption="true" />
-                        
-                        <f:selectItems value="#{modelRegisterBean.phases}" var="p" 
-                                       itemLabel="#{p.name}" itemValue="#{p}" />
-
-                        <p:column>
-                            <h:outputText value="#{ph.name}" />
-                        </p:column>
-                    </p:selectOneMenu>
+                <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">       
+                    <cmp:selectOnePhase id="phase" value="#{modelRegisterBean.phase}" 
+                                           label="Fase: " converter="phaseConverter" 
+                                           panelStyle="width: 250px;" effect="fade" style="width: 250px;"
+                                           required="true" requiredMessage="Selecione a fase desejada!!!" 
+                                           phases="#{modelRegisterBean.phases}" />
                         
                     <p:outputLabel for="expectedDuration" value="Duração Esperada: " style="font-weight: bold;" /> 
                     <p:inputNumber id="expectedDuration" value="#{modelRegisterBean.expectedDuration}" label="Duração [min]" required="true" 
