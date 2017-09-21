@@ -28,14 +28,14 @@
                                 required="true" requiredMessage="Digite a sua senha, supervisor!!!"
                                 promptLabel="Digite a sua senha, supervisor!!!" style="width: 250px;" />
 
-                    <h:outputLabel for="password1" value="Nova Senha: " style="font-weight: bold;" /> 
+                    <p:outputLabel for="password1" value="Nova Senha: " style="font-weight: bold;" /> 
                     <p:password id="password1" value="#{supervisorAlterBean.password}" 
                                 feedback="true" match="password2" label="Nova senha" required="true" 
                                 promptLabel="Nova senha" weakLabel="Fraca" goodLabel="Boa" 
                                 strongLabel="Forte" requiredMessage="Digite a senha do supervisor!!!" 
                                 validatorMessage="As senhas não conferem!!!" style="width: 250px;" />
 
-                    <h:outputLabel for="password2" value="Confirmar Senha: " style="font-weight: bold;" /> 
+                    <p:outputLabel for="password2" value="Confirmar Senha: " style="font-weight: bold;" /> 
                     <p:password id="password2" label="Confirmação da senha" required="true" 
                                 requiredMessage="Digite a senha do supervisor novamente!!!" style="width: 250px;" />
                 </h:panelGrid>   

@@ -33,8 +33,8 @@ public class ManagerAlterBean extends AlterBean<Manager> {
         return service.getManagers();
     }
 
-    public void setManagerService(ManagerService managerService) {
-        this.service = managerService;
+    public void setService(ManagerService service) {
+        this.service = service;
     }
     
 }
