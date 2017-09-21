@@ -21,8 +21,7 @@
                              required="true" requiredMessage="Digite o nome da fase!!!" 
                              style="width: 250px;" />
                 
-                <cmp:selectOneSector id="sector"
-                                        sector="#{phaseRegisterBean.phase.sector}" />
+                <cmp:selectOneSector id="sector" sector="#{phaseRegisterBean.phase.sector}" />
                 
                 <f:facet name="footer">
                     <p:commandButton value="Registrar" action="#{phaseRegisterBean.register()}" 

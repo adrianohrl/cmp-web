@@ -185,22 +185,8 @@
                                         required="true" requiredMessage="Digite a sua senha, supervisor!!!"
                                         promptLabel="Digite a sua senha, supervisor!!!" style="width: 250px;" />
 
-                            <p:outputLabel for="sector" value="Setor: " style="font-weight: bold;" />              
-                            <p:selectOneMenu id="sector" value="#{entryEventRegisterBean.sector}" 
-                                             converter="sectorConverter" panelStyle="width: 250px;"
-                                             effect="fade" var="sec" style="width: 250px;" filter="true" 
-                                             filterMatchMode="startsWith" required="true"
-                                             requiredMessage="Selecione o setor onde está fase é executada!!!"
-                                             disabled="#{empty entryEventRegisterBean.sectors}">
-                                <f:selectItem itemLabel="Selecione um ..."  itemDisabled="true" noSelectionOption="true" />
-
-                                <f:selectItems value="#{entryEventRegisterBean.sectors}" var="s"
-                                               itemLabel="#{s.name}" itemValue="#{s}" />
-
-                                <p:column>
-                                    <h:outputText value="#{sec.name}" />
-                                </p:column>
-                            </p:selectOneMenu>
+                            <cmp:selectOneSector id="sector" sector="#{entryEventRegisterBean.sector}" 
+                                                 sectors="#{entryEventRegisterBean.sectors}" />
                         </h:panelGrid>
                     </p:tab>
                     
@@ -335,7 +321,7 @@
                 
                 <f:facet name="footer">
                     <p:commandButton value="Sair" action="#{entryEventRegisterBean.logout()}"
-                                     update="@form:messages" title="Sair" style="font-size: 18px;">
+                                     process="@this" title="Sair" style="font-size: 18px;">
                         <p:ajax update="@form" resetValues="true" />
                     </p:commandButton>
                 </f:facet>

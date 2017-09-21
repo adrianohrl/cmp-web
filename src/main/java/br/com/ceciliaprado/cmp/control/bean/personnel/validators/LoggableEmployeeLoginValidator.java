@@ -6,10 +6,10 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel.validators;
 
 import br.com.ceciliaprado.cmp.model.personnel.Loggable;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.FacesValidator;
 import javax.faces.validator.ValidatorException;
 
 /**
@@ -17,15 +17,14 @@ import javax.faces.validator.ValidatorException;
  * @author adrianohrl
  * @param <L>
  */
-@FacesValidator("loggableEmployeeLoginValidator")
-public class LoggableEmployeeLoginValidator<L extends Loggable> extends LoggableEmployeeValidator<L> {
+public abstract class LoggableEmployeeLoginValidator<L extends Loggable> extends LoggableEmployeeValidator<L> {
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object value) throws ValidatorException {
         if(value == null) {
             return;
         }
-        for (Loggable loggableEmployee : loggableEmployees) {
+        for (L loggableEmployee : getLoggableEmployees(fc)) {
             if (loggableEmployee.getLogin().equals(value)) {
                 return;
             }

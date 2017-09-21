@@ -47,7 +47,7 @@ public abstract class AlterBean<T extends Loggable> implements Serializable, Ite
         for (T l : this) {
             if (login.equals(l.getLogin())) {
                 loggable = l;
-                SessionUtils.setLoggable(loggable);
+                SessionUtils.setUser(loggable);
             }
         }
     }

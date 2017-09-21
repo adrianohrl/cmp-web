@@ -10,7 +10,6 @@ import br.com.ceciliaprado.cmp.model.personnel.Loggable;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.FacesValidator;
 import javax.faces.validator.ValidatorException;
 
 /**
@@ -18,8 +17,7 @@ import javax.faces.validator.ValidatorException;
  * @author adrianohrl
  * @param <L>
  */
-@FacesValidator("loggableEmployeePasswordValidator")
-public class LoggableEmployeePasswordValidator<L extends Loggable> extends LoggableEmployeeValidator<L> {
+public abstract class LoggableEmployeePasswordValidator<L extends Loggable> extends LoggableEmployeeValidator<L> {
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object value) throws ValidatorException {       
@@ -31,7 +29,7 @@ public class LoggableEmployeePasswordValidator<L extends Loggable> extends Logga
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                     "Erro no login", "O login do funcionário não foi fornecido!!!"));
         }
-        for (Loggable loggableEmployee : loggableEmployees) {
+        for (L loggableEmployee : getLoggableEmployees(fc)) {
             if (login.equals(loggableEmployee.getLogin())) {
                 if (!value.equals(loggableEmployee.getPassword())) {
                     throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, 

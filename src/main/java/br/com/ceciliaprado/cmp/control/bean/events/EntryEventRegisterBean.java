@@ -41,7 +41,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 
@@ -151,7 +150,7 @@ public class EntryEventRegisterBean implements Serializable {
         for (Supervisor s : supervisorService) {
             if (supervisorLogin.equals(s.getLogin())) {
                 supervisor = s;
-                SessionUtils.setLoggable(supervisor);
+                SessionUtils.setUser(supervisor);
                 SupervisorDAO supervisorDAO = new SupervisorDAO(em);
                 sectors.addAll(supervisorDAO.findSupervisorSectors(supervisor));
                 if (sectors.size() == 1) {

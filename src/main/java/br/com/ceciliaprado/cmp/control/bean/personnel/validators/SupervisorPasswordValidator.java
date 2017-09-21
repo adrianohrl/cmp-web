@@ -5,10 +5,12 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel.validators;
 
-import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
+import br.com.ceciliaprado.cmp.control.bean.personnel.services.SupervisorService;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
+import java.util.List;
+import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -16,11 +18,12 @@ import javax.persistence.EntityManager;
  */
 @FacesValidator("supervisorPasswordValidator")
 public class SupervisorPasswordValidator extends LoggableEmployeePasswordValidator<Supervisor> {
-    
+
     @Override
-    public void fill(EntityManager em) {
-        SupervisorDAO supervisorDAO = new SupervisorDAO(em);
-        loggableEmployees.addAll(supervisorDAO.findAll());
+    protected List<Supervisor> getLoggableEmployees(FacesContext fc) {
+        Application application = fc.getApplication();
+        SupervisorService service = application.evaluateExpressionGet(fc, "#{supervisorService}", SupervisorService.class);
+        return service.getSupervisors();
     }
 
     @Override

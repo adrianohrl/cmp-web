@@ -28,7 +28,7 @@ public class SessionUtils {
                 .getExternalContext().getRequest();
     }
     
-    public static boolean setLoggable(Loggable loggable) {
+    public static boolean setUser(Loggable loggable) {
         HttpSession session = SessionUtils.getSession();
         if (session != null) {
             session.setAttribute(loggableAtributeName, loggable);        
