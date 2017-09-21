@@ -8,15 +8,8 @@ package br.com.ceciliaprado.cmp.control.bean.personnel;
 import br.com.ceciliaprado.cmp.control.bean.personnel.services.SectorService;
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
-import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Sector;
-import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -34,8 +27,7 @@ import javax.persistence.EntityManager;
 public class SectorRegisterBean implements Serializable {
     
     @ManagedProperty(value = "#{sectorService}")
-    private SectorService sectorService;
-    private final EntityManager em = DataSource.createEntityManager();
+    private SectorService service;
     private final Sector sector = new Sector();
     
     public String register() {
@@ -46,29 +38,30 @@ public class SectorRegisterBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                 "Erro no cadastro", sector + " deve estar associado a um supervisor!!!");
         } else {
+            EntityManager em = DataSource.createEntityManager();
             try {
                 SectorDAO sectorDAO = new SectorDAO(em);
                 sectorDAO.create(sector);
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Sucesso no cadastro", sector + " foi cadastrado com sucesso!!!");
                 next = "/index";
-                sectorService.update(sector);
+                update();
             } catch (EntityExistsException e) {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                     "Erro no cadastro", sector + " já foi cadastrado!!!");
             }
+            em.close();
         }
         context.addMessage(null, message);
         return next;
     }
 
-    @PreDestroy
-    public void destroy() {
-        em.close();
+    protected void update() {
+        service.update();
     }
 
-    public void setSectorService(SectorService sectorService) {
-        this.sectorService = sectorService;
+    public void setService(SectorService service) {
+        this.service = service;
     }
 
     public Sector getSector() {

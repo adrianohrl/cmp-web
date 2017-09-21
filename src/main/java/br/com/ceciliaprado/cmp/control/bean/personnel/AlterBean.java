@@ -11,7 +11,6 @@ import br.com.ceciliaprado.cmp.control.dao.personnel.LoggableDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Loggable;
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.PreDestroy;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpSession;
  */
 public abstract class AlterBean<T extends Loggable> implements Serializable {
     
-    private final EntityManager em = DataSource.createEntityManager();
     private T loggable;
     private String login;
     private String password;    
@@ -33,10 +31,13 @@ public abstract class AlterBean<T extends Loggable> implements Serializable {
             return "";
         }
         loggable.setPassword(password);
+        EntityManager em = DataSource.createEntityManager();
         LoggableDAO<T> loggableDAO = new LoggableDAO<>(em);
         loggableDAO.update(loggable);
+        em.close();
         HttpSession session = SessionUtils.getSession();
         session.invalidate();
+        update();
         return "/index";
     }
     
@@ -54,12 +55,9 @@ public abstract class AlterBean<T extends Loggable> implements Serializable {
         }
     }
     
+    protected abstract void update();
+    
     protected abstract List<T> getLoggables();
-
-    @PreDestroy
-    public void destroy() {
-        em.close();
-    }
 
     public String getLogin() {
         return login;

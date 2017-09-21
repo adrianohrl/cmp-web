@@ -6,18 +6,14 @@
 package br.com.ceciliaprado.cmp.control.bean.production;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.production.ModelDAO;
+import br.com.ceciliaprado.cmp.control.bean.production.services.ProductionOrderService;
 import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
-import br.com.ceciliaprado.cmp.model.production.Model;
 import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
@@ -31,6 +27,8 @@ import javax.persistence.EntityManager;
 @ViewScoped
 public class ProductionOrderRegisterBean implements Serializable {
     
+    @ManagedProperty(value = "#{productionOrderService}")
+    private ProductionOrderService service;
     private final EntityManager em = DataSource.createEntityManager();
     private final ProductionOrder productionOrder = new ProductionOrder();
     
@@ -44,6 +42,7 @@ public class ProductionOrderRegisterBean implements Serializable {
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "Sucesso no cadastro", productionOrder + " foi cadastrado com sucesso!!!");
             next = "/index";
+            update();
         } catch (EntityExistsException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                 "Erro no cadastro", productionOrder + " já foi cadastrado!!!");
@@ -51,10 +50,18 @@ public class ProductionOrderRegisterBean implements Serializable {
         context.addMessage(null, message);
         return next;
     }
+    
+    public void update() {
+        service.update();
+    }
 
     @PreDestroy
     public void destroy() {
         em.close();
+    }
+
+    public void setService(ProductionOrderService service) {
+        this.service = service;
     }
 
     public ProductionOrder getProductionOrder() {

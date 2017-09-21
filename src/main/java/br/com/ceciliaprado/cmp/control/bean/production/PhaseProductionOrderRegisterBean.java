@@ -6,8 +6,8 @@
 package br.com.ceciliaprado.cmp.control.bean.production;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.production.services.ProductionOrderService;
 import br.com.ceciliaprado.cmp.control.dao.production.PhaseProductionOrderDAO;
-import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
 import br.com.ceciliaprado.cmp.exceptions.ProductionException;
 import br.com.ceciliaprado.cmp.model.production.Model;
 import br.com.ceciliaprado.cmp.model.production.ModelPhase;
@@ -22,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
@@ -36,6 +37,8 @@ import org.primefaces.context.RequestContext;
 @ViewScoped
 public class PhaseProductionOrderRegisterBean implements Serializable {
     
+    @ManagedProperty(value = "#{productionOrderService}")
+    private ProductionOrderService productionOrderService;
     private final EntityManager em = DataSource.createEntityManager();
     private PhaseProductionOrder phaseProductionOrder;
     private final List<PhaseProductionOrder> phaseProductionOrders = new ArrayList<>();
@@ -48,15 +51,7 @@ public class PhaseProductionOrderRegisterBean implements Serializable {
     
     @PostConstruct
     public void init() {
-        ProductionOrderDAO productionOrderDAO = new ProductionOrderDAO(em);
-        productionOrders.addAll(productionOrderDAO.findAll());
-        Collections.sort(productionOrders);
-        if (productionOrders.isEmpty()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
-                    "Fatalidade no cadastro", "Nenhuma ordem de produção foi cadastrada ainda!!!");
-            context.addMessage(null, message);
-        }
+        productionOrders.addAll(productionOrderService.getProductionOrders());
         reset();
     }
     
@@ -147,6 +142,10 @@ public class PhaseProductionOrderRegisterBean implements Serializable {
     @PreDestroy
     public void destroy() {
         em.close();
+    }
+
+    public void setProductionOrderService(ProductionOrderService productionOrderService) {
+        this.productionOrderService = productionOrderService;
     }
 
     public ProductionOrder getProductionOrder() {

@@ -6,6 +6,7 @@
 package br.com.ceciliaprado.cmp.control.bean.events;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.events.services.CasualtyService;
 import br.com.ceciliaprado.cmp.control.dao.events.io.CasualtiesReaderDAO;
 import br.com.ceciliaprado.cmp.model.events.Casualty;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -27,6 +29,8 @@ import org.primefaces.model.UploadedFile;
 @ViewScoped
 public class CasualtyImportBean implements Serializable {
     
+    @ManagedProperty(value = "#{casualtyService}")
+    private CasualtyService service;
     private final List<Casualty> casualties = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
@@ -40,6 +44,7 @@ public class CasualtyImportBean implements Serializable {
             casualties.addAll(readerDAO.getRegisteredCasualties());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
+            update();
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no upload", 
                     "Não foi possível fazer o upload do arquivo " + event.getFile().getFileName() + "!!!");
@@ -47,6 +52,14 @@ public class CasualtyImportBean implements Serializable {
         }
         em.close();
         context.addMessage(null, message);
+    }
+    
+    public void update() {
+        service.update();
+    }
+
+    public void setService(CasualtyService service) {
+        this.service = service;
     }
 
     public List<Casualty> getCasualties() {

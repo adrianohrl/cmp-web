@@ -5,6 +5,7 @@
  */
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
+import br.com.ceciliaprado.cmp.control.bean.personnel.services.SupervisorService;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -21,6 +22,11 @@ public class SupervisorAlterBean extends AlterBean<Supervisor> {
     
     @ManagedProperty(value = "#{supervisorService}")
     private SupervisorService service;
+
+    @Override
+    protected void update() {
+        service.update();
+    }
 
     @Override
     protected List<Supervisor> getLoggables() {

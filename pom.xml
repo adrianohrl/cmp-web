@@ -6,7 +6,7 @@
 
     <groupId>br.com.ceciliaprado</groupId>
     <artifactId>cmp-web</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <packaging>war</packaging>
 
     <name>cmp-web</name>

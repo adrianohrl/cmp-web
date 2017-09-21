@@ -6,18 +6,14 @@
 package br.com.ceciliaprado.cmp.control.bean.production;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
-import br.com.ceciliaprado.cmp.control.dao.personnel.SectorDAO;
+import br.com.ceciliaprado.cmp.control.bean.production.services.PhaseService;
 import br.com.ceciliaprado.cmp.control.dao.production.PhaseDAO;
-import br.com.ceciliaprado.cmp.model.personnel.Sector;
 import br.com.ceciliaprado.cmp.model.production.Phase;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
@@ -31,6 +27,8 @@ import javax.persistence.EntityManager;
 @ViewScoped
 public class PhaseRegisterBean implements Serializable {
     
+    @ManagedProperty(value = "#{phaseService}")
+    private PhaseService service;
     private final EntityManager em = DataSource.createEntityManager();
     private final Phase phase = new Phase();
     
@@ -48,6 +46,7 @@ public class PhaseRegisterBean implements Serializable {
                 message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                     "Sucesso no cadastro", phase + " foZi cadastrado com sucesso!!!");
                 next = "/index";
+                update();
             } catch (EntityExistsException e) {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                     "Erro no cadastro", phase + " já foi cadastrado!!!");
@@ -56,10 +55,18 @@ public class PhaseRegisterBean implements Serializable {
         context.addMessage(null, message);
         return next;
     }
+    
+    public void update() {
+        service.update();
+    }
 
     @PreDestroy
     public void destroy() {
         em.close();
+    }
+
+    public void setService(PhaseService service) {
+        this.service = service;
     }
 
     public Phase getPhase() {

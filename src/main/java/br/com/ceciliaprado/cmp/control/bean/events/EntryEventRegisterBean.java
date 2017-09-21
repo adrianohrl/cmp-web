@@ -7,8 +7,7 @@ package br.com.ceciliaprado.cmp.control.bean.events;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.bean.SessionUtils;
-import br.com.ceciliaprado.cmp.control.bean.personnel.SupervisorService;
-import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
+import br.com.ceciliaprado.cmp.control.bean.personnel.services.SupervisorService;
 import br.com.ceciliaprado.cmp.control.dao.events.CasualtyEntryEventDAO;
 import br.com.ceciliaprado.cmp.control.dao.events.EntryEventDAO;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SubordinateDAO;
@@ -34,7 +33,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;

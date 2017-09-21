@@ -8,12 +8,16 @@ package br.com.ceciliaprado.cmp.control.bean.personnel.services;
 import br.com.ceciliaprado.cmp.control.dao.personnel.ManagerDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
 import java.util.List;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
 import javax.persistence.EntityManager;
 
 /**
  *
  * @author adrianohrl
  */
+@ManagedBean
+@ApplicationScoped
 public class ManagerService extends PersonnelService<Manager> {
 
     @Override

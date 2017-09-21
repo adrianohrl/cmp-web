@@ -20,9 +20,13 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class ManagerAlterBean extends AlterBean<Manager> {
     
-    
     @ManagedProperty(value = "#{managerService}")
     private ManagerService service;
+
+    @Override
+    protected void update() {
+        service.update();
+    }
 
     @Override
     protected List<Manager> getLoggables() {

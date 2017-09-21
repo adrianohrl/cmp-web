@@ -10,7 +10,6 @@ import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SubordinateDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Subordinate;
 import java.io.Serializable;
-import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -28,36 +27,36 @@ import javax.persistence.EntityManager;
 public class SubordinateRegisterBean implements Serializable {
        
     @ManagedProperty(value = "#{subordinateService}")
-    private SubordinateService subordinateService;
-    private final EntityManager em = DataSource.createEntityManager();
+    private SubordinateService service;
     private final Subordinate subordinate = new Subordinate();    
     
     public String register() {
         String next = "";
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message;
+        EntityManager em = DataSource.createEntityManager();
         try {
             SubordinateDAO subordinateDAO = new SubordinateDAO(em);
             subordinateDAO.create(subordinate);
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, 
                 "Sucesso no cadastro", subordinate + " foi cadastrado com sucesso!!!");
             next = "/index";
-            subordinateService.update(subordinate);
+            update();
         } catch (EntityExistsException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, 
                 "Erro no cadastro", subordinate + " já foi cadastrado!!!");
         }
+        em.close();
         context.addMessage(null, message);
         return next;
     }
-
-    @PreDestroy
-    public void destroy() {
-        em.close();
+    
+    public void update() {
+        service.update();
     }
 
-    public void setSubordinateService(SubordinateService subordinateService) {
-        this.subordinateService = subordinateService;
+    public void setService(SubordinateService service) {
+        this.service = service;
     }
 
     public Subordinate getSubordinate() {

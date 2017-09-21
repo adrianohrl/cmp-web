@@ -6,6 +6,9 @@
 package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
+import br.com.ceciliaprado.cmp.control.bean.personnel.services.ManagerService;
+import br.com.ceciliaprado.cmp.control.bean.personnel.services.SubordinateService;
+import br.com.ceciliaprado.cmp.control.bean.personnel.services.SupervisorService;
 import br.com.ceciliaprado.cmp.control.dao.personnel.io.PersonnelReaderDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
 import java.io.Serializable;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
@@ -27,6 +31,12 @@ import org.primefaces.model.UploadedFile;
 @ViewScoped
 public class EmployeeImportBean implements Serializable {
     
+    @ManagedProperty(value = "#{subordinateService}")
+    private SubordinateService subordinateService;
+    @ManagedProperty(value = "#{supervisorService}")
+    private SupervisorService supervisorService;
+    @ManagedProperty(value = "#{managerService}")
+    private ManagerService managerService;
     private final List<Employee> employees = new ArrayList<>();
     
     public void upload(FileUploadEvent event) {
@@ -40,6 +50,7 @@ public class EmployeeImportBean implements Serializable {
             employees.addAll(readerDAO.getRegisteredEmployees());
             message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso no upload", 
                     "O arquivo " + event.getFile().getFileName() + " foi importado para a aplicação!!!");
+            update();
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no upload", 
                     "Não foi possível fazer o upload do arquivo " + event.getFile().getFileName() + "!!!");
@@ -47,6 +58,12 @@ public class EmployeeImportBean implements Serializable {
         }
         em.close();
         context.addMessage(null, message);
+    }
+    
+    public void update() {
+        subordinateService.update();
+        supervisorService.update();
+        managerService.update();
     }
 
     public List<Employee> getEmployees() {
@@ -67,6 +84,18 @@ public class EmployeeImportBean implements Serializable {
                 break;
         }
         return str;
+    }
+
+    public void setSubordinateService(SubordinateService subordinateService) {
+        this.subordinateService = subordinateService;
+    }
+
+    public void setSupervisorService(SupervisorService supervisorService) {
+        this.supervisorService = supervisorService;
+    }
+
+    public void setManagerService(ManagerService managerService) {
+        this.managerService = managerService;
     }
     
 }
