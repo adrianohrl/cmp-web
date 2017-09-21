@@ -7,6 +7,7 @@ package br.com.ceciliaprado.cmp.control.bean.personnel;
 
 import br.com.ceciliaprado.cmp.control.bean.personnel.services.ManagerService;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
+import java.util.Iterator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -35,6 +36,11 @@ public class ManagerAlterBean extends AlterBean<Manager> {
 
     public void setService(ManagerService service) {
         this.service = service;
+    }
+
+    @Override
+    public Iterator<Manager> iterator() {
+        return service.iterator();
     }
     
 }

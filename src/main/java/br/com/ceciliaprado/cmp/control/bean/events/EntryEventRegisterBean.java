@@ -148,11 +148,10 @@ public class EntryEventRegisterBean implements Serializable {
         if (supervisorLogin == null || supervisorLogin.isEmpty()) {
             return;
         }
-        for (Supervisor s : supervisorService.getSupervisors()) {
+        for (Supervisor s : supervisorService) {
             if (supervisorLogin.equals(s.getLogin())) {
                 supervisor = s;
-                HttpSession session = SessionUtils.getSession();
-			session.setAttribute("loggedEmployee", supervisor);
+                SessionUtils.setLoggable(supervisor);
                 SupervisorDAO supervisorDAO = new SupervisorDAO(em);
                 sectors.addAll(supervisorDAO.findSupervisorSectors(supervisor));
                 if (sectors.size() == 1) {
@@ -264,8 +263,7 @@ public class EntryEventRegisterBean implements Serializable {
     }
     
     public String logout() {
-        HttpSession session = SessionUtils.getSession();
-        session.invalidate();
+        SessionUtils.invalidate();
         return "/index";
     }
     

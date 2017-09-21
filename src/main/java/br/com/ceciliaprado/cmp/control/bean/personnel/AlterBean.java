@@ -12,21 +12,20 @@ import br.com.ceciliaprado.cmp.model.personnel.Loggable;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author adrianohrl
  * @param <T>
  */
-public abstract class AlterBean<T extends Loggable> implements Serializable {
+public abstract class AlterBean<T extends Loggable> implements Serializable, Iterable<T> {
     
-    private T loggable;
+    private T loggable = null;
     private String login;
     private String password;    
     
     public String alter() {
-        if (password.isEmpty())
+        if (loggable == null || password.isEmpty())
         {
             return "";
         }
@@ -35,8 +34,7 @@ public abstract class AlterBean<T extends Loggable> implements Serializable {
         LoggableDAO<T> loggableDAO = new LoggableDAO<>(em);
         loggableDAO.update(loggable);
         em.close();
-        HttpSession session = SessionUtils.getSession();
-        session.invalidate();
+        SessionUtils.invalidate();
         update();
         return "/index";
     }
@@ -46,11 +44,10 @@ public abstract class AlterBean<T extends Loggable> implements Serializable {
         if (login == null || login.isEmpty()) {
             return;
         }
-        for (T l : getLoggables()) {
+        for (T l : this) {
             if (login.equals(l.getLogin())) {
                 loggable = l;
-                HttpSession session = SessionUtils.getSession();
-                session.setAttribute("loggedEmployee", loggable);
+                SessionUtils.setLoggable(loggable);
             }
         }
     }

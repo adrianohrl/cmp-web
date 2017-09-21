@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
  * @author adrianohrl
  */
 public class SessionUtils {
+    
+    private final static String loggableAtributeName = "loggedEmployee";
 
     public static HttpSession getSession() {
         return (HttpSession) FacesContext.getCurrentInstance()
@@ -25,16 +27,40 @@ public class SessionUtils {
         return (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
     }
+    
+    public static boolean setLoggable(Loggable loggable) {
+        HttpSession session = SessionUtils.getSession();
+        if (session != null) {
+            session.setAttribute(loggableAtributeName, loggable);        
+            return true;
+        }
+        return false;
+    }
+    
+    public static void invalidate() {
+        HttpSession session = SessionUtils.getSession();
+        if (session != null) {
+            session.invalidate();
+        }
+    }
 
     public static String getUserName() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
                 .getExternalContext().getSession(false);
-        return session != null ? ((Loggable) session.getAttribute("loggedEmployee")).getName() : null;
+        Loggable loggable = null;
+        if (session != null) {
+            loggable = (Loggable) session.getAttribute(loggableAtributeName);
+        }
+        return loggable != null ? loggable.getName() : null;
     }
 
     public static String getUserLogin() {
         HttpSession session = getSession();
-        return session != null ? ((Loggable) session.getAttribute("loggedEmployee")).getLogin() : null;
+        Loggable loggable = null;
+        if (session != null) {
+            loggable = (Loggable) session.getAttribute(loggableAtributeName);
+        }
+        return loggable != null ? loggable.getLogin() : null;
     }
     
 }

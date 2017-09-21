@@ -19,7 +19,8 @@
                     <p:outputLabel for="login" value="Login: " style="font-weight: bold;"/> 
                     <p:inputText id="login" label="Login: " value="#{supervisorAlterBean.login}"
                                  required="true" requiredMessage="Digite o seu login, supervisor!!!" 
-                                 style="width: 250px;" validator="supervisorLoginValidator">
+                                 style="width: 250px;" validator="supervisorLoginValidator"
+                                 disabled="#{empty supervisorService.supervisors}">
                         <p:ajax event="blur" listener="#{supervisorAlterBean.select()}" />
                     </p:inputText>
 

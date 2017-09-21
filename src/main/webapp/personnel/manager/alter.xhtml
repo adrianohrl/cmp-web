@@ -19,7 +19,8 @@
                     <p:outputLabel for="login" value="Login: " style="font-weight: bold;"/> 
                     <p:inputText id="login" label="Login: " value="#{managerAlterBean.login}"
                                  required="true" requiredMessage="Digite o seu login, gerente!!!" 
-                                 style="width: 250px;" validator="managerLoginValidator">
+                                 style="width: 250px;" validator="managerLoginValidator" 
+                                 disabled="#{empty managerService.managers}">
                         <p:ajax event="blur" listener="#{managerAlterBean.select()}" />
                     </p:inputText>
 

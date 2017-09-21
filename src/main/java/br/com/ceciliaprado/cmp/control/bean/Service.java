@@ -8,6 +8,7 @@ package br.com.ceciliaprado.cmp.control.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -20,7 +21,7 @@ import javax.persistence.EntityManager;
  * @author adrianohrl
  * @param <E>
  */
-public abstract class Service<E extends Comparable> implements Serializable {
+public abstract class Service<E extends Comparable> implements Serializable, Iterable<E> {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final List<E> elements = new ArrayList<>();
@@ -61,5 +62,10 @@ public abstract class Service<E extends Comparable> implements Serializable {
     public abstract String getErrorMessage();
     
     protected abstract List<E> getElements(EntityManager em);
+
+    @Override
+    public Iterator<E> iterator() {
+        return elements.iterator();
+    }
     
 }
