@@ -126,6 +126,13 @@ public class EntryEventRegisterBean implements Serializable {
     }
     
     public String onFlowProcess(FlowEvent event) {
+        if (event.getOldStep().equals("supervisorTab") && sector == null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", 
+                    "Selecione o sector desejado!!!");
+            context.addMessage(null, message);
+            return event.getOldStep();
+        }
         if (event.getNewStep().equals("supervisorTab")) {
             logout();
         } else if (event.getNewStep().equals("entriesTab")) {
@@ -153,9 +160,7 @@ public class EntryEventRegisterBean implements Serializable {
                 SessionUtils.setUser(supervisor);
                 SupervisorDAO supervisorDAO = new SupervisorDAO(em);
                 sectors.addAll(supervisorDAO.findSupervisorSectors(supervisor));
-                if (sectors.size() == 1) {
-                    sector = sectors.get(0);
-                }
+                sector = sectors.size() == 1 ? sectors.get(0) : null;
                 Collections.sort(sectors);
                 return;
             }
