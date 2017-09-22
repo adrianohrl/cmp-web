@@ -47,7 +47,7 @@ public class ModelImportBean implements Serializable {
             update();
         } catch (java.io.IOException | br.com.ceciliaprado.cmp.exceptions.IOException e) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no upload", 
-                    "Não foi possível fazer o upload do arquivo " + event.getFile().getFileName() + "!!!");
+                    "Não foi possível fazer o upload do arquivo " + event.getFile().getFileName() + ": " + e.getMessage());
             System.out.println("IOException catched during importation: " + e.getMessage());
         }
         em.close();

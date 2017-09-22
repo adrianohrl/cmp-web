@@ -31,6 +31,13 @@
                     <p:column headerText="Coletivo" style="width: 100px; text-align: center;">
                         <p:selectBooleanCheckbox value="#{casualty.collective}" disabled="true" />
                     </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton process="@form:grid" icon="ui-icon-refresh" 
+                                         title="Atualizar" update="@form:grid, @form:messages" 
+                                         actionListener="#{casualtyService.update()}"
+                                         style="width: 20px; height: 20px;" />
+                    </f:facet>
                 </p:dataTable>
                     
                 <f:facet name="footer">

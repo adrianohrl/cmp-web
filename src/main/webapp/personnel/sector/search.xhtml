@@ -63,6 +63,13 @@
                             </f:facet>  
                         </p:dataTable>
                     </p:rowExpansion>
+
+                    <f:facet name="footer">
+                        <p:commandButton process="@form:grid" icon="ui-icon-refresh" 
+                                         title="Atualizar" update="@form:grid, @form:messages" 
+                                         actionListener="#{sectorService.update()}"
+                                         style="width: 20px; height: 20px;" />
+                    </f:facet>
                 </p:dataTable>
                     
                 <f:facet name="footer">

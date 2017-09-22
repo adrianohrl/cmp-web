@@ -41,6 +41,13 @@
                          <h:outputText value="#{employee.class.simpleName != 'Subordinate' 
                                                 ? employee.login : ' '}" />
                     </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton process="@form:grid" icon="ui-icon-refresh" 
+                                         title="Atualizar" update="@form:grid, @form:messages" 
+                                         actionListener="#{employeeService.update()}"
+                                         style="width: 20px; height: 20px;" />
+                    </f:facet>
                 </p:dataTable>
                     
                 <f:facet name="footer">

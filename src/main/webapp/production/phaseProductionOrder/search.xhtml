@@ -45,6 +45,13 @@
                             <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
                         </h:outputText>
                     </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton process="@form:grid" icon="ui-icon-refresh" 
+                                         title="Atualizar" update="@form:grid, @form:messages" 
+                                         actionListener="#{phaseProductionOrderService.update()}"
+                                         style="width: 20px; height: 20px;" />
+                    </f:facet>
                 </p:dataTable>
                     
                 <f:facet name="footer">
