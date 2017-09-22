@@ -129,6 +129,19 @@
                                                 icon="ui-icon-arrowthick-1-n" />
                                 </p:submenu>
                             </p:submenu>
+                            
+                            <p:submenu label="Relatórios" expanded="false" rendered="false">
+                                <p:submenu label="Gráficos" expanded="false">
+                                    <p:menuitem value="Horário" outcome="/reports/charts/efficiency" 
+                                                icon="ui-icon-calendar" />
+                                    <p:menuitem value="Eficiência" outcome="/reports/charts/efficiency" 
+                                                icon="ui-icon-search" disabled="true" />
+                                </p:submenu>
+                                <p:submenu label="Impressos" expanded="false">
+                                    <p:menuitem value="Eficiência" outcome="/reports/print/efficiency" 
+                                                icon="ui-icon-print" disabled="true" />
+                                </p:submenu>
+                            </p:submenu>
                         </p:panelMenu>
                     </h:form>
                 </ui:insert>

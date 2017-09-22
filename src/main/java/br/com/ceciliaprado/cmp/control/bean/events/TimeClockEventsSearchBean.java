@@ -10,6 +10,7 @@ import br.com.ceciliaprado.cmp.control.dao.events.TimeClockEventDAO;
 import br.com.ceciliaprado.cmp.exceptions.DAOException;
 import br.com.ceciliaprado.cmp.model.events.TimeClockEvent;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
+import br.com.ceciliaprado.cmp.util.CalendarFormat;
 import br.com.ceciliaprado.cmp.util.Calendars;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
 
 /**
  *
@@ -40,6 +43,7 @@ public class TimeClockEventsSearchBean implements Serializable {
     private Date startTime;
     private Date endDate;
     private Date endTime;
+    private LineChartModel attendance;
     
     public void search() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -55,6 +59,21 @@ public class TimeClockEventsSearchBean implements Serializable {
                     "A data e o horário iniciais da consulta deve ser antes da data e horário finais!!!");
         }  
         context.addMessage(null, message);
+    }
+    
+    public void plot() {
+        attendance = null;
+        search();
+        if (events.isEmpty()) {
+            return;
+        }
+        attendance = new LineChartModel();
+        LineChartSeries series = new LineChartSeries();
+        series.setLabel("Horas trabalhadas");
+        for (TimeClockEvent event : events)
+        {
+            series.set(CalendarFormat.formatDate(event.getEventDate()), null);
+        }
     }
 
     @PreDestroy
@@ -116,6 +135,10 @@ public class TimeClockEventsSearchBean implements Serializable {
     
     public Calendar getEnd() {
         return Calendars.sum(endDate, endTime);
+    }
+
+    public LineChartModel getAttendance() {
+        return attendance;
     }
     
 }
