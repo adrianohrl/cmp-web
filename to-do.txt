@@ -4,5 +4,3 @@
 4) file exportation and download
 
 5) subordinate efficiency graphs per period
-
-6) "Sair" button of entry/register.xhtml is not working properly

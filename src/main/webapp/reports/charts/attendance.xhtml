@@ -7,67 +7,63 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:cmp="http://ceciliaprado.com.br/cmp">
-
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
             
-            <h:panelGrid id="grid" columns="1" cellpadding="10">  
+            <h:panelGrid columns="1" cellpadding="10">  
                 <f:facet name="header">
-                    <h:outputText value="Consulta de horário de funcionário" style="font-weight: bold; font-size: 24px;" />
+                    <h:outputText value="Relatório gráfico de horário de funcionário" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
                 
-                <h:panelGrid id="grid" columns="2" cellpadding="10">   
-                <f:facet name="header">
-                    <h:outputText value="Consultar dados de entrada/saída de funcionário" 
-                                  style="font-weight: bold; font-size: 24px;" />
-                </f:facet>
-                
-                <p:outputLabel for="startDate" value="Data Inicial: " style="font-weight: bold;" /> 
-                <p:calendar id="startDate" value="#{timeClockEventsSearchBean.startDate}" pattern="dd/MMM/yyyy" 
-                            effect="fade" mask="true" maskAutoClear="true" navigator="true" required="true"
-                            requiredMessage="Selecione a data inicial!!!" 
-                            converterMessage="Data com formato errado!!!" locale="pt" 
-                            maxdate="#{timeClockEventsSearchBean.maxDate}" />
+                <h:panelGrid id="grid" columns="2" cellpadding="10">  
+                    <p:outputLabel for="startDate" value="Data Inicial: " style="font-weight: bold;" /> 
+                    <p:calendar id="startDate" value="#{timeClockEventsSearchBean.startDate}" pattern="dd/MMM/yyyy" 
+                                effect="fade" mask="true" maskAutoClear="true" navigator="true" required="true"
+                                requiredMessage="Selecione a data inicial!!!" 
+                                converterMessage="Data com formato errado!!!" locale="pt" 
+                                maxdate="#{timeClockEventsSearchBean.maxDate}" />           
 
-                <p:outputLabel for="startTime" value="Horário Inicial: " style="font-weight: bold;" /> 
-                <p:calendar id="startTime" value="#{timeClockEventsSearchBean.startTime}" pattern="HH:mm:ss" 
-                            effect="fade" mask="true" timeOnly="true" maskAutoClear="true" required="true" 
-                            requiredMessage="Selecione o horário inicial!!!"
-                            converterMessage="Horário com formato errado!!!" locale="pt" />                
-                
-                <p:outputLabel for="endDate" value="Data Final: " style="font-weight: bold;" /> 
-                <p:calendar id="endDate" value="#{timeClockEventsSearchBean.endDate}" pattern="dd/MMM/yyyy" effect="fade"
-                            mask="true" maskAutoClear="true" navigator="true" required="true"
-                            requiredMessage="Selecione a data final!!!" 
-                            converterMessage="Data com formato errado!!!" locale="pt" 
-                            mindate="#{timeClockEventsSearchBean.startDate}"
-                            maxdate="#{timeClockEventsSearchBean.maxDate}" />
+                    <p:outputLabel for="endDate" value="Data Final: " style="font-weight: bold;" /> 
+                    <p:calendar id="endDate" value="#{timeClockEventsSearchBean.endDate}" pattern="dd/MMM/yyyy" effect="fade"
+                                mask="true" maskAutoClear="true" navigator="true" required="true"
+                                requiredMessage="Selecione a data final!!!" 
+                                converterMessage="Data com formato errado!!!" locale="pt" 
+                                mindate="#{timeClockEventsSearchBean.startDate}"
+                                maxdate="#{timeClockEventsSearchBean.maxDate}" />            
 
-                <p:outputLabel for="endTime" value="Horário Final: " style="font-weight: bold;" /> 
-                <p:calendar id="endTime" value="#{timeClockEventsSearchBean.endTime}" pattern="HH:mm:ss" effect="fade"
-                            mask="true" timeOnly="true" maskAutoClear="true" required="true" 
-                            requiredMessage="Selecione o horário final!!!"
-                            converterMessage="Horário com formato errado!!!" locale="pt" />                
-                
-                <cmp:selectOneEmployee id="employee" employee="#{timeClockEventsSearchBean.employee}" />
-                
-                <f:facet name="footer">
-                    <p:commandButton value="Consultar" action="#{timeClockEventsSearchBean.search()}" 
-                                     update="@form" title="Consultar entradas e saídas do funcionário"
-                                     style="font-size: 18px;" />
-                </f:facet>
-            </h:panelGrid>
+                    <cmp:selectOneEmployee id="employee" employee="#{timeClockEventsSearchBean.employee}" />
+
+                    <f:facet name="footer">
+                        <p:commandButton value="Gerar" actionListener="#{timeClockEventsSearchBean.plot()}" 
+                                         process="@this, @form:grid" update="@form:report, @form:messages" 
+                                         title="Gerar gráfico de entradas e saídas do funcionário"
+                                         style="font-size: 18px;" />
+                    </f:facet>
+                </h:panelGrid>
             
-            <p:separator/>
-                
-                <p:chart type="line" model="#{timeClockEventsSearchBean.attendance}" style="height:400px;"/>
+                <p:separator/>
+                               
+                <p:outputPanel id="report" deferred="#{not empty timeClockEventsSearchBean.events}">
+                     <p:chart type="line" model="#{timeClockEventsSearchBean.attendance}" 
+                              rendered="#{not empty timeClockEventsSearchBean.events}" />
+                     
+                    <h:panelGrid columns="2" cellpadding="10" 
+                                 rendered="#{not empty timeClockEventsSearchBean.events}"> 
+                        <p:outputLabel value="Total: " style="font-weight: bold;" /> 
+                        <h:outputText value="#{timeClockEventsSearchBean.totalDuration}">
+                            <f:convertNumber pattern="#0.00 [h]" />
+                        </h:outputText>                                   
+                    </h:panelGrid>
+                </p:outputPanel>
+                    
                     
                 <f:facet name="footer">
                     <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />
                 </f:facet>
             </h:panelGrid>
         </h:form>
+        
+        <h:outputScript library="js" name="pt_calendar.js" />
     </ui:define>
-
 </ui:composition>

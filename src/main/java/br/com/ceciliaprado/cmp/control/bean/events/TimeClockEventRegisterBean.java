@@ -7,18 +7,12 @@ package br.com.ceciliaprado.cmp.control.bean.events;
 
 import br.com.ceciliaprado.cmp.control.bean.DataSource;
 import br.com.ceciliaprado.cmp.control.dao.events.TimeClockEventDAO;
-import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
 import br.com.ceciliaprado.cmp.model.events.TimeClockEvent;
-import br.com.ceciliaprado.cmp.model.personnel.Employee;
 import br.com.ceciliaprado.cmp.util.Calendars;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
