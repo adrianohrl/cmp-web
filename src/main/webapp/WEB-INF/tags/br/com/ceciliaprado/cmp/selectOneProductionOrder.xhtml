@@ -26,6 +26,9 @@
                              requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty productionOrders)}"
                              effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="po" 
                              style="#{style}" panelStyle="#{panelStyle}">
+                <c:if test="${(not empty update)}">
+                    <p:ajax update="#{update}"/>
+                </c:if>
                 <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
                 <f:selectItems value="#{productionOrders}" />
                 <p:column>

@@ -22,7 +22,9 @@
                             effect="fade" mask="true" maskAutoClear="true" navigator="true" required="true"
                             requiredMessage="Selecione a data inicial!!!" 
                             converterMessage="Data com formato errado!!!" locale="pt" 
-                            maxdate="#{entryEventsSearchBean.maxDate}" />
+                            maxdate="#{entryEventsSearchBean.maxDate}">
+                    <p:ajax event="dateSelect" update="@form:endDate" />
+                </p:calendar>
 
                 <p:outputLabel for="startTime" value="Horário Inicial: " style="font-weight: bold;" /> 
                 <p:calendar id="startTime" value="#{entryEventsSearchBean.startTime}" pattern="HH:mm:ss" 
@@ -44,7 +46,8 @@
                             requiredMessage="Selecione o horário final!!!"
                             converterMessage="Horário com formato errado!!!" locale="pt" />   
                 
-                <cmp:selectOneEmployee id="subordinate" type="subordinate" employee="#{entryEventsSearchBean.subordinate}" /> 
+                <cmp:selectOneEmployee id="subordinate" type="subordinate" 
+                                       employee="#{entryEventsSearchBean.subordinate}" /> 
                 
                 <f:facet name="footer">
                     <p:commandButton value="Consultar" action="#{entryEventsSearchBean.search()}" 

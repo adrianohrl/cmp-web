@@ -22,7 +22,9 @@
                             effect="fade" mask="true" maskAutoClear="true" navigator="true" required="true"
                             requiredMessage="Selecione a data inicial!!!" 
                             converterMessage="Data com formato errado!!!" locale="pt" 
-                            maxdate="#{timeClockEventsSearchBean.maxDate}" />
+                            maxdate="#{timeClockEventsSearchBean.maxDate}">
+                    <p:ajax event="dateSelect" update="@form:endDate" />
+                </p:calendar>
 
                 <p:outputLabel for="startTime" value="Horário Inicial: " style="font-weight: bold;" /> 
                 <p:calendar id="startTime" value="#{timeClockEventsSearchBean.startTime}" pattern="HH:mm:ss" 

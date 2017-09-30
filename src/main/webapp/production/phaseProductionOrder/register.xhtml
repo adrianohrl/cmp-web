@@ -14,7 +14,7 @@
             <p:dialog id="dialog" header="Nova Ordem de Produção de Fase" widgetVar="dlg" 
                       resizable="false" modal="true" draggable="false" showEffect="fade"  
                       hideEffect="fade" closeOnEscape="true">
-                <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">   
+                <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">  
                     <cmp:selectOnePhase id="phase" required="true" 
                                         phase="#{phaseProductionOrderRegisterBean.phase}"
                                         phases="#{phaseProductionOrderRegisterBean.phases}" />
@@ -43,14 +43,6 @@
                 </f:facet>
                 
                 <h:panelGrid columns="2" cellpadding="10">  
-                    
-                    <ui:remove>
-                    <cmp:selectOneProductionOrder id="productionOrder" productionOrder="#{phaseProductionOrderRegisterBean.productionOrder}">
-                        <p:ajax listener="#{phaseProductionOrderRegisterBean.clear()}" 
-                                update="@form:dialog, @form:button, @form:orders" />
-                    </cmp:selectOneProductionOrder>
-                    </ui:remove>
-                    
                     <p:outputLabel for="productionOrder" value="Ordem de Produção: " style="font-weight: bold;" /> 
                     <p:selectOneMenu id="productionOrder" value="#{phaseProductionOrderRegisterBean.productionOrder}" 
                                      converter="productionOrderConverter" panelStyle="width: 250px;"
@@ -70,6 +62,34 @@
                             <h:outputText value="#{order.reference}" />
                         </p:column>
                     </p:selectOneMenu>
+                    <ui:remove>
+                    <cmp:selectOneProductionOrder id="productionOrder" 
+                                                  productionOrder="#{phaseProductionOrderRegisterBean.productionOrder}"
+                                                  listener="phaseProductionOrderRegisterBean.clear()" 
+                                                  update="@form:dialog, @form:button, @form:orders" />
+                    </ui:remove>
+                    
+                    <ui:remove>
+                    <p:outputLabel for="productionOrder" value="Ordem de Produção: " style="font-weight: bold;" /> 
+                    <p:selectOneMenu id="productionOrder" value="#{phaseProductionOrderRegisterBean.productionOrder}" 
+                                     converter="productionOrderConverter" panelStyle="width: 250px;"
+                                     effect="fade" var="order" style="width: 250px;" filter="true" 
+                                     filterMatchMode="startsWith" required="true"
+                                     requiredMessage="Selecione a ordem de produção desejada!!!"
+                                     disabled="#{empty productionOrderService.productionOrders}">
+                        <p:ajax listener="#{phaseProductionOrderRegisterBean.clear()}" 
+                                update="@form:dialog, @form:button, @form:orders" />
+                        
+                        <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
+
+                        <f:selectItems value="#{productionOrderService.productionOrders}" var="po" 
+                                       itemLabel="#{po.reference}" itemValue="#{po}" />
+
+                        <p:column>
+                            <h:outputText value="#{order.reference}" />
+                        </p:column>
+                    </p:selectOneMenu>
+                    </ui:remove>
                     
                     <h:outputLabel for="button" value="Todas as fases: " style="font-weight: bold;" /> 
                     <p:selectBooleanButton id="button" value="#{phaseProductionOrderRegisterBean.allPhases}" 

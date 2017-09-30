@@ -50,6 +50,9 @@
                              requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty employees)}"
                              effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="e" 
                              style="#{style}" panelStyle="#{panelStyle}">
+                <c:if test="${(not empty update)}">
+                    <p:ajax update="#{update}"/>
+                </c:if>
                 <f:converter converterId="#{converter}" />
                 <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
                 <f:selectItems value="#{employees}" />

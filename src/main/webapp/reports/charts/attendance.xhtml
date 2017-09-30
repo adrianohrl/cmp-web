@@ -9,7 +9,7 @@
                 xmlns:cmp="http://ceciliaprado.com.br/cmp">
     <ui:define name="content">
         <h:form>
-            <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
+            <p:growl id="messages" autoUpdate="true" showDetail="true" life="#{parametersBean.growlLife}" />  
             
             <h:panelGrid columns="1" cellpadding="10">  
                 <f:facet name="header">
@@ -18,45 +18,75 @@
                 
                 <h:panelGrid id="grid" columns="2" cellpadding="10">  
                     <p:outputLabel for="startDate" value="Data Inicial: " style="font-weight: bold;" /> 
-                    <p:calendar id="startDate" value="#{timeClockEventsSearchBean.startDate}" pattern="dd/MMM/yyyy" 
+                    <p:calendar id="startDate" value="#{attendanceReportBean.startDate}" pattern="dd/MMM/yyyy" 
                                 effect="fade" mask="true" maskAutoClear="true" navigator="true" required="true"
                                 requiredMessage="Selecione a data inicial!!!" 
                                 converterMessage="Data com formato errado!!!" locale="pt" 
-                                maxdate="#{timeClockEventsSearchBean.maxDate}" />           
+                                maxdate="#{attendanceReportBean.maxDate}">
+                        <p:ajax event="dateSelect" update="@form:endDate" />
+                    </p:calendar>
 
                     <p:outputLabel for="endDate" value="Data Final: " style="font-weight: bold;" /> 
-                    <p:calendar id="endDate" value="#{timeClockEventsSearchBean.endDate}" pattern="dd/MMM/yyyy" effect="fade"
+                    <p:calendar id="endDate" value="#{attendanceReportBean.endDate}" pattern="dd/MMM/yyyy" effect="fade"
                                 mask="true" maskAutoClear="true" navigator="true" required="true"
-                                requiredMessage="Selecione a data final!!!" 
+                                requiredMessage="Selecione a data final!!!" showButtonPanel="true"
                                 converterMessage="Data com formato errado!!!" locale="pt" 
-                                mindate="#{timeClockEventsSearchBean.startDate}"
-                                maxdate="#{timeClockEventsSearchBean.maxDate}" />            
+                                mindate="#{attendanceReportBean.startDate}"
+                                maxdate="#{attendanceReportBean.maxDate}" 
+                                disabled="#{empty attendanceReportBean.startDate}">
+                        <p:ajax event="dateSelect"  update="@form:employee" />
+                    </p:calendar>           
 
-                    <cmp:selectOneEmployee id="employee" employee="#{timeClockEventsSearchBean.employee}" />
+                    <cmp:selectOneEmployee id="employee" employee="#{attendanceReportBean.employee}" 
+                                           disabled="#{empty attendanceReportBean.endDate}" update="@form:submit" />
 
                     <f:facet name="footer">
-                        <p:commandButton value="Gerar" actionListener="#{timeClockEventsSearchBean.plot()}" 
+                        <p:commandButton id="submit" value="Gerar" actionListener="#{attendanceReportBean.plot()}" 
                                          process="@this, @form:grid" update="@form:report, @form:messages" 
                                          title="Gerar gráfico de entradas e saídas do funcionário"
-                                         style="font-size: 18px;" />
+                                         style="font-size: 18px;" disabled="#{empty attendanceReportBean.employee}" />
                     </f:facet>
                 </h:panelGrid>
             
                 <p:separator/>
                                
-                <p:outputPanel id="report" deferred="#{not empty timeClockEventsSearchBean.events}">
-                     <p:chart type="line" model="#{timeClockEventsSearchBean.attendance}" 
-                              rendered="#{not empty timeClockEventsSearchBean.events}" />
+                <p:importEnum type="br.com.ceciliaprado.cmp.control.bean.reports.AttendanceChartTypes" 
+                              var="AttendanceChartTypes" allSuffix="ALL_ENUM_VALUES" />  
+                <p:outputPanel id="report" deferred="#{not empty attendanceReportBean.events}">
+                    <p:accordionPanel>
+                        <ui:repeat var="chartType" value="#{AttendanceChartTypes.ALL_ENUM_VALUES}">
+                            <p:tab title="#{chartType.title}">
+                                <p:chart type="line" model="#{attendanceReportBean.dailySeriesChart(chartType)}" 
+                                         rendered="#{not empty attendanceReportBean.events}" />
+                     
+                                <h:panelGrid columns="2" cellpadding="10" 
+                                             rendered="#{not empty attendanceReportBean.events}"> 
+                                    <p:outputLabel value="Total: " style="font-weight: bold;" /> 
+                                    <h:outputText value="#{attendanceReportBean.total(chartType)}">
+                                        <f:convertNumber pattern="#0.00 [h]" />
+                                    </h:outputText>                                   
+                                </h:panelGrid>
+                            </p:tab>
+                        </ui:repeat>
+                    </p:accordionPanel>
+                </p:outputPanel>
+                
+                
+                
+                <ui:remove>
+                <p:outputPanel id="report" deferred="#{not empty attendanceReportBean.events}">
+                    <p:chart type="line" model="#{attendanceReportBean.dailyAttendance}" 
+                             rendered="#{not empty attendanceReportBean.events}" />
                      
                     <h:panelGrid columns="2" cellpadding="10" 
-                                 rendered="#{not empty timeClockEventsSearchBean.events}"> 
+                                 rendered="#{not empty attendanceReportBean.events}"> 
                         <p:outputLabel value="Total: " style="font-weight: bold;" /> 
-                        <h:outputText value="#{timeClockEventsSearchBean.totalDuration}">
+                        <h:outputText value="#{attendanceReportBean.periodAttendance}">
                             <f:convertNumber pattern="#0.00 [h]" />
                         </h:outputText>                                   
                     </h:panelGrid>
                 </p:outputPanel>
-                    
+                </ui:remove>
                     
                 <f:facet name="footer">
                     <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />

@@ -26,6 +26,9 @@
                              requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty phases)}" 
                              effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="p" 
                              style="#{style}" panelStyle="#{panelStyle}">
+                <c:if test="${(not empty update)}">
+                    <p:ajax update="#{update}"/>
+                </c:if>
                 <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
                 <f:selectItems value="#{phases}" />
                 <p:column>
