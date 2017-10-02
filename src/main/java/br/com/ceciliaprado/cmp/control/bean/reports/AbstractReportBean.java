@@ -13,10 +13,12 @@ import br.com.ceciliaprado.cmp.exceptions.ReportException;
 import br.com.ceciliaprado.cmp.model.events.AbstractEmployeeRelatedEvent;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
 import br.com.ceciliaprado.cmp.model.personnel.Manager;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.model.chart.LineChartModel;
 
 /**
  *
@@ -28,8 +30,8 @@ import javax.faces.context.FacesContext;
 public abstract class AbstractReportBean<T extends Employee, C extends ChartType, S extends SeriesType> extends AbstractEventsPeriodSearchBean<T, AbstractEmployeeRelatedEvent> {
     
     protected Manager manager = new Manager();
-    private final Map<C, ReportChart> dailySeriesCharts = new TreeMap<>();
-    private final Map<C, Number> totals = new TreeMap<>();
+    private final Map<C, ReportChart<S>> dailySeriesCharts = new TreeMap<>();
+    private final Map<S, Number> totals = new TreeMap<>();
     
     @Override
     protected void reset() {
@@ -38,11 +40,15 @@ public abstract class AbstractReportBean<T extends Employee, C extends ChartType
         totals.clear();
         for (C chartType : getChartTypes()) {
             dailySeriesCharts.put(chartType, new ReportChart(chartType, employee.getName(), endDate));
-            totals.put(chartType, 0.0);
+        }
+        for (S seriesType : getSeriesTypes()) {
+            totals.put(seriesType, 0.0);
         }
     }
     
     protected abstract C[] getChartTypes();
+    
+    protected abstract S[] getSeriesTypes();
     
     protected abstract C getChartType(S seriesType);
     
@@ -78,18 +84,24 @@ public abstract class AbstractReportBean<T extends Employee, C extends ChartType
         this.manager = manager;
     }
     
-    public ReportChart getDailySeriesChart(C chartType) {
-        return dailySeriesCharts.get(chartType);
+    public LineChartModel getDailySeriesChart(C chartType) {
+        return dailySeriesCharts.get(chartType).getChart();
     }
     
-    public Number getTotal(C chartType) {
-        return totals.get(chartType);
+    public Number getTotal(S seriesType) {
+        return totals.get(seriesType);
     }
 
     private void addDailySeries(C chartType, ReportNumericSeries<S> dailySeries) {
-        ReportChart chart = dailySeriesCharts.get(chartType);
-        chart.addSeries(dailySeries, chartType.getLabel());
-        totals.put(chartType, dailySeries.getTotal());
+        ReportChart<S> chart = dailySeriesCharts.get(chartType);
+        chart.addSeries(dailySeries, getLegend(dailySeries.getType()));
+        totals.put(dailySeries.getType(), dailySeries.getTotal());
     }
+    
+    public List<S> getSeriesTypes(C chartType) {
+        return dailySeriesCharts.get(chartType).getSeriesTypes();
+    }
+        
+    public abstract String getLegend(S seriesType);
     
 }

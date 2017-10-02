@@ -50,43 +50,30 @@
             
                 <p:separator/>
                                
-                <p:importEnum type="br.com.ceciliaprado.cmp.control.bean.reports.AttendanceChartTypes" 
-                              var="AttendanceChartTypes" allSuffix="ALL_ENUM_VALUES" />  
+                <p:importEnum type="br.com.ceciliaprado.cmp.control.bean.reports.AttendanceChartTypes" />
+                
                 <p:outputPanel id="report" deferred="#{not empty attendanceReportBean.events}">
-                    <p:accordionPanel>
-                        <ui:repeat var="chartType" value="#{AttendanceChartTypes.ALL_ENUM_VALUES}">
-                            <p:tab title="#{chartType.title}">
-                                <p:chart type="line" model="#{attendanceReportBean.dailySeriesChart(chartType)}" 
-                                         rendered="#{not empty attendanceReportBean.events}" />
-                     
-                                <h:panelGrid columns="2" cellpadding="10" 
-                                             rendered="#{not empty attendanceReportBean.events}"> 
-                                    <p:outputLabel value="Total: " style="font-weight: bold;" /> 
-                                    <h:outputText value="#{attendanceReportBean.total(chartType)}">
-                                        <f:convertNumber pattern="#0.00 [h]" />
-                                    </h:outputText>                                   
-                                </h:panelGrid>
-                            </p:tab>
+                    <ui:repeat var="chartType" value="#{AttendanceChartTypes.ALL_VALUES}">
+                        <p:chart type="line" model="#{attendanceReportBean.getDailySeriesChart(chartType)}" 
+                                 rendered="#{not empty attendanceReportBean.events}" />                                                
+
+                        <ui:repeat var="seriesType" value="#{attendanceReportBean.getSeriesTypes(chartType)}"
+                                   rendered="#{not empty attendanceReportBean.events}">      
+                            <h:panelGrid columns="3" cellpadding="10"> 
+                                <p:outputLabel value="#{attendanceReportBean.getLegend(seriesType)} Total: " 
+                                               style="font-weight: bold;" />                                
+                                
+                                <h:outputText value="#{attendanceReportBean.getTotal(seriesType)}">
+                                    <f:convertNumber maxFractionDigits="2" />                                   
+                                </h:outputText> 
+                                
+                                <h:outputText value="#{chartType.unit}" />
+                            </h:panelGrid>
                         </ui:repeat>
-                    </p:accordionPanel>
+                        
+                        <p:separator rendered="#{not empty attendanceReportBean.events}" />
+                    </ui:repeat>
                 </p:outputPanel>
-                
-                
-                
-                <ui:remove>
-                <p:outputPanel id="report" deferred="#{not empty attendanceReportBean.events}">
-                    <p:chart type="line" model="#{attendanceReportBean.dailyAttendance}" 
-                             rendered="#{not empty attendanceReportBean.events}" />
-                     
-                    <h:panelGrid columns="2" cellpadding="10" 
-                                 rendered="#{not empty attendanceReportBean.events}"> 
-                        <p:outputLabel value="Total: " style="font-weight: bold;" /> 
-                        <h:outputText value="#{attendanceReportBean.periodAttendance}">
-                            <f:convertNumber pattern="#0.00 [h]" />
-                        </h:outputText>                                   
-                    </h:panelGrid>
-                </p:outputPanel>
-                </ui:remove>
                     
                 <f:facet name="footer">
                     <p:commandButton value="Voltar" action="/index" title="Voltar" style="font-size: 18px;" />

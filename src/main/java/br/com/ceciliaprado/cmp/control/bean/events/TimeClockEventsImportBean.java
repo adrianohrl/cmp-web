@@ -25,7 +25,7 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class TimeClockImportBean implements Serializable {
+public class TimeClockEventsImportBean implements Serializable {
     
     private final List<TimeClockEvent> events = new ArrayList<>();
     

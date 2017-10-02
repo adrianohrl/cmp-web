@@ -9,8 +9,8 @@ import br.com.ceciliaprado.cmp.control.bean.Service;
 import br.com.ceciliaprado.cmp.control.dao.events.CasualtyDAO;
 import br.com.ceciliaprado.cmp.model.events.Casualty;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.persistence.EntityManager;
 
 /**
@@ -18,7 +18,7 @@ import javax.persistence.EntityManager;
  * @author adrianohrl
  */
 @ManagedBean
-@ApplicationScoped
+@SessionScoped
 public class CasualtyService extends Service<Casualty> {
 
     @Override

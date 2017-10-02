@@ -25,7 +25,7 @@ import javax.persistence.EntityManager;
  */
 public abstract class AbstractEventsPeriodSearchBean<T extends Employee, S extends AbstractEmployeeRelatedEvent> extends PeriodSearch {
     
-    private final EntityManager em = DataSource.createEntityManager();
+    public final EntityManager em = DataSource.createEntityManager();
     protected EmployeeRelatedEventsList<S> events = new EmployeeRelatedEventsList<>();
     protected T employee;
 

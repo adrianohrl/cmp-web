@@ -15,7 +15,7 @@ public enum AttendanceChartTypes implements ChartType<AttendanceChartTypes> {
     
     private final String title;
     private final String label;
-    private final String unit;
+    private final String unit;    
 
     private AttendanceChartTypes(String title, String label, String unit) {
         this.title = title;

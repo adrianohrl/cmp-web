@@ -26,7 +26,7 @@ import org.primefaces.model.UploadedFile;
  */
 @ManagedBean
 @ViewScoped
-public class EntryImportBean implements Serializable {
+public class EntryEventsImportBean implements Serializable {
     
     private final List<EntryEvent> events = new ArrayList<>();
     

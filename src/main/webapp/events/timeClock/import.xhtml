@@ -15,13 +15,13 @@
                     <h:outputText value="Importação de Entradas e Saídas de Ponto" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
             
-                <p:fileUpload fileUploadListener="#{timeClockImportBean.upload}" label="Escolher" 
+                <p:fileUpload fileUploadListener="#{timeClockEventsImportBean.upload}" label="Escolher" 
                               mode="advanced" dragDropSupport="true" update="@form:messages, @form:events" 
                               auto="true" sizeLimit="1048576" allowTypes="/(\.|\/)(csv)$/"
                               invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
                               invalidSizeMessage="O tamanho máximo permitido do arquivo é de 1Mb!!!" />
                 
-                <p:dataTable id="events" var="event" value="#{timeClockImportBean.events}" 
+                <p:dataTable id="events" var="event" value="#{timeClockEventsImportBean.events}" 
                              rowKey="#{event.eventDate}" emptyMessage="Nenhuma entrada/saída importada ainda."
                              scrollable="true" scrollHeight="300">                
                     <f:facet name="header">

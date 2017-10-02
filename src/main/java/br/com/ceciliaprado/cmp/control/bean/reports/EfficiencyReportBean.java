@@ -27,6 +27,11 @@ public class EfficiencyReportBean extends AbstractReportBean<Subordinate, Effici
     }
 
     @Override
+    protected EfficiencySeriesTypes[] getSeriesTypes() {
+        return EfficiencySeriesTypes.values();
+    }
+
+    @Override
     protected EfficiencyChartTypes getChartType(EfficiencySeriesTypes seriesType) {
         switch (seriesType) {
             case EFFECTIVE_DURATION:
@@ -52,6 +57,29 @@ public class EfficiencyReportBean extends AbstractReportBean<Subordinate, Effici
     @Override
     protected AbstractProductionReport<EfficiencySeriesTypes> getReport() throws ReportException {
         return new SubordinateEfficiencyReport(employee, events, manager, super.getStart(), super.getEnd());
+    }
+
+    @Override
+    public String getLegend(EfficiencySeriesTypes seriesType) {
+        switch (seriesType) {
+            case EFFECTIVE_DURATION:
+                return "Carga Horária Efetiva";
+            case EXPECTED_DURATION:
+                return "Carga Horária Esperada";
+            case FREE_DURATION:
+                return "Carga Horária Livre";
+            case TOTAL_DURATION:
+                return "Carga Horária Total";
+            case PRODUCED_QUANTITY:
+                return "Quantidade Produzida";
+            case RETURNED_QUANTITY:
+                return "Quantidade Retornada";
+            case EFFECTIVE_EFFICIENCY:
+                return "Eficiência Efetiva";
+            case TOTAL_EFFICIENCY:
+                return "Eficiência Total";
+        }
+        return null;
     }
     
 }

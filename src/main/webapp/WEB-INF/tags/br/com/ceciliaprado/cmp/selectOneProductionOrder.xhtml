@@ -11,7 +11,7 @@
         <ui:composition>
             <c:set var="productionOrders" value="${(productionOrders == null) ? productionOrderService.productionOrders : productionOrders}" />
             <c:set var="label" value="${(empty label) ? 'Order de Produção: ' : label}" />
-            <c:set var="required" value="${(empty required) ? false : required}" />
+            <c:set var="required" value="${(empty required) ? true : required}" />
             <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione uma order de produção!!!' : requiredMessage}" />
             <c:set var="disabled" value="${(empty disabled) ? false : disabled}" />
             <c:set var="noSelectionItemLabel" value="${(empty noSelectionItemLabel) ? 'Selecione uma ...' : noSelectionItemLabel}" />
@@ -26,8 +26,8 @@
                              requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty productionOrders)}"
                              effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="po" 
                              style="#{style}" panelStyle="#{panelStyle}">
-                <c:if test="${(not empty update)}">
-                    <p:ajax update="#{update}"/>
+                <c:if test="${not empty update}">
+                    <p:ajax update="#{update}" />
                 </c:if>
                 <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
                 <f:selectItems value="#{productionOrders}" />

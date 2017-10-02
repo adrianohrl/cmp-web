@@ -8,8 +8,8 @@ package br.com.ceciliaprado.cmp.control.bean.personnel.services;
 import br.com.ceciliaprado.cmp.control.dao.personnel.SupervisorDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Supervisor;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.persistence.EntityManager;
 
 /**
@@ -17,7 +17,7 @@ import javax.persistence.EntityManager;
  * @author adrianohrl
  */
 @ManagedBean
-@ApplicationScoped
+@SessionScoped
 public class SupervisorService extends PersonnelService<Supervisor> {
 
     @Override

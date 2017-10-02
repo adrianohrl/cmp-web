@@ -9,8 +9,8 @@ import br.com.ceciliaprado.cmp.control.bean.Service;
 import br.com.ceciliaprado.cmp.control.dao.personnel.EmployeeDAO;
 import br.com.ceciliaprado.cmp.model.personnel.Employee;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.persistence.EntityManager;
 
 /**
@@ -18,7 +18,7 @@ import javax.persistence.EntityManager;
  * @author adrianohrl
  */
 @ManagedBean
-@ApplicationScoped
+@SessionScoped
 public class EmployeeService extends Service<Employee> {
 
     @Override

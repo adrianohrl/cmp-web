@@ -98,16 +98,6 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>listener</name>
-            <description>
-                <![CDATA[
-                    Method to process in partial request.
-                ]]>
-            </description>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
             <name>noSelectionItemLabel</name>
             <description>
                 <![CDATA[
@@ -288,16 +278,6 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>listener</name>
-            <description>
-                <![CDATA[
-                    Method to process in partial request.
-                ]]>
-            </description>
-            <required>false</required>
-            <type>javax.el.ValueExpression</type>
-        </attribute>
-        <attribute>
             <name>noSelectionItemLabel</name>
             <description>
                 <![CDATA[
@@ -461,16 +441,6 @@
             <description>
                 <![CDATA[
                     Component(s) to update with ajax.
-                ]]>
-            </description>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <name>listener</name>
-            <description>
-                <![CDATA[
-                    Method to process in partial request.
                 ]]>
             </description>
             <required>false</required>
@@ -646,16 +616,6 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>listener</name>
-            <description>
-                <![CDATA[
-                    Method to process in partial request.
-                ]]>
-            </description>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
             <name>noSelectionItemLabel</name>
             <description>
                 <![CDATA[
@@ -825,16 +785,6 @@
             <type>java.lang.String</type>
         </attribute>
         <attribute>
-            <name>listener</name>
-            <description>
-                <![CDATA[
-                    Method to process in partial request.
-                ]]>
-            </description>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
             <name>noSelectionItemLabel</name>
             <description>
                 <![CDATA[
@@ -998,16 +948,6 @@
             <description>
                 <![CDATA[
                     Component(s) to update with ajax.
-                ]]>
-            </description>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <name>listener</name>
-            <description>
-                <![CDATA[
-                    Method to process in partial request.
                 ]]>
             </description>
             <required>false</required>

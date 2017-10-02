@@ -9,8 +9,8 @@ import br.com.ceciliaprado.cmp.control.bean.Service;
 import br.com.ceciliaprado.cmp.control.dao.production.ProductionOrderDAO;
 import br.com.ceciliaprado.cmp.model.production.ProductionOrder;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.persistence.EntityManager;
 
 /**
@@ -18,7 +18,7 @@ import javax.persistence.EntityManager;
  * @author adrianohrl
  */
 @ManagedBean
-@ApplicationScoped
+@SessionScoped
 public class ProductionOrderService extends Service<ProductionOrder> {
 
     @Override

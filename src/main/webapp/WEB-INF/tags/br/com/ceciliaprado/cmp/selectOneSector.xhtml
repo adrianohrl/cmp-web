@@ -11,7 +11,7 @@
         <ui:composition>
             <c:set var="sectors" value="${(sectors == null) ? sectorService.sectors : sectors}" />
             <c:set var="label" value="${(empty label) ? 'Setor: ' : label}" />
-            <c:set var="required" value="${(empty required) ? false : required}" />
+            <c:set var="required" value="${(empty required) ? true : required}" />
             <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione um setor!!!' : requiredMessage}" />
             <c:set var="disabled" value="${(empty disabled) ? false : disabled}" />
             <c:set var="converter" value="${(empty converter) ? 'sectorConverter' : converter}" />
@@ -27,8 +27,8 @@
                              requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty sectors)}" 
                              effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="s" 
                              style="#{style}" panelStyle="#{panelStyle}">           
-                <c:if test="${(not empty update)}">
-                    <p:ajax update="#{update}"/>
+                <c:if test="${not empty update}">
+                    <p:ajax update="#{update}" />
                 </c:if>
                 <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
                 <f:selectItems value="#{sectors}" />

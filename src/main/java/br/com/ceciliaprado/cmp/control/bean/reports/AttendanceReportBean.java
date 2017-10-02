@@ -27,6 +27,11 @@ public class AttendanceReportBean extends AbstractReportBean<Employee, Attendanc
     }
 
     @Override
+    protected AttendanceSeriesTypes[] getSeriesTypes() {
+        return AttendanceSeriesTypes.values();
+    }
+
+    @Override
     protected AttendanceChartTypes getChartType(AttendanceSeriesTypes seriesType) {
         return AttendanceChartTypes.ATTENDANCE;
     }
@@ -34,6 +39,11 @@ public class AttendanceReportBean extends AbstractReportBean<Employee, Attendanc
     @Override
     protected AbstractProductionReport<AttendanceSeriesTypes> getReport() throws ReportException {
         return new EmployeeAttendanceReport(employee, events, manager, super.getStart(), super.getEnd());
+    }
+
+    @Override
+    public String getLegend(AttendanceSeriesTypes seriesType) {
+        return "Carga Horária";
     }
     
 }

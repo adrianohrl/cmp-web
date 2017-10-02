@@ -31,26 +31,18 @@
                                 mask="true" timeOnly="true" maskAutoClear="true" required="true" 
                                 requiredMessage="Selecione o horário da atividade!!!" style="width: 250px;" 
                                 converterMessage="Horário com formato errado!!!" locale="pt" />        
-                    <ui:remove>
-                        <cmp:selectOneEmployee id="subordinate" type="subordinate" employee="#{entryEventRegisterBean.subordinate}"
-                                           employees="#{entryEventRegisterBean.subordinates}" />   
                     
-                    
-                        <cmp:selectOneProductionOrder id="productionOrder"
-                                                      productionOrder="#{entryEventRegisterBean.productionOrder}" 
-                                                      productionOrders="#{entryEventRegisterBean.productionOrders}" />
-                    </ui:remove>
-                    
-                    <p:selectOneMenu id="subordinate" value="#{entryEventBean.subordinate}" 
+                    <p:outputLabel for="subordinate" value="Subordinado: " style="font-weight: bold;" /> 
+                    <p:selectOneMenu id="subordinate" value="#{entryEventRegisterBean.subordinate}" 
                                      converter="subordinateConverter" panelStyle="width: 250px;" effect="fade" var="sub" 
                                      style="width: 250px;" filter="true" filterMatchMode="startsWith" required="true" 
                                      requiredMessage="Selecione um subordinado disponível!!!" 
-                                     disabled="#{empty entryEventBean.subordinates}">
-                        <p:ajax listener="#{entryEventBean.selectProductionOrders()}" update="@form:dlgGrid" />
+                                     disabled="#{empty entryEventRegisterBean.subordinates}">
+                        <p:ajax listener="#{entryEventRegisterBean.selectProductionOrders()}" update="@form:dlgGrid" />
 
                         <f:selectItem itemLabel="Selecione um ..." itemDisabled="true" noSelectionOption="true" />
 
-                        <f:selectItems value="#{entryEventBean.subordinates}" var="s" 
+                        <f:selectItems value="#{entryEventRegisterBean.subordinates}" var="s" 
                                        itemLabel="#{s.name}" itemValue="#{s}" />
 
                         <p:column>

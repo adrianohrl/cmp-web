@@ -36,7 +36,7 @@
                    <c:set var="converter" value="${(empty converter) ? 'employeeConverter' : converter}" />
                 </c:otherwise>
             </c:choose>
-            <c:set var="required" value="${(empty required) ? false : required}" />
+            <c:set var="required" value="${(empty required) ? true : required}" />
             <c:set var="disabled" value="${(empty disabled) ? false : disabled}" />
             <c:set var="noSelectionItemLabel" value="${(empty noSelectionItemLabel) ? 'Selecione um ...' : noSelectionItemLabel}" />
             <c:set var="effect" value="${(empty effect) ? 'fade' : effect}" />
@@ -50,8 +50,8 @@
                              requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty employees)}"
                              effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="e" 
                              style="#{style}" panelStyle="#{panelStyle}">
-                <c:if test="${(not empty update)}">
-                    <p:ajax update="#{update}"/>
+                <c:if test="${not empty update}">
+                    <p:ajax update="#{update}" />
                 </c:if>
                 <f:converter converterId="#{converter}" />
                 <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />

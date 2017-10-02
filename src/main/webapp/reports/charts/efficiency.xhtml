@@ -32,12 +32,14 @@
                                 requiredMessage="Selecione a data final!!!" 
                                 converterMessage="Data com formato errado!!!" locale="pt" 
                                 mindate="#{efficiencyReportBean.startDate}"
-                                maxdate="#{efficiencyReportBean.maxDate}">
+                                maxdate="#{efficiencyReportBean.maxDate}"
+                                disabled="#{empty efficiencyReportBean.startDate}">
                         <p:ajax event="dateSelect"  update="@form:subordinate" />
                     </p:calendar>               
                 
                     <cmp:selectOneEmployee id="subordinate" type="subordinate" 
-                                           employee="#{subordinateService.subordinates}" /> 
+                                           employee="#{efficiencyReportBean.employee}"
+                                           disabled="#{empty efficiencyReportBean.endDate}" /> 
                     
                     <f:facet name="footer">
                         <p:commandButton value="Gerar" actionListener="#{efficiencyReportBean.plot()}" 
@@ -48,24 +50,30 @@
                 </h:panelGrid>
             
                 <p:separator/>
+                               
+                <p:importEnum type="br.com.ceciliaprado.cmp.control.bean.reports.EfficiencyChartTypes" />
                 
                 <p:outputPanel id="report" deferred="#{not empty efficiencyReportBean.events}">
-                    <p:accordionPanel>
-                        <ui:repeat var="chart" value="#{efficiencyReportBean.charts}">
-                            <p:tab title="Godfather Part I">
-                                <p:chart type="line" model="#{efficiencyReportBean.attendance}" 
-                                         rendered="#{not empty efficiencyReportBean.events}" />
-                     
-                                <h:panelGrid columns="2" cellpadding="10" 
-                                             rendered="#{not empty efficiencyReportBean.events}"> 
-                                    <p:outputLabel value="Total: " style="font-weight: bold;" /> 
-                                    <h:outputText value="#{efficiencyReportBean.totalDuration}">
-                                        <f:convertNumber pattern="#0.00 [h]" />
-                                    </h:outputText>                                   
-                                </h:panelGrid>
-                            </p:tab>
+                    <ui:repeat var="chartType" value="#{EfficiencyChartTypes.ALL_VALUES}">
+                        <p:chart type="line" model="#{efficiencyReportBean.getDailySeriesChart(chartType)}" 
+                                 rendered="#{not empty efficiencyReportBean.events}" />
+
+                        <ui:repeat var="seriesType" value="#{efficiencyReportBean.getSeriesTypes(chartType)}"
+                                   rendered="#{not empty efficiencyReportBean.events}">                                
+                            <h:panelGrid columns="3" cellpadding="10"> 
+                                <p:outputLabel value="#{efficiencyReportBean.getLegend(seriesType)} Total: " 
+                                               style="font-weight: bold;" /> 
+                                
+                                <h:outputText value="#{efficiencyReportBean.getTotal(seriesType)}">
+                                    <f:convertNumber maxFractionDigits="2" />                                   
+                                </h:outputText>                  
+                                
+                                <h:outputText value="#{chartType.unit}" />
+                            </h:panelGrid>
                         </ui:repeat>
-                    </p:accordionPanel>
+            
+                        <p:separator rendered="#{not empty efficiencyReportBean.events}" />
+                    </ui:repeat>
                 </p:outputPanel>
                     
                 <f:facet name="footer">

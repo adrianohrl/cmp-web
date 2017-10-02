@@ -16,13 +16,13 @@
                     <h:outputText value="Importação de Atividades de Produção" style="font-weight: bold; font-size: 24px;" />
                 </f:facet>
             
-                <p:fileUpload fileUploadListener="#{entryImportBean.upload}" label="Escolher" 
+                <p:fileUpload fileUploadListener="#{entryEventsImportBean.upload}" label="Escolher" 
                               mode="advanced" dragDropSupport="true" update="@form:messages, @form:events" 
                               auto="true" sizeLimit="1048576" allowTypes="/(\.|\/)(csv)$/"
                               invalidFileMessage="São permitidos somente arquivos de extensão CSV!!!" 
                               invalidSizeMessage="O tamanho máximo permitido do arquivo é de 1Mb!!!" />
                 
-                <p:dataTable id="events" var="event" value="#{entryImportBean.events}" 
+                <p:dataTable id="events" var="event" value="#{entryEventsImportBean.events}" 
                              rowKey="#{event.eventDate}" emptyMessage="Nenhuma atividade de produção importada ainda."
                              scrollable="true" scrollHeight="300">                
                     <f:facet name="header">
