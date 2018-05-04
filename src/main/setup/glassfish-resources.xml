@@ -2,9 +2,9 @@
 <!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <resources>
     <jdbc-resource enabled="true" 
-                   jndi-name="jdbc/cmpJNDI" 
+                   jndi-name="jdbc/stileJNDI" 
                    object-type="user" 
-                   pool-name="cmpPool">
+                   pool-name="stilePool">
         <description/>    
     </jdbc-resource>
     <jdbc-connection-pool allow-non-component-callers="false" 
@@ -33,9 +33,9 @@
                           steady-pool-size="8" 
                           validate-atmost-once-period-in-seconds="0" 
                           wrap-jdbc-objects="false">
-        <property name="URL" value="jdbc:mysql://localhost:3306/cmp?zeroDateTimeBehavior=convertToNull"/>
-        <property name="User" value="cmp"/>
-        <property name="Password" value="cmp"/>
+        <property name="URL" value="jdbc:mysql://localhost:3306/stile?zeroDateTimeBehavior=convertToNull"/>
+        <property name="User" value="stile"/>
+        <property name="Password" value="stile"/>
     </jdbc-connection-pool>
     <parameter-encoding default-charset="UTF-8"/>
 </resources>
