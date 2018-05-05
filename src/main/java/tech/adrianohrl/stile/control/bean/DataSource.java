@@ -15,7 +15,7 @@ import javax.persistence.Persistence;
  */
 public class DataSource {
     
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("cmpwebPU");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("stile-webPU");
 
     private DataSource() {
     }

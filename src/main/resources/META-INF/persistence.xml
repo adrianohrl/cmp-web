@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="cmpwebPU" transaction-type="RESOURCE_LOCAL">
+  <persistence-unit name="stile-webPU" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <non-jta-data-source>jdbc/cmpJNDI</non-jta-data-source>
-    <class>br.com.ceciliaprado.cmp.model.events.AbstractEmployeeRelatedEvent</class>
-    <class>br.com.ceciliaprado.cmp.model.events.Casualty</class>
-    <class>br.com.ceciliaprado.cmp.model.events.CasualtyEntryEvent</class>
-    <class>br.com.ceciliaprado.cmp.model.events.EntryEvent</class>
-    <class>br.com.ceciliaprado.cmp.model.events.LogEvent</class>
-    <class>br.com.ceciliaprado.cmp.model.events.TimeClockEvent</class>
-    <class>br.com.ceciliaprado.cmp.model.personnel.Employee</class>
-    <class>br.com.ceciliaprado.cmp.model.personnel.Loggable</class>
-    <class>br.com.ceciliaprado.cmp.model.personnel.Manager</class>
-    <class>br.com.ceciliaprado.cmp.model.personnel.Sector</class>
-    <class>br.com.ceciliaprado.cmp.model.personnel.Subordinate</class>
-    <class>br.com.ceciliaprado.cmp.model.personnel.Supervisor</class>
-    <class>br.com.ceciliaprado.cmp.model.production.Model</class>
-    <class>br.com.ceciliaprado.cmp.model.production.ModelPhase</class>
-    <class>br.com.ceciliaprado.cmp.model.production.Phase</class>
-    <class>br.com.ceciliaprado.cmp.model.production.PhaseProductionOrder</class>
-    <class>br.com.ceciliaprado.cmp.model.production.ProductionOrder</class>
+    <jta-data-source>jdbc/stileJNDI</jta-data-source>
+    <class>tech.adrianohrl.stile.model.events.AbstractEmployeeRelatedEvent</class>
+    <class>tech.adrianohrl.stile.model.events.Casualty</class>
+    <class>tech.adrianohrl.stile.model.events.CasualtyEntryEvent</class>
+    <class>tech.adrianohrl.stile.model.events.EntryEvent</class>
+    <class>tech.adrianohrl.stile.model.events.LogEvent</class>
+    <class>tech.adrianohrl.stile.model.events.TimeClockEvent</class>
+    <class>tech.adrianohrl.stile.model.order.PhaseProductionOrder</class>
+    <class>tech.adrianohrl.stile.model.order.ProductionOrder</class>
+    <class>tech.adrianohrl.stile.model.order.SizeOrder</class>
+    <class>tech.adrianohrl.stile.model.order.VariantOrder</class>
+    <class>tech.adrianohrl.stile.model.personnel.Employee</class>
+    <class>tech.adrianohrl.stile.model.personnel.Loggable</class>
+    <class>tech.adrianohrl.stile.model.personnel.Machine</class>
+    <class>tech.adrianohrl.stile.model.personnel.Manager</class>
+    <class>tech.adrianohrl.stile.model.personnel.Sector</class>
+    <class>tech.adrianohrl.stile.model.personnel.Subordinate</class>
+    <class>tech.adrianohrl.stile.model.personnel.Supervisor</class>
+    <class>tech.adrianohrl.stile.model.production.Chart</class>
+    <class>tech.adrianohrl.stile.model.production.ChartSize</class>
+    <class>tech.adrianohrl.stile.model.production.Collection</class>
+    <class>tech.adrianohrl.stile.model.production.Fabric</class>
+    <class>tech.adrianohrl.stile.model.production.Family</class>
+    <class>tech.adrianohrl.stile.model.production.Model</class>
+    <class>tech.adrianohrl.stile.model.production.ModelPhase</class>
+    <class>tech.adrianohrl.stile.model.production.Part</class>
+    <class>tech.adrianohrl.stile.model.production.Phase</class>
+    <class>tech.adrianohrl.stile.model.production.Variant</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
     </properties>
