@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE resources PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN" "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
 <resources>
-    <jdbc-resource enabled="true" 
-                   jndi-name="jdbc/stileJNDI" 
-                   object-type="user" 
-                   pool-name="stilePool">
+    <jdbc-resource enabled="true" jndi-name="jdbc/stileJNDI" object-type="user" pool-name="stilePool">
         <description/>    
     </jdbc-resource>
     <jdbc-connection-pool allow-non-component-callers="false" 
@@ -25,7 +22,7 @@
                           max-connection-usage-count="0" 
                           max-pool-size="32" 
                           max-wait-time-in-millis="60000" 
-                          name="cmpPool" 
+                          name="stilePool" 
                           non-transactional-connections="false" 
                           pool-resize-quantity="2" 
                           res-type="javax.sql.ConnectionPoolDataSource" 
@@ -37,5 +34,5 @@
         <property name="User" value="stile"/>
         <property name="Password" value="stile"/>
     </jdbc-connection-pool>
-    <parameter-encoding default-charset="UTF-8"/>
+    <!--<parameter-encoding default-charset="UTF-8"/>-->
 </resources>

@@ -44,8 +44,6 @@
                 
                 <h:panelGrid columns="2" cellpadding="10">  
                     <p:outputLabel for="productionOrder" value="Ordem de Produção: " style="font-weight: bold;" /> 
-                    <ui:remove>
-                        
                     <p:selectOneMenu id="productionOrder" value="#{phaseProductionOrderRegisterBean.productionOrder}" 
                                      converter="productionOrderConverter" panelStyle="width: 250px;"
                                      effect="fade" var="order" style="width: 250px;" filter="true" 
@@ -64,12 +62,13 @@
                             <h:outputText value="#{order.reference}" />
                         </p:column>
                     </p:selectOneMenu>
-                    </ui:remove>
                     
+                    <ui:remove>
                     <stile:selectOneProductionOrder id="productionOrder" 
                                                     productionOrder="#{phaseProductionOrderRegisterBean.productionOrder}"
                                                     listener="#{phaseProductionOrderRegisterBean.clear()}" 
                                                     update="@form:dialog, @form:button, @form:orders" />
+                    </ui:remove>
                     
                     <ui:remove>
                         <p:outputLabel for="productionOrder" value="Ordem de Produção: " style="font-weight: bold;" /> 
