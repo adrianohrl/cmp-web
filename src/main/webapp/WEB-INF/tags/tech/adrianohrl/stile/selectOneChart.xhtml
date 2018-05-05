@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition>
+            <c:set var="charts" value="${(charts == null) ? chartService.charts : charts}" />
+            <c:set var="label" value="${(empty label) ? 'Grade: ' : label}" />
+            <c:set var="required" value="${(empty required) ? true : required}" />
+            <c:set var="requiredMessage" value="${(empty requiredMessage) ? 'Selecione uma grade!!!' : requiredMessage}" />
+            <c:set var="disabled" value="${(empty disabled) ? false : disabled}" />
+            <c:set var="noSelectionItemLabel" value="${(empty noSelectionItemLabel) ? 'Selecione uma ...' : noSelectionItemLabel}" />
+            <c:set var="effect" value="${(empty effect) ? 'fade' : effect}" />
+            <c:set var="filter" value="${(empty filter) ? true : filter}" />
+            <c:set var="filterMatchMode" value="${(empty filterMatchMode) ? 'startsWith' : filterMatchMode}" />
+            <c:set var="style" value="${(empty style) ? 'width: 250px;' : style}" />
+            <c:set var="labelStyle" value="${(empty labelStyle) ? 'font-weight: bold;' : labelStyle}" />
+            <c:set var="panelStyle" value="${(empty panelStyle) ? 'width: 250px;' : panelStyle}" />
+            <p:outputLabel for="#{id}" value="#{label}" style="#{labelStyle}" />              
+            <p:selectOneMenu id="#{id}" value="#{chart}" required="#{required}" converter="chartConverter"
+                             requiredMessage="#{requiredMessage}" disabled="#{disabled or (empty charts)}" 
+                             effect="#{effect}" filter="#{filter}" filterMatchMode="#{filterMatchMode}" var="c" 
+                             style="#{style}" panelStyle="#{panelStyle}">
+                <c:if test="${not empty update}">
+                    <p:ajax update="#{update}" />
+                </c:if>
+                <f:selectItem itemLabel="#{noSelectionItemLabel}" itemDisabled="true" noSelectionOption="true" />
+                <f:selectItems value="#{charts}" />
+                <p:column>
+                    <h:outputText value="#{c.name}" />
+                </p:column>
+            </p:selectOneMenu>
+        </ui:composition>
+    </h:body>
+</html>

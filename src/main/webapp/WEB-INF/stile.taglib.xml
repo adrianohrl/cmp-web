@@ -171,6 +171,344 @@
         </attribute>
     </tag>
     <tag>
+        <tag-name>selectOneChart</tag-name>
+        <source>tags/tech/adrianohrl/stile/selectOneChart.xhtml</source>
+        <attribute>
+            <name>chart</name>
+            <description>
+                <![CDATA[
+                    The selected chart of the component.
+                ]]>
+            </description>
+            <required>true</required>
+            <type>tech.adrianohrl.stile.model.production.Chart</type>
+        </attribute>
+        <attribute>
+            <name>charts</name>
+            <description>
+                <![CDATA[
+                    A list of possible charts that can be selected. 
+                    (default: chartService.charts)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>id</name>
+            <description>
+                <![CDATA[
+                    Unique identifier of the component in a namingContainer.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>label</name>
+            <description>
+                <![CDATA[
+                    Label to display. (default: "Grade: ")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>required</name>
+            <description>
+                <![CDATA[
+                    Marks component as required. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>requiredMessage</name>
+            <description>
+                <![CDATA[
+                    Message to display when required field validation fails. 
+                    (default: "Selecione uma grade!!!")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>disabled</name>
+            <description>
+                <![CDATA[
+                    Disables component. (default: false) 
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>converter</name>
+            <description>
+                <![CDATA[
+                    Converter identifier of the Converter instance to be created 
+                    and registered. (default: chartConverter)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>update</name>
+            <description>
+                <![CDATA[
+                    Component(s) to update with ajax.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>noSelectionItemLabel</name>
+            <description>
+                <![CDATA[
+                    Label to display when none option was selected yet. 
+                    (default: "Selecione uma ...")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>effect</name>
+            <description>
+                <![CDATA[
+                    The selectOneMenu component effect type. (default: "fade")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>filter</name>
+            <description>
+                <![CDATA[
+                    Displays an input filter for the list. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>filterMatchMode</name>
+            <description>
+                <![CDATA[
+                    Match mode for filtering, valid values are startsWith, contains, endsWith and custom. 
+                    (default: "startsWith")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>labelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component label.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>panelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component panel.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <tag-name>selectOneCollection</tag-name>
+        <source>tags/tech/adrianohrl/stile/selectOneCollection.xhtml</source>
+        <attribute>
+            <name>collection</name>
+            <description>
+                <![CDATA[
+                    The selected collection of the component.
+                ]]>
+            </description>
+            <required>true</required>
+            <type>tech.adrianohrl.stile.model.production.Collection</type>
+        </attribute>
+        <attribute>
+            <name>collections</name>
+            <description>
+                <![CDATA[
+                    A list of possible collections that can be selected. 
+                    (default: collectionService.collections)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>id</name>
+            <description>
+                <![CDATA[
+                    Unique identifier of the component in a namingContainer.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>label</name>
+            <description>
+                <![CDATA[
+                    Label to display. (default: "Coleção: ")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>required</name>
+            <description>
+                <![CDATA[
+                    Marks component as required. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>requiredMessage</name>
+            <description>
+                <![CDATA[
+                    Message to display when required field validation fails. 
+                    (default: "Selecione uma coleção!!!")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>disabled</name>
+            <description>
+                <![CDATA[
+                    Disables component. (default: false) 
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>converter</name>
+            <description>
+                <![CDATA[
+                    Converter identifier of the Converter instance to be created 
+                    and registered. (default: collectionConverter)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>update</name>
+            <description>
+                <![CDATA[
+                    Component(s) to update with ajax.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>noSelectionItemLabel</name>
+            <description>
+                <![CDATA[
+                    Label to display when none option was selected yet. 
+                    (default: "Selecione uma ...")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>effect</name>
+            <description>
+                <![CDATA[
+                    The selectOneMenu component effect type. (default: "fade")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>filter</name>
+            <description>
+                <![CDATA[
+                    Displays an input filter for the list. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>filterMatchMode</name>
+            <description>
+                <![CDATA[
+                    Match mode for filtering, valid values are startsWith, contains, endsWith and custom. 
+                    (default: "startsWith")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>labelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component label.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>panelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component panel.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
         <tag-name>selectOneEmployee</tag-name>
         <source>tags/tech/adrianohrl/stile/selectOneEmployee.xhtml</source>
         <attribute>
@@ -351,6 +689,343 @@
         </attribute>
     </tag>
     <tag>
+        <tag-name>selectOneFabric</tag-name>
+        <source>tags/tech/adrianohrl/stile/selectOneFabric.xhtml</source>
+        <attribute>
+            <name>fabric</name>
+            <description>
+                <![CDATA[
+                    The selected fabric of the component.
+                ]]>
+            </description>
+            <required>true</required>
+            <type>tech.adrianohrl.stile.model.production.Fabric</type>
+        </attribute>
+        <attribute>
+            <name>fabrics</name>
+            <description>
+                <![CDATA[
+                    A list of possible fabrics that can be selected. 
+                    (default: fabricService.fabrics)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>id</name>
+            <description>
+                <![CDATA[
+                    Unique identifier of the component in a namingContainer.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>label</name>
+            <description>
+                <![CDATA[
+                    Label to display. (default: "Tecido: ")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>required</name>
+            <description>
+                <![CDATA[
+                    Marks component as required. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>requiredMessage</name>
+            <description>
+                <![CDATA[
+                    Message to display when required field validation fails. 
+                    (default: "Selecione um tecido!!!")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>disabled</name>
+            <description>
+                <![CDATA[
+                    Disables component. (default: false) 
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>converter</name>
+            <description>
+                <![CDATA[
+                    Converter identifier of the Converter instance to be created 
+                    and registered. (default: fabricConverter)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>update</name>
+            <description>
+                <![CDATA[
+                    Component(s) to update with ajax.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>noSelectionItemLabel</name>
+            <description>
+                <![CDATA[
+                    Label to display when none option was selected yet. 
+                    (default: "Selecione um ...")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>effect</name>
+            <description>
+                <![CDATA[
+                    The selectOneMenu component effect type. (default: "fade")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>filter</name>
+            <description>
+                <![CDATA[
+                    Displays an input filter for the list. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>filterMatchMode</name>
+            <description>
+                <![CDATA[
+                    Match mode for filtering, valid values are startsWith, contains, endsWith and custom. 
+                    (default: "startsWith")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>labelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component label.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>panelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component panel.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <tag-name>selectOneFamily</tag-name>
+        <source>tags/tech/adrianohrl/stile/selectOneFamily.xhtml</source>
+        <attribute>
+            <name>family</name>
+            <description>
+                <![CDATA[
+                    The selected family of the component.
+                ]]>
+            </description>
+            <required>true</required>
+            <type>tech.adrianohrl.stile.model.events.Family</type>
+        </attribute>
+        <attribute>
+            <name>families</name>
+            <description>
+                <![CDATA[
+                    A list of possible families that can be selected. (default: familyService.families)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>id</name>
+            <description>
+                <![CDATA[
+                    Unique identifier of the component in a namingContainer.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>label</name>
+            <description>
+                <![CDATA[
+                    Label to display. (default: "Família: ")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>required</name>
+            <description>
+                <![CDATA[
+                    Marks component as required. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>requiredMessage</name>
+            <description>
+                <![CDATA[
+                    Message to display when required field validation fails. 
+                    (default: "Selecione uma família!!!")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>disabled</name>
+            <description>
+                <![CDATA[
+                    Disables component. (default: false) 
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>converter</name>
+            <description>
+                <![CDATA[
+                    Converter identifier of the Converter instance to be created 
+                    and registered. (default: familyConverter)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>update</name>
+            <description>
+                <![CDATA[
+                    Component(s) to update with ajax.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>noSelectionItemLabel</name>
+            <description>
+                <![CDATA[
+                    Label to display when none option was selected yet. 
+                    (default: "Selecione uma ...")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>effect</name>
+            <description>
+                <![CDATA[
+                    The selectOneMenu component effect type. (default: "fade")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>filter</name>
+            <description>
+                <![CDATA[
+                    Displays an input filter for the list. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>filterMatchMode</name>
+            <description>
+                <![CDATA[
+                    Match mode for filtering, valid values are startsWith, contains, endsWith and custom. 
+                    (default: "startsWith")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>labelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component label.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>panelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component panel.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
         <tag-name>selectOneModel</tag-name>
         <source>tags/tech/adrianohrl/stile/selectOneModel.xhtml</source>
         <attribute>
@@ -431,6 +1106,175 @@
                 <![CDATA[
                     Converter identifier of the Converter instance to be created 
                     and registered. (default: modelConverter)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>update</name>
+            <description>
+                <![CDATA[
+                    Component(s) to update with ajax.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>noSelectionItemLabel</name>
+            <description>
+                <![CDATA[
+                    Label to display when none option was selected yet. 
+                    (default: "Selecione um ...")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>effect</name>
+            <description>
+                <![CDATA[
+                    The selectOneMenu component effect type. (default: "fade")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>filter</name>
+            <description>
+                <![CDATA[
+                    Displays an input filter for the list. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>filterMatchMode</name>
+            <description>
+                <![CDATA[
+                    Match mode for filtering, valid values are startsWith, contains, endsWith and custom. 
+                    (default: "startsWith")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>labelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component label.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>panelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component panel.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <tag-name>selectOnePart</tag-name>
+        <source>tags/tech/adrianohrl/stile/selectOnePart.xhtml</source>
+        <attribute>
+            <name>part</name>
+            <description>
+                <![CDATA[
+                    The selected part of the component.
+                ]]>
+            </description>
+            <required>true</required>
+            <type>tech.adrianohrl.stile.model.production.Part</type>
+        </attribute>
+        <attribute>
+            <name>parts</name>
+            <description>
+                <![CDATA[
+                    A list of possible parts that can be selected. 
+                    (default: partService.parts)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>id</name>
+            <description>
+                <![CDATA[
+                    Unique identifier of the component in a namingContainer.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>label</name>
+            <description>
+                <![CDATA[
+                    Label to display. (default: "Parte: ")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>required</name>
+            <description>
+                <![CDATA[
+                    Marks component as required. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>requiredMessage</name>
+            <description>
+                <![CDATA[
+                    Message to display when required field validation fails. 
+                    (default: "Selecione uma parte!!!")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>disabled</name>
+            <description>
+                <![CDATA[
+                    Disables component. (default: false) 
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>converter</name>
+            <description>
+                <![CDATA[
+                    Converter identifier of the Converter instance to be created 
+                    and registered. (default: partConverter)
                 ]]>
             </description>
             <required>false</required>
@@ -969,6 +1813,175 @@
                 <![CDATA[
                     Label to display when none option was selected yet. 
                     (default: "Selecione um ...")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>effect</name>
+            <description>
+                <![CDATA[
+                    The selectOneMenu component effect type. (default: "fade")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>filter</name>
+            <description>
+                <![CDATA[
+                    Displays an input filter for the list. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <name>filterMatchMode</name>
+            <description>
+                <![CDATA[
+                    Match mode for filtering, valid values are startsWith, contains, endsWith and custom. 
+                    (default: "startsWith")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>labelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component label.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>panelStyle</name>
+            <description>
+                <![CDATA[
+                    Inline style of the component panel.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    <tag>
+        <tag-name>selectOneVariant</tag-name>
+        <source>tags/tech/adrianohrl/stile/selectOneVariant.xhtml</source>
+        <attribute>
+            <name>variant</name>
+            <description>
+                <![CDATA[
+                    The selected variant of the component.
+                ]]>
+            </description>
+            <required>true</required>
+            <type>tech.adrianohrl.stile.model.production.Variant</type>
+        </attribute>
+        <attribute>
+            <name>variants</name>
+            <description>
+                <![CDATA[
+                    A list of possible phases that can be selected.
+                    (default: variantService.variants)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.util.List</type>
+        </attribute>
+        <attribute>
+            <name>id</name>
+            <description>
+                <![CDATA[
+                    Unique identifier of the component in a namingContainer.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>label</name>
+            <description>
+                <![CDATA[
+                    Label to display. (default: "Variante: ")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>required</name>
+            <description>
+                <![CDATA[
+                    Marks component as required. (default: true)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>requiredMessage</name>
+            <description>
+                <![CDATA[
+                    Message to display when required field validation fails. 
+                    (default: "Selecione uma fase!!!")
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>disabled</name>
+            <description>
+                <![CDATA[
+                    Disables component. (default: false) 
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>converter</name>
+            <description>
+                <![CDATA[
+                    Converter identifier of the Converter instance to be created 
+                    and registered. (default: phaseConverter)
+                ]]>
+            </description>
+            <required>false</required>
+            <type>javax.el.ValueExpression</type>
+        </attribute>
+        <attribute>
+            <name>update</name>
+            <description>
+                <![CDATA[
+                    Component(s) to update with ajax.
+                ]]>
+            </description>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>noSelectionItemLabel</name>
+            <description>
+                <![CDATA[
+                    Label to display when none option was selected yet. 
+                    (default: "Selecione uma ...")
                 ]]>
             </description>
             <required>false</required>
