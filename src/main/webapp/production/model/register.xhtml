@@ -6,7 +6,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:cmp="http://ceciliaprado.com.br/cmp">
+                xmlns:stile="http://stile.adrianohrl.tech/tags">
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" /> 
@@ -15,7 +15,7 @@
                       draggable="false" showEffect="fade" hideEffect="fade" closeOnEscape="true"
                       fitViewport="true">
                 <h:panelGrid id="dlgGrid" columns="2" cellpadding="10">       
-                    <cmp:selectOnePhase id="phase"
+                    <stile:selectOnePhase id="phase"
                                         phase="#{modelRegisterBean.phase}"
                                         phases="#{modelRegisterBean.phases}" />
                         

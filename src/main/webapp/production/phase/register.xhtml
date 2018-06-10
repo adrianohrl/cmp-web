@@ -6,7 +6,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:cmp="http://ceciliaprado.com.br/cmp">
+                xmlns:stile="http://stile.adrianohrl.tech/tags">
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" showDetail="true" life="#{parametersBean.growlLife}" />  
@@ -21,7 +21,7 @@
                              required="true" requiredMessage="Digite o nome da fase!!!" 
                              style="width: 250px;" />
                 
-                <cmp:selectOneSector id="sector" sector="#{phaseRegisterBean.phase.sector}" />
+                <stile:selectOneSector id="sector" sector="#{phaseRegisterBean.phase.sector}" />
                 
                 <f:facet name="footer">
                     <p:commandButton value="Registrar" action="#{phaseRegisterBean.register()}" 

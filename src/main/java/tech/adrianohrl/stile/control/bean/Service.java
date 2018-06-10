@@ -34,6 +34,7 @@ public abstract class Service<E extends Comparable> implements Serializable, Ite
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, 
                     "Fatalidade", getErrorMessage());
             context.addMessage(null, message);
+            System.out.println("Fatalidade: " + getErrorMessage());
             return;
         }
         Collections.sort(elements);

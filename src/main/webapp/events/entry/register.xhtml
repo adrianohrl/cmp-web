@@ -6,7 +6,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:cmp="http://ceciliaprado.com.br/cmp">
+                xmlns:stile="http://stile.adrianohrl.tech/tags">
     <ui:define name="content">
         <h:form>
             <p:growl id="messages" autoUpdate="true" showDetail="true" life="#{parametersBean.growlLife}" />   
@@ -156,7 +156,7 @@
                     <p:inputTextarea id="observation" label="Observação" value="#{entryEventRegisterBean.observation}" 
                                      rows="5" autoResize="false" cols="5" style="width: 250px;"  />
                     
-                    <cmp:selectOneCasualty id="casualty" casualty="#{entryEventRegisterBean.casualty}" 
+                    <stile:selectOneCasualty id="casualty" casualty="#{entryEventRegisterBean.casualty}" 
                                            required="#{entryEventRegisterBean.productionState.hasCasualty()}"
                                            disabled="#{not entryEventRegisterBean.productionState.hasCasualty()}" />
 
@@ -194,7 +194,7 @@
                                         required="true" requiredMessage="Digite a sua senha, supervisor!!!"
                                         promptLabel="Digite a sua senha, supervisor!!!" style="width: 250px;" />
 
-                            <cmp:selectOneSector id="sector" sector="#{entryEventRegisterBean.sector}" 
+                            <stile:selectOneSector id="sector" sector="#{entryEventRegisterBean.sector}" 
                                                  sectors="#{entryEventRegisterBean.sectors}" />
                         </h:panelGrid>
                     </p:tab>

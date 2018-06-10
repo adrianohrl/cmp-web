@@ -8,6 +8,6 @@ Use the following command (inside of the cloned directory) in order to deploy th
 ```bash
 	export PROJECT_DIRECTORY=<stile-web cloned directory>
 	export VERSION=<desired version>
-	asadmin deploy --force=true --contextroot=stile --name=stile target/stile-web-${VERSION}.war
+	asadmin deploy --force=true --contextroot=stile --name=stile ${PROJECT_DIRECTORY}/target/stile-web-${VERSION}.war
 	
 ```
