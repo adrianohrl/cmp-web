@@ -1,18 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tech.adrianohrl.stile.control.bean.events;
 
 import tech.adrianohrl.stile.control.bean.DataSource;
 import tech.adrianohrl.stile.control.dao.events.TimeClockEventDAO;
 import tech.adrianohrl.stile.model.events.TimeClockEvent;
-import tech.adrianohrl.stile.util.Calendars;
+import tech.adrianohrl.util.Calendars;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -20,10 +14,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import tech.adrianohrl.util.CalendarUtil;
 
 /**
  *
- * @author adrianohrl
+ * @author Adriano Henrique Rossette Leite (contact@adrianohrl.tech)
  */
 @ManagedBean
 @ViewScoped
@@ -31,7 +26,7 @@ public class TimeClockEventRegisterBean implements Serializable {
     
     private final EntityManager em = DataSource.createEntityManager();
     private final TimeClockEvent timeClockEvent = new TimeClockEvent();
-    private final Calendar maxDate = new GregorianCalendar();
+    private final Calendar maxDate = CalendarUtil.now();
     private Date date;
     private Date time;
     
@@ -41,7 +36,7 @@ public class TimeClockEventRegisterBean implements Serializable {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro no cadastro", 
                 "A data e o horário de entrada/saída deve ser antes da data e horário atual!!!");
         try {
-            timeClockEvent.setEventDate(Calendars.sum(date, time));
+            timeClockEvent.setEventDate(Calendars.combine(date, time));
             if (maxDate.after(timeClockEvent.getEventDate())) {
                 TimeClockEventDAO timeClockEventDAO = new TimeClockEventDAO(em);
                 timeClockEventDAO.create(timeClockEvent);

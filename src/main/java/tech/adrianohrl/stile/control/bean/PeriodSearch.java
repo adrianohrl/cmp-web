@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tech.adrianohrl.stile.control.bean;
 
-import tech.adrianohrl.stile.util.Calendars;
+import tech.adrianohrl.util.Calendars;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +8,7 @@ import java.util.GregorianCalendar;
 
 /**
  *
- * @author adrianohrl
+ * @author Adriano Henrique Rossette Leite (contact@adrianohrl.tech)
  */
 public abstract class PeriodSearch implements Serializable {
     
@@ -48,7 +43,7 @@ public abstract class PeriodSearch implements Serializable {
     }
     
     public Calendar getStart() {
-        return Calendars.sum(startDate, startTime);
+        return Calendars.combine(startDate, startTime);
     }
 
     public Date getEndDate() {
@@ -68,7 +63,7 @@ public abstract class PeriodSearch implements Serializable {
     }
     
     public Calendar getEnd() {
-        return Calendars.sum(endDate, endTime);
+        return Calendars.combine(endDate, endTime);
     }
     
 }

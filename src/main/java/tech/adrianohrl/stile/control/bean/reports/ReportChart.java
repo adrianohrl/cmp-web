@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tech.adrianohrl.stile.control.bean.reports;
 
 import tech.adrianohrl.stile.control.model.production.reports.ReportNumericSeries;
@@ -19,7 +14,7 @@ import org.primefaces.model.chart.LineChartSeries;
 
 /**
  *
- * @author adrianohrl
+ * @author Adriano Henrique Rossette Leite (contact@adrianohrl.tech)
  * @param <S>
  */
 public class ReportChart<S extends SeriesType> {

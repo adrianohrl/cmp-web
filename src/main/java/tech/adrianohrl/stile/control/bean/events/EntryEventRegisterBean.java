@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tech.adrianohrl.stile.control.bean.events;
 
 import tech.adrianohrl.stile.control.bean.DataSource;
@@ -25,7 +20,7 @@ import tech.adrianohrl.stile.model.production.Phase;
 import tech.adrianohrl.stile.model.order.PhaseProductionOrder;
 import tech.adrianohrl.stile.model.order.ProductionOrder;
 import tech.adrianohrl.stile.model.order.ProductionStates;
-import tech.adrianohrl.stile.util.Calendars;
+import tech.adrianohrl.util.Calendars;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,10 +38,11 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
+import tech.adrianohrl.util.CalendarUtil;
 
 /**
  *
- * @author adrianohrl
+ * @author Adriano Henrique Rossette Leite (contact@adrianohrl.tech)
  */
 @ManagedBean
 @ViewScoped
@@ -61,7 +57,7 @@ public class EntryEventRegisterBean implements Serializable {
     private Supervisor supervisor;
     private Sector sector;
     private final List<Sector> sectors = new ArrayList<>();
-    private Calendar maxDate = new GregorianCalendar();
+    private Calendar maxDate = CalendarUtil.now();
     private Date date;
     private Date time;
     private Subordinate subordinate;
@@ -86,7 +82,7 @@ public class EntryEventRegisterBean implements Serializable {
             if (date == null || time == null) {
                 return;
             }
-            Calendar eventDate = Calendars.sum(date, time);
+            Calendar eventDate = Calendars.combine(date, time);
             if (eventDate.before(new GregorianCalendar()) && productionState != null) {
                 EntryEvent entryEvent = null;
                 EntryEventDAO entryEventDAO = new EntryEventDAO(em);                
@@ -168,7 +164,7 @@ public class EntryEventRegisterBean implements Serializable {
     }
     
     public void reset() {
-        maxDate = new GregorianCalendar();
+        maxDate = CalendarUtil.now();
         date = new Date();
         time = new Date();
         subordinate = null;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tech.adrianohrl.stile.control.bean.personnel.validators;
 
 import tech.adrianohrl.stile.control.bean.SessionUtils;
@@ -14,7 +9,7 @@ import javax.faces.validator.ValidatorException;
 
 /**
  *
- * @author adrianohrl
+ * @author Adriano Henrique Rossette Leite (contact@adrianohrl.tech)
  * @param <L>
  */
 public abstract class LoggableEmployeePasswordValidator<L extends Loggable> extends LoggableEmployeeValidator<L> {
